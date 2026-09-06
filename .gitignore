@@ -1,0 +1,19 @@
+# Local dev artifacts — do NOT upload these to cPanel
+.venv/
+db.sqlite3
+*.pyc
+__pycache__/
+
+# local collectstatic output (STATIC_ROOT in dev)
+katalog/static/
+
+# sorl-thumbnail generated thumbnails
+media/cache/
+
+# uploaded product images — managed on the server, not in git
+media/upload/image/
+
+*.log
+lexiacoi_katalog.sql.gz
+.env
+_nul
