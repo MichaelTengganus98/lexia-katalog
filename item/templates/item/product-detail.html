@@ -21,7 +21,14 @@
   <div class="detail-gallery">
     <div class="gallery-main" id="galleryMain" data-lightbox>
       {% if pics %}
-        <img id="galleryImg" src="{{ pics.0.url }}" alt="{{ barang.name }}">
+        {% thumbnail pics.0 "900x900" as im %}
+          <img id="galleryImg" src="{{ im.url }}" data-full="{{ pics.0.url }}"
+               width="{{ im.width }}" height="{{ im.height }}" fetchpriority="high"
+               alt="{{ barang.name }} — {{ barang.Jenis.jenis }}">
+        {% empty %}
+          <img id="galleryImg" src="{{ pics.0.url }}" data-full="{{ pics.0.url }}"
+               alt="{{ barang.name }} — {{ barang.Jenis.jenis }}">
+        {% endthumbnail %}
       {% else %}
         <div class="photo-placeholder" style="color:var(--muted-dark)">Foto belum tersedia</div>
       {% endif %}
@@ -31,7 +38,8 @@
         {% for pic in pics %}
           <button type="button" data-full="{{ pic.url }}" class="{% if forloop.first %}is-active{% endif %}">
             {% thumbnail pic "140x140" crop="center" as im %}
-              <img src="{{ im.url }}" alt="{{ barang.name }} foto {{ forloop.counter }}">
+              <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" loading="lazy"
+                   alt="{{ barang.name }} foto {{ forloop.counter }}">
             {% empty %}<img src="{{ pic.url }}" alt="">{% endthumbnail %}
           </button>
         {% endfor %}
@@ -112,7 +120,8 @@
       <a class="prod-card" href="{% url 'item:mesin' id=it.id slug=it.slug %}">
         <div class="prod-photo">
           {% thumbnail it.picture1 "480x360" crop="center" as im %}
-            <img src="{{ im.url }}" alt="{{ it.name }}">
+            <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" loading="lazy"
+                 alt="{{ it.name }} — {{ it.Jenis.jenis }}">
           {% empty %}Foto belum tersedia{% endthumbnail %}
         </div>
         <div class="prod-body">
@@ -140,7 +149,7 @@
     var main = document.getElementById('galleryImg');
     var thumbs = Array.prototype.slice.call(document.querySelectorAll('#galleryThumbs button'));
     var srcs = thumbs.length ? thumbs.map(function (b) { return b.getAttribute('data-full'); })
-                             : (main ? [main.getAttribute('src')] : []);
+                             : (main ? [main.getAttribute('data-full') || main.getAttribute('src')] : []);
     var idx = 0;
 
     function show(i) {

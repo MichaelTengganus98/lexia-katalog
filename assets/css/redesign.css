@@ -254,6 +254,11 @@ main { flex: 1 0 auto; }
   padding: 40px 24px; text-align: center; color: var(--muted-dark); font-size: 14px;
 }
 
+/* ---------- category intro copy ---------- */
+.catalog-intro { background: var(--paper); padding: 32px 48px 0; }
+.catalog-intro .inner { max-width: 1200px; margin: 0 auto; }
+.catalog-intro p { max-width: 760px; margin-bottom: 12px; color: #33383D; }
+
 /* ---------- catalog layout (sidebar + grid) ---------- */
 .catalog-layout {
   display: grid;

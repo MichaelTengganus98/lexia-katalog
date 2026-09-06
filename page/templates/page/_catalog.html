@@ -11,8 +11,15 @@
       {{ judul }}
     </div>
     <h1>{{ judul }}</h1>
+    {% if category and category.meta_description %}<p class="lead">{{ category.meta_description }}</p>{% endif %}
   </div>
 </section>
+
+{% if category.intro %}
+<section class="catalog-intro">
+  <div class="inner">{{ category.intro|linebreaks }}</div>
+</section>
+{% endif %}
 
 <div class="catalog-layout">
   <aside class="catalog-side">
@@ -44,7 +51,8 @@
           <a class="prod-card" href="{% url 'item:mesin' id=i.id slug=i.slug %}">
             <div class="prod-photo">
               {% thumbnail i.picture1 "480x360" crop="center" as im %}
-                <img src="{{ im.url }}" alt="{{ i.name }}">
+                <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" loading="lazy"
+                     alt="{{ i.name }} — {{ i.Jenis.jenis }}">
               {% empty %}Foto belum tersedia{% endthumbnail %}
             </div>
             <div class="prod-body">

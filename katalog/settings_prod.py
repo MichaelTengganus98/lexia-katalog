@@ -167,3 +167,12 @@ CSRF_COOKIE_SECURE = True
 FILE_UPLOAD_PERMISSIONS = 0o775
 SECURE_CONTENT_TYPE_NOSNIFF = True
 SECURE_BROWSER_XSS_FILTER = True
+# --- SEO / media -----------------------------------------------------------
+THUMBNAIL_FORMAT = 'WEBP'
+THUMBNAIL_QUALITY = 82
+
+# Canonical host: send the apex domain to www with a 301
+PREPEND_WWW = True
+SECURE_HSTS_SECONDS = 31536000
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True

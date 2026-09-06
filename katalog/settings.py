@@ -165,6 +165,12 @@ if PRODUCTION:
     FILE_UPLOAD_PERMISSIONS = 0o775
     SECURE_CONTENT_TYPE_NOSNIFF = True
     SECURE_BROWSER_XSS_FILTER = True
+
+    # Canonical host: 301 the apex domain to www so Google indexes one host
+    PREPEND_WWW = True
+    SECURE_HSTS_SECONDS = 31536000
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
 else:
     STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
     STATICFILES_DIRS = [
@@ -175,3 +181,8 @@ else:
     MEDIA_URL = '/media/'
 
 
+
+# --- SEO / media -----------------------------------------------------------
+# sorl-thumbnail: emit WebP (smaller than JPEG/PNG, ~98% browser support)
+THUMBNAIL_FORMAT = 'WEBP'
+THUMBNAIL_QUALITY = 82

@@ -84,7 +84,14 @@ class Item(SeoModel):
 
     @property
     def seo_title(self):
-        return self.meta_title or "%s — Harga & Spesifikasi" % self.name
+        if self.meta_title:
+            return self.meta_title
+        base = self.name
+        for suffix in (" - Lexia", " – Lexia", " — Lexia"):
+            if base.endswith(suffix):
+                base = base[:-len(suffix)].strip()
+                break
+        return "%s — Harga & Spesifikasi" % base
 
     @property
     def seo_description(self):

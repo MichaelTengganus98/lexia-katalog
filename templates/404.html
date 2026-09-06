@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="page-hero">
+  <div class="inner">
+    <div class="breadcrumb"><a href="{% url 'home' %}">Beranda</a><span>/</span> 404</div>
+    <h1>Halaman tidak ditemukan</h1>
+    <p class="lead">Maaf, halaman yang Anda cari tidak ada atau sudah dipindahkan.</p>
+  </div>
+</section>
+<div class="section">
+  <div class="detail-actions">
+    <a class="btn btn-primary" href="{% url 'katalog:all-catalog' %}">Lihat Katalog</a>
+    <a class="btn btn-outline" href="{% url 'home' %}">Ke Beranda</a>
+  </div>
+</div>
+{% endblock %}
