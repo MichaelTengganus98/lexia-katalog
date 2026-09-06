@@ -37,8 +37,11 @@ powershell -ExecutionPolicy Bypass -File run-local.ps1
 ```
 
 Admin: `http://127.0.0.1:8000/admin/`
- * user `jeffry.aldi@gmail.com` / password `lexia-local-2026`  (superuser — **local only**, change if you like)
- * user `lexia` — non-staff, password unknown (same as production hash)
+ * user `jeffry.aldi@gmail.com` — superuser, **same password as production** (original hash imported from the dump)
+ * user `lexia` — production hash, but `is_staff=False` so it cannot enter the admin (same as production)
+
+If you ever need a fresh local admin without touching the imported accounts:
+`.\.venv\Scripts\python.exe manage.py createsuperuser`
 
 ## What was imported from the SQL dump
 
