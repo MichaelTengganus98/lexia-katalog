@@ -385,15 +385,31 @@ main { flex: 1 0 auto; }
 
 /* ---------- responsive ---------- */
 @media (max-width: 1024px) {
-  .catalog-layout { grid-template-columns: 1fr; gap: 28px; }
+  .catalog-layout { grid-template-columns: 1fr; gap: 22px; }
   .catalog-side { position: static; }
-  .cat-list { flex-flow: row wrap; }
-  .cat-list a { border-left: 0; border-bottom: 2px solid transparent; }
-  .cat-list a.is-active { border-color: var(--amber); }
+  .catalog-side h5 { margin-bottom: 10px; }
+  .search-box { margin-bottom: 16px; }
+  /* categories become a single horizontal strip of square tags */
+  .cat-list {
+    flex-flow: row nowrap;
+    gap: 8px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 6px;
+    scrollbar-width: thin;
+  }
+  .cat-list a {
+    flex: 0 0 auto;
+    border: 1px solid var(--card-line);
+    border-left: 1px solid var(--card-line);
+    padding: 8px 14px;
+    white-space: nowrap;
+  }
+  .cat-list a.is-active { border-color: var(--amber); color: var(--ink); font-weight: 600; background: var(--paper-dim); }
 }
 @media (max-width: 960px) {
   .container, .section, .section.tight, .page-hero, .site-nav, .site-footer,
-  .detail-wrap, .detail-section, .contact-grid, .pager { padding-left: 24px; padding-right: 24px; }
+  .catalog-layout, .detail-wrap, .detail-section, .contact-grid, .pager { padding-left: 24px; padding-right: 24px; }
   .nav-toggle { display: flex; }
   .nav-links {
     display: none; position: absolute; top: 100%; left: 0; right: 0;
@@ -420,4 +436,9 @@ main { flex: 1 0 auto; }
   .cat-grid, .prod-grid, .prod-grid.featured-layout, .trust { grid-template-columns: 1fr; }
   .page-hero h1 { font-size: 26px; }
   .hero-text h1 { font-size: 28px; }
+  /* stack spec label / value so long values don't crowd on narrow screens */
+  .prod-body .spec-row, .detail-key .spec-row { flex-direction: column; gap: 2px; }
+  .prod-body .spec-row span:last-child, .detail-key .spec-row span:last-child { text-align: left; }
+  .detail-actions .btn { flex: 1 1 100%; }
+  .breadcrumb { font-size: 11px; }
 }
