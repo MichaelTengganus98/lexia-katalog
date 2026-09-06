@@ -1,22 +1,30 @@
 # Deploy to staging (cPanel + subdomain/addon domain)
 
-This puts the **`main`** branch on a separate URL (e.g. `staging.lexia.co.id`)
+This puts the **`staging`** branch on a separate URL (e.g. `staging.lexia.co.id`)
 with its own MySQL database, without touching the live site.
 
 Branches on GitHub (`github.com/MichaelTengganus98/lexia-katalog`):
-- **`main`** — the redesign + SEO + blog + deploy work. Staging runs this.
+- **`staging`** — the redesign + SEO + blog + deploy work. The staging server runs this.
 - **`master`** — the original pre-redesign site (what production runs today).
-- **`redesign`** — same commit as `main` (kept as an alias; safe to delete).
+- **`main`** — GitHub's default; currently the same commit as `staging`.
 
 Settings are 100% environment-driven — you never edit `settings.py`. Everything
 is controlled by the variables in `.env.example`.
+
+> **Security — the repo is public.** Old commits contain the production
+> `SECRET_KEY` and the old production MySQL password (`webkojeffry1` for
+> `lexiacoi_admin`). Before relying on this: **make the repo private**
+> (GitHub → repo → Settings → Danger Zone → Change visibility), OR rotate
+> the production MySQL password and set a fresh `DJANGO_SECRET_KEY` env var
+> on production. Staging uses its own DB + its own `DJANGO_SECRET_KEY`, so
+> staging itself is fine.
 
 ---
 
 ## 0. One-time: what you need
 
 - cPanel access to the `lexiacoi` account
-- The repo on GitHub: `https://github.com/MichaelTengganus98/lexia-katalog.git` (private)
+- The repo on GitHub: `https://github.com/MichaelTengganus98/lexia-katalog.git`
 - Python 3.7 or 3.8 available in cPanel → *Setup Python App*
 
 Naming used below (change to taste):
@@ -54,11 +62,8 @@ SSH in (cPanel → *Terminal*), then:
 
 ```bash
 mkdir -p ~/apps
-cd ~/apps
-git clone https://github.com/MichaelTengganus98/lexia-katalog.git katalog-staging
-# (clones the default branch, main). Private repo -> it will prompt for your
-# GitHub username + a Personal Access Token (Settings -> Developer settings ->
-# Tokens) as the password.
+git clone -b staging https://github.com/MichaelTengganus98/lexia-katalog.git ~/apps/katalog-staging
+cd ~/apps/katalog-staging
 ```
 
 ## 4. Create the Python app
@@ -166,7 +171,7 @@ the docroot) or add `Disallow: /` via a staging-only robots override.
 
 ```bash
 cd ~/apps/katalog-staging
-git pull origin main
+git pull origin staging
 bash deployment.sh          # pip install + migrate + collectstatic + restart
 ```
 
@@ -174,11 +179,13 @@ New media added through the admin lands in `DJANGO_MEDIA_ROOT` automatically.
 
 ## 10. Promoting to production later
 
-When `main` is approved, point the **production** Python app at it too:
+When `staging` is approved, merge it and deploy to the **production** Python app:
 
 ```bash
+# from your PC
+git checkout master && git merge staging && git push origin master
 # on the production app root (a separate checkout / Python app)
-git fetch origin && git checkout main && git pull
+git fetch origin && git checkout master && git pull
 ```
 
 Set its env vars (`DJANGO_ENV=production`, `DJANGO_PREPEND_WWW=1`, the
