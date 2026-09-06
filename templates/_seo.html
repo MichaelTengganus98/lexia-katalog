@@ -1,0 +1,31 @@
+{% comment %}
+Head SEO block. Optional context vars a view may set (all have fallbacks):
+  page_title        title text WITHOUT the " | Site Name" suffix
+  page_description   meta description
+  page_image         ABSOLUTE url for og:image
+  page_type          og:type (default "website")
+  page_noindex       bool -> emit noindex
+  canonical_url      overrides the query-stripped default from the context processor
+{% endcomment %}
+<title>{% if page_title %}{{ page_title }} | {{ site.site_name }}{% else %}{{ site.site_name }}{% if site.tagline %} — {{ site.tagline }}{% endif %}{% endif %}</title>
+<meta name="description" content="{% if page_description %}{{ page_description }}{% else %}{{ site.default_meta_description|default:site.tagline }}{% endif %}">
+<link rel="canonical" href="{{ canonical_url }}">
+{% if page_noindex %}<meta name="robots" content="noindex,follow">{% else %}<meta name="robots" content="index,follow,max-image-preview:large">{% endif %}
+
+<meta property="og:site_name" content="{{ site.site_name }}">
+<meta property="og:locale" content="id_ID">
+<meta property="og:type" content="{{ page_type|default:'website' }}">
+<meta property="og:title" content="{% if page_title %}{{ page_title }}{% else %}{{ site.site_name }}{% endif %}">
+<meta property="og:description" content="{% if page_description %}{{ page_description }}{% else %}{{ site.default_meta_description|default:site.tagline }}{% endif %}">
+<meta property="og:url" content="{{ canonical_url }}">
+{% if page_image %}<meta property="og:image" content="{{ page_image }}">
+{% elif site.default_og_image %}<meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ site.default_og_image.url }}">{% endif %}
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{% if page_title %}{{ page_title }}{% else %}{{ site.site_name }}{% endif %}">
+<meta name="twitter:description" content="{% if page_description %}{{ page_description }}{% else %}{{ site.default_meta_description|default:site.tagline }}{% endif %}">
+{% if page_image %}<meta name="twitter:image" content="{{ page_image }}">
+{% elif site.default_og_image %}<meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{{ site.default_og_image.url }}">{% endif %}
+
+{% if site.google_site_verification %}<meta name="google-site-verification" content="{{ site.google_site_verification }}">{% endif %}
+{% if site.bing_site_verification %}<meta name="msvalidate.01" content="{{ site.bing_site_verification }}">{% endif %}

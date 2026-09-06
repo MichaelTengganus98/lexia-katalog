@@ -1,22 +1,29 @@
-from django.shortcuts import render
-from item.models import Item
 from django.core.paginator import Paginator
-from django.views.decorators.http import require_GET, require_POST
 from django.http import JsonResponse
+from django.shortcuts import render
+from django.views.decorators.http import require_GET, require_POST
+
+from item.models import Item
 # Create your views here.
 
 
 @require_GET
 def search(request):
-    q = request.GET.get('mesin')
-    listItem = Item.objects.filter(name__icontains=q)
+    q = (request.GET.get('mesin') or '').strip()
+    listItem = Item.objects.filter(name__icontains=q) if q else Item.objects.none()
     paginator = Paginator(listItem, 12)
     p = request.GET.get('page')
     itemsPage = paginator.get_page(p)
-    notFound=''
-    if listItem.count() == 0:
-        notFound = "tidak ditemukan"
-    return render(request, 'page/katalog.html', {'item': itemsPage, 'judul': "Pencarian: " + q + " " + notFound})
+    notFound = '' if listItem.count() else "tidak ditemukan"
+    judul = ("Pencarian: %s %s" % (q, notFound)).strip() if q else "Pencarian"
+    return render(request, 'page/katalog.html', {
+        'item': itemsPage,
+        'judul': judul,
+        'query': q,
+        'page_title': judul,
+        'page_description': "Hasil pencarian mesin di katalog Lexia Machinery.",
+        'page_noindex': True,
+    })
 
 
 @require_POST

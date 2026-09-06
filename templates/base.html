@@ -2,9 +2,10 @@
 {% load static %}
 <html lang="id">
 <head>
-    {% block title %}<title>Lexia Machinery</title>{% endblock %}
     {% include "head-import.html" %}
+    {% include "_seo.html" %}
     {% block head %}{% endblock %}
+    {% include "_analytics.html" %}
 </head>
 <body>
 {% include "navbar.html" %}
@@ -12,6 +13,8 @@
     {% block content %}{% endblock %}
 </main>
 {% include "footer.html" %}
+{% include "_jsonld_site.html" %}
+{% block structured_data %}{% endblock %}
 {% include "script-import.html" %}
 {% block script %}{% endblock %}
 </body>

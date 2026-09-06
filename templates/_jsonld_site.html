@@ -1,0 +1,43 @@
+{% load static %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "{{ request.scheme }}://{{ request.get_host }}/#organization",
+      "name": "{{ site.site_name }}",
+      "url": "{{ request.scheme }}://{{ request.get_host }}/",
+      "logo": "{{ request.scheme }}://{{ request.get_host }}{% static 'img/logo-lexia-machinery.png' %}",
+      {% if site.phone_primary %}"telephone": "{{ site.phone_primary }}",{% endif %}
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "{{ site.address }}",
+        "addressLocality": "{{ site.city }}",
+        "addressRegion": "{{ site.region }}",
+        "postalCode": "{{ site.postal_code }}",
+        "addressCountry": "{{ site.country }}"
+      },
+      "sameAs": [
+        {% if site.facebook_url %}"{{ site.facebook_url }}"{% endif %}
+        {% if site.instagram_url %},"{{ site.instagram_url }}"{% endif %}
+        {% if site.youtube_url %},"{{ site.youtube_url }}"{% endif %}
+        {% if site.tokopedia_url %},"{{ site.tokopedia_url }}"{% endif %}
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "{{ request.scheme }}://{{ request.get_host }}/#website",
+      "url": "{{ request.scheme }}://{{ request.get_host }}/",
+      "name": "{{ site.site_name }}",
+      "publisher": { "@id": "{{ request.scheme }}://{{ request.get_host }}/#organization" },
+      "inLanguage": "id-ID",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "{{ request.scheme }}://{{ request.get_host }}/search/?mesin={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+  ]
+}
+</script>

@@ -83,6 +83,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'page.context_navbar.menu_mesin',
+                'seo.context_processors.seo',
             ],
         },
     },
