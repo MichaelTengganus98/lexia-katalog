@@ -1,29 +1,17 @@
-astroid
-certifi
-chardet
-colorama
-coverage
-dj-database-url
-Django
-django-environ
-gunicorn
-idna
-isort
-social-auth-app-django
-lazy-object-proxy
-mccabe
-nose
-Pillow
-psycopg2-binary
-pylint
-pytz
-requests
-six
-typed-ast
-urllib3
-whitenoise
-wrapt
-django-cleanup
-python-memcached
-sorl-thumbnail
-mysqlclient
+# Runtime dependencies (Python 3.7 / 3.8, Django 2.1).
+# cPanel: run `pip install -r requirements.txt` from the app's virtualenv.
+Django==2.1.15
+pytz==2024.1
+six==1.16.0
+dj-database-url==0.5.0
+mysqlclient==2.1.1          # MySQL driver for staging/production
+Pillow==9.5.0
+sorl-thumbnail==12.5.0
+django-cleanup==4.0.0
+whitenoise==5.3.0
+python-memcached==1.59      # only used when DJANGO_MEMCACHED_LOCATION is set
+
+# If mysqlclient fails to compile on the server, comment it out and use:
+# PyMySQL==1.0.2
+# ...then add these two lines to the top of katalog/wsgi.py and manage.py:
+#   import pymysql; pymysql.install_as_MySQLdb()
