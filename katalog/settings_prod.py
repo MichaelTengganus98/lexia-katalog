@@ -39,11 +39,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sitemaps',
     'homepage',
     'about',
     'item',
     'search',
     'page',
+    'seo',
     'django_cleanup',
 	'sorl.thumbnail'
 ]
