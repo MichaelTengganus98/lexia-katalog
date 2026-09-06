@@ -21,3 +21,7 @@ _nul
 # generated example / uploaded media (managed on the server)
 media/blog/
 media/upload/brosur/
+
+# deploy bundles (build artifacts)
+staging-media.zip
+*.tar.gz
