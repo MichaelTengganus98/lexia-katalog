@@ -1,0 +1,17 @@
+{% load static %}
+<nav id="nav" class="navbar navbar-expand-lg bg-dark navbar-dark justify-content-between fixed-top">
+    <a class="navbar-brand" href="{% url 'home' %}">
+        <h1>LEXIA</h1>
+        <p>Machinery</p>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-end nav-item" id="collapsibleNavbar">
+        <ul class="navbar-nav" id="mainNav">
+            <li class="nav-item"><a id="a-home" class="nav-link" href="{% url 'home' %}">Beranda</a></li>
+            <li class="nav-item"><a id="a-catalog" class="nav-link" href="{% url 'katalog:all-catalog' %}">Katalog</a></li>
+            <li class="nav-item"><a id="a-contact" class="nav-link" href="{% url 'about' %}">Hubungi Kami</a></li>
+        </ul>
+    </div>
+</nav>

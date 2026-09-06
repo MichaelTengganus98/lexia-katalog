@@ -1,0 +1,687 @@
+body {
+    background-color: #fafafa;
+    margin: 0;
+    padding: 0;
+    font-family: 'Raleway', sans-serif;
+}
+
+i {
+    border: solid black;
+    border-width: 0 2px 2px 0;
+    display: inline-block;
+    padding: 3px;
+}
+
+a, p, h5, h1, h4 {
+    color: #313131;
+    margin: 0;
+}
+
+h4 {
+    letter-spacing: 1px;
+}
+
+a:hover {
+    text-decoration: none;
+    color: #0085FF;
+}
+
+td {
+    width: 480px;
+    height: 46px;
+}
+
+#nav {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.sign-icon {
+    transform: scale(0.8);
+}
+
+.bg-dark {
+    background-color: #fafafa !important;
+}
+
+.sub-title {
+    font-size: 16px;
+    font-weight: 800;
+    color: #0085FF;
+}
+
+.sub-title-category {
+    font-size: 16px;
+    margin-top: 0.5rem !important;
+}
+
+.main-title {
+    font-size: 28px;
+    color: #0085FF;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.machine-title-indent {
+    margin: 0 1.5rem;
+}
+
+.right {
+    transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+}
+
+.arrow {
+    margin-right: 1rem;
+}
+
+.box-catalog {
+    width: calc(100vw / 5);
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    border-radius: 1.5rem;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
+    margin: 1rem;
+    padding-bottom: 12px;
+}
+
+.container-catalog {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin: 1.5rem 0;
+}
+
+.pict {
+    width: 100%;
+    height: 100%;
+    padding: 1rem 0;
+    object-fit: scale-down;
+}
+
+.pict-catalog {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+td {
+    border-top: 1px solid #dddddd;
+    border-bottom: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.detail-pict {
+    height: 480px;
+    background-color: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.specification-main-container {
+    padding: 9rem 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.btn-outline-success {
+    color: #fafafa !important;
+    border-color: #fafafa !important;
+}
+
+.btn-outline-success:hover {
+    color: white;
+    background-color: #006acc;
+    border-color: #0085FF;
+}
+
+.button-pesan {
+    border: solid 2px #0085FF;
+    border-radius: 0.8rem;
+    width: 180px;
+    height: 44px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.3s;
+}
+
+.button-pesan:hover {
+    text-decoration: none;
+    color: white;
+    background-color: #006acc;
+}
+
+.button-pesan p {
+    color: #0085FF;
+}
+
+.button-pesan:hover p {
+    color: white;
+}
+
+.title-container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.line-separator {
+    background-color: #DCE0E0;
+    height: 1px;
+    width: 100%;
+    margin: 1.5rem 0;
+}
+
+.container-specification {
+    width: 50%;
+}
+
+.indent-top-bottom {
+    margin: 1.5rem 0;
+}
+
+/*Navbar*/
+
+.navbar-dark .navbar-nav .nav-link {
+    color: black;
+    font-size: 1rem;
+    margin: 0 1rem;
+    transition: 0.3s;
+}
+
+.navbar-dark .navbar-nav .show > .nav-link {
+    color: #0085FF;
+}
+
+.navbar-dark:hover .navbar-nav:hover .nav-link:hover {
+    color: #006acc;
+}
+
+.navbar-dark .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3e%3cpath stroke='rgba(0, 0, 0, 0.5)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+.navbar-expand-md .navbar-nav .dropdown-menu {
+    position: absolute;
+    top: 48px;
+}
+
+.navbar-brand {
+    padding-left: 2rem;
+}
+
+.navbar-brand h1, .navbar-brand p {
+    font-weight: 800;
+    text-align: center;
+}
+
+.navbar .dropdown .dropdown-toggle:after {
+    transition: 0.2s;
+    transform: rotate(0deg);
+}
+
+.navbar .dropdown.show .dropdown-toggle:after {
+    transform: rotate(-180deg);
+}
+
+.navbar .dropdown:hover .dropdown-toggle:after {
+    transform: rotate(-180deg);
+}
+
+.btn-outline-success {
+    background-color: #363636;
+    border-color: #363636;
+    color: white;
+}
+
+.btn-outline-success:active {
+    background-color: darkgoldenrod !important;
+    border-color: white !important;
+    color: white !important;
+    box-shadow: none !important;
+}
+
+.contact-map-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    align-items: flex-start;
+
+}
+
+.container-contact {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: 4rem;
+}
+
+.information-container {
+    width: 30%;
+}
+
+.information-container h4, .information-container h5 {
+    color: #0085FF;
+}
+
+.indent-contant-title {
+    margin: 4rem 0;
+}
+
+.indent-sosmed-title {
+    margin: 4rem 0 2rem 0;
+}
+
+.indent-bottom {
+    margin-bottom: 1.5rem;
+}
+
+.flex-contact {
+    display: flex;
+    flex-direction: row;
+    margin: 1.5rem 0;
+
+}
+
+.icon-contact-tokped {
+    height: 24px;
+}
+
+.icon-contact {
+    width: 24px;
+    height: 24px;
+    margin-right: 0.5rem;
+}
+
+.contact-title {
+    font-size: 20px;
+    color: #0085FF;
+}
+
+.section-about-home {
+    background: url("../img/bg.png") no-repeat;
+    background-size: cover;
+    min-height: 100vh;
+    height: 1px;
+}
+
+.about-home {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+}
+
+.best-seller {
+    width: 360px;
+    height: 480px;
+}
+
+.about-lexia {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 520px;
+    height: 540px;
+    text-align: center;
+}
+
+.page-item.active .page-link {
+    z-index: 1;
+    background-color: #0085FF;
+    border-color: #0085FF;
+    color: white;
+    transition: 0.2s;
+}
+
+.page-link:focus {
+    background-color: transparent;
+    border-style: none;
+}
+
+.map {
+    width: 580px;
+    position: relative;
+}
+
+.machine-video {
+    width: 420px;
+    height: 315px;
+    margin: 1.5rem 0;
+}
+
+.box-item {
+    width: calc(100vw / 5.5);
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    border-radius: 1.5rem;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
+    margin: 1.5rem;
+    padding-bottom: 12px;
+}
+
+.related-product-container {
+    padding-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.container-pict-video {
+    padding-right: 8rem;
+}
+
+.footer {
+    background-color: #363636;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 5rem;
+    flex-wrap: wrap;
+    padding: 1.5rem 3.5rem;
+}
+
+.footer .contact-us {
+    justify-content: center;
+    align-items: center;
+}
+
+.footer .contact-us img {
+    margin-right: 1rem;
+    height: 140px;
+    width: 96px;
+}
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.flex-row {
+    display: flex;
+    flex-direction: row;
+    margin: 1rem 0;
+}
+
+.sub-title-footer {
+    color: #ffffff;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.description-footer {
+    color: #ffffff;
+    font-size: 14px;
+}
+
+.active-link {
+    color: #0085FF !important;
+    font-weight: 800;
+}
+
+.icon-footer {
+    width: 32px;
+    height: 32px;
+    margin-right: 1.5rem;
+}
+
+.icon-footer-tokped {
+    width: 130px;
+    height: 32px;
+}
+
+.sosial-media-container {
+    justify-content: center;
+    align-items: center;
+}
+
+.sosmed-flex {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.center {
+    text-align: center;
+}
+
+.margin-sosmed {
+    margin: 0 2.5rem;
+}
+
+.btn-see-more {
+    border: solid 2px #0085FF;
+    color: white;
+    transition: 0.3s;
+    border-radius: 0.8rem;
+    font-weight: 800;
+    font-size: 0.9rem;
+    padding: 0.5rem 1.5rem;
+    text-align: center;
+    background-color: #0085FF;
+    margin: 0.7rem 1.5rem 0.7rem 1.5rem;
+}
+
+.btn-see-more:hover {
+    border: solid 2px #0085FF;
+    text-decoration: none;
+    color: white;
+    background-color: #006acc;
+}
+
+.machine-title {
+    font-size: 1.5rem;
+    text-align: center;
+    font-weight: 800;
+}
+
+#ui-id-1 {
+    z-index: 9999;
+    position: absolute
+}
+
+.ui-autocomplete {
+    overflow-y: scroll !important;
+    overflow-x: hidden;
+}
+
+#sugges {
+    display: block;
+    position: relative;
+}
+
+.ui-autocomplete {
+    position: absolute;
+}
+
+.car {
+    width: 100%;
+    height: 100%;
+}
+
+#gmap_canvas img {
+    max-width: none !important;
+    background: none !important
+}
+
+@media screen and (max-width: 992px) {
+    body {
+        width: 100vw;
+    }
+
+    .sub-title {
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .best-seller {
+        width: 320px;
+        height: 420px;
+    }
+
+    .about-lexia {
+        width: auto;
+        margin: 2rem;
+    }
+
+    .about-home {
+        padding: 6.5rem 0 1.5rem 0;
+    }
+
+    .navbar-brand {
+        padding-left: 1rem;
+    }
+
+    .box-catalog, .box-item {
+        width: 100%;
+        max-width: 340px;
+        margin: 1rem 0;
+    }
+
+    .box-item {
+        margin: 1rem;
+    }
+
+    .main-title {
+        text-align: center;
+    }
+
+    .title-catalog {
+        text-align: center;
+        margin-top: 2rem;
+    }
+
+    .nav-item {
+        background-color: #fafafa;
+    }
+
+    .navbar-dark .navbar-nav .nav-link {
+        margin: 0.5rem 1rem;
+    }
+
+    .container-catalog {
+        justify-content: center;
+        padding: 0 2rem;
+    }
+
+    .container {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    iframe {
+        width: 320px;
+        height: 240px;
+    }
+
+    .indent-contant-title {
+        margin: 2rem 0;
+    }
+
+    .container-specification {
+        width: auto;
+        padding: 0 2rem;
+    }
+
+    .w-100 {
+        width: 300px !important;
+        height: 420px !important;
+    }
+
+    .specification-main-container {
+        padding: 5.5rem 0 4.5rem 0;
+    }
+
+    .detail-pict {
+        width: auto;
+        height: 480px;
+        background-color: transparent;
+        margin: 0;
+    }
+
+    .information-container {
+        width: auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 0 2rem;
+    }
+
+    .map {
+        width: auto;
+    }
+
+    .footer {
+        padding: 1rem;
+        justify-content: center;
+    }
+
+    .container-pict-video {
+        padding: 0 2rem;
+    }
+
+    .machine-video {
+        width: 280px;
+        height: 200px;
+    }
+
+    .sign-icon {
+        transform: scale(0.6);
+    }
+
+    .button-pesan {
+        margin-top: 1rem;
+    }
+
+    .footer-description {
+        padding-top: 1.5rem;
+    }
+
+    .container-contact {
+        padding-top: 6rem;
+    }
+
+    .row {
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    .title-container {
+        flex-direction: column;
+    }
+}
+
+@media screen and (max-width: 320px) {
+    .information-container {
+        padding: 0 1.5rem;
+    }
+}
+
+@media screen and (min-width: 1200px) {
+    .container {
+        max-width: 1280px;
+    }
+
+    .box-item {
+        width: calc(1280px / 5);
+    }
+}

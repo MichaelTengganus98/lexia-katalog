@@ -1,0 +1,33 @@
+{% load tags_page %}
+<nav class="d-flex justify-content-center wow fadeIn">
+    <ul class="pagination pg-blue">
+
+        <!--Arrow left-->
+
+        <li class="page-item {% if item.has_previous %} enabled {% else %}disabled{% endif %}">
+            <a class="page-link"
+               href="{% if item.has_previous %}?{% url_replace page=paginator.previous_page_number %} {% else %}#{% endif %}"
+               aria-label="Previous">
+                <span aria-hidden="true">«</span>
+                <span class="sr-only">Previous</span>
+            </a>
+        </li>
+        {% for l in  item.paginator.page_range %}
+            {% if l <= item.number|add:5 and l >= item.number|add:-5 %}
+                <li class="page-item {% if forloop.counter == item.number %}active{% endif %}">
+                    <a class="page-link"
+                       href="?{% url_replace page=forloop.counter %}">{{ forloop.counter }}</a>
+                </li>
+            {% endif %}
+        {% endfor %}
+
+        <li class="page-item {% if item.has_next %} enabled {% else %}disabled{% endif %}">
+            <a class="page-link waves-effect waves-effect "
+               href="{% if item.has_next %}?{% url_replace page=paginator.next_page_number %}{% else %}#{% endif %}"
+               aria-label="Next">
+                <span aria-hidden="true">»</span>
+                <span class="sr-only">Next</span>
+            </a>
+        </li>
+    </ul>
+</nav>

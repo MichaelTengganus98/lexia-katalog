@@ -1,0 +1,138 @@
+.btn-category {
+  border: solid 2px #0085ff;
+  color: #0085ff;
+  transition: 0.3s;
+  border-radius: 1.5rem;
+  font-weight: 800;
+  font-size: 0.9rem;
+  padding: 0.3rem 1.7rem;
+  min-width: 190px;
+  text-align: center;
+}
+
+.btn-category:hover {
+  border: solid 2px #0085ff;
+  text-decoration: none;
+  color: white;
+  background-color: #006acc;
+}
+
+.btn-category:not(:last-child) {
+  margin-bottom: 0.5rem;
+}
+
+.searchbar {
+  top: 1rem;
+  margin-bottom: 2.5rem;
+  position: relative;
+}
+
+.searchbar input::placeholder {
+  color: white;
+}
+
+.searchbar input {
+  border: solid 2px #0085ff;
+  border-radius: 1.5rem;
+  background-color: #0085ff;
+  padding: 0.5rem 1.7rem;
+}
+
+.searchbar .form-control {
+  color: white;
+}
+
+.searchbar input:focus {
+  background-color: #0085ff;
+}
+
+.searchbar .btn {
+  color: white;
+  position: absolute;
+  right: 0;
+  padding: 0 0.75rem 0 0;
+}
+
+.sticky-nav {
+  position: sticky;
+  top: 120px;
+}
+
+.left-container {
+  width: 100%;
+  min-width: 225px;
+}
+
+.left-container h5 {
+  font-size: 2.5rem;
+  color: #0085ff;
+  font-weight: 800;
+}
+
+.list-catalog {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1.5rem;
+}
+
+.list-catalog .active {
+  background-color: #0085ff;
+  color: white;
+}
+
+.title-catalog {
+  color: #0085ff;
+  font-weight: 800;
+}
+
+.main-container-catalog {
+  display: flex;
+  flex-direction: row;
+  padding: 8rem 0 4rem 0;
+}
+
+.side-nav {
+  margin-left: 3rem;
+  padding-right: 2.5rem;
+}
+
+@media screen and (max-width: 992px) {
+  .form-inline .form-control {
+    display: inline-table;
+    width: 190px;
+    vertical-align: middle;
+  }
+
+  .left-container {
+    padding-top: 2rem;
+    width: 100%;
+  }
+
+  .side-nav {
+    width: 100%;
+    margin-left: 0;
+    padding-right: 0;
+  }
+
+  .main-container-catalog {
+    flex-wrap: wrap;
+    padding: 6.5rem 0 1.5rem 0;
+    justify-content: center;
+  }
+
+  .sticky-nav {
+    position: relative;
+    top: unset;
+  }
+
+  .side-nav {
+    width: 100%;
+    padding: 0 2rem;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .box-catalog {
+    width: calc(1280px / 5);
+  }
+}

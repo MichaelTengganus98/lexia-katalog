@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    {% block title %}
+    {% endblock %}
+    {% include "head-import.html" %}
+    {% block head %}
+    {% endblock %}
+</head>
+<body>
+{% include "navbar.html" %}
+{% block content %} {% endblock %}
+{% include "footer.html" %}
+
+{% include 'script-import.html' %}
+{% block script %}
+{% endblock %}
+<script>
+        $(function () {
+            $("#tags").autocomplete({
+                source: function (request, response) {
+                    var csrftoken = $("[name=csrfmiddlewaretoken]").val();
+                    $.ajax({
+                        headers: { "X-CSRFToken": csrftoken },
+                        url: "{% url 'search:searchpost' %}",
+                        dataType: "json",
+                        method: 'POST',
+                        data: {
+                            mesin: $("#tags").val()
+                        },
+                        success: function (data) {
+                            response(data.list);
+                        }
+                    })
+                },
+                appendTo: "#sugges"
+            })
+        });
+    </script>
+</body>
+</html>

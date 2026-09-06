@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% load add %}
+{% load static %}
+{% load thumbnail %}
+{% block head %}
+    <link type="text/css" rel="stylesheet" href="{% static 'vendor/css/style.css' %}">
+    <link type="text/css" rel="stylesheet" href="{% static 'homepage/css/carousel.css' %}">
+    <link type="text/css" rel="stylesheet" href="{% static 'homepage/css/style.css' %}">
+{% endblock %}
+{% block title %}
+    <title>Lexia</title>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'vendor/js/card-slider-min.js' %}"></script>
+    <script src="{% static 'homepage/js/index.js' %}"></script>
+{% endblock %}
+{% block content %}
+    <section class="section-about-home container-fluid">
+        <div class="content d-flex justify-content-center align-items-center">
+            <div class="about-home row d-flex justify-content-center align-items-center">
+                <div class="col-md-12 col-lg-3 col-sm-12 d-flex justify-content-center align-items-center">
+                    <img src="{% static 'img/lexia-borderless.png' %}">
+                </div>
+                <div class="cold-md-12 col-lg-9 col-sm-12 about d-flex justify-content-sm-center align-items-sm-center align-items-lg-start flex-column">
+                    <div class="lexia-title">
+                        <h1>LEXIA MACHINERY</h1>
+                        <p>Menjual berbagai mesin perlengkapan produksi dan finishing untuk perusahaan percetakan dan
+                            photocopy center</p>
+                    </div>
+                    <div class="btn-nav d-flex justify-content-center">
+                        <a href="{% url 'katalog:all-catalog' %}" class="btn btn-link lexia-btn-primary">Lihat
+                            Produk</a>
+                        <a href="{% url 'about' %}" class="btn btn-link">Temukan Kami</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="product" class="related-product-container container">
+        <p class="main-title">Lihat Produk Terbaik Kami</p>
+        <div class="card-stack-section d-flex align-items-center justify-content-around">
+            <div class="d-flex flex-column justify-content-center align-items-center">
+                <p class="card-title">Produk Terbaru</p>
+                <div id="slider" class="container-catalog ui-card-slider">
+                    {% for item in related %}
+                        <div class="box-item slide">
+                            <div class="pict-catalog">
+                                <a href="{% url 'item:mesin' id=item.id slug=item.slug %}"
+                                   class="sub-title machine-title-indent">
+                                    {% thumbnail item.picture1 "200x200" crop="center" as im %}
+                                        <img class="pict" src="{{ im.url }}" alt="{{ item.name }}">
+                                    {% endthumbnail %}
+                                </a>
+                            </div>
+                            <p class="machine-title">{{ item.name }}</p>
+                            <a href="{% url 'item:mesin' id=item.id slug=item.slug %}"
+                               class="btn-see-more">Pelajari Lebih Lanjut</a>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="d-flex flex-column justify-content-center align-items-center">
+                <p class="card-title">Produk Terlaris</p>
+                <div id="slider-2" class="container-catalog ui-card-slider">
+                    {% for item in favorites %}
+                        <div class="box-item slide">
+                            <div class="pict-catalog">
+                                <a href="{% url 'item:mesin' id=item.id slug=item.slug %}"
+                                   class="sub-title machine-title-indent">
+                                    {% thumbnail item.picture1 "200x200" crop="center" as im %}
+                                        <img class="pict" src="{{ im.url }}" alt="{{ item.name }}">
+                                    {% endthumbnail %}
+                                </a>
+                            </div>
+                            <p class="machine-title">{{ item.name }}</p>
+                            <a href="{% url 'item:mesin' id=item.id slug=item.slug %}"
+                               class="btn-see-more">Pelajari Lebih Lanjut</a>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

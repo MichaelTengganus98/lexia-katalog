@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}
+    <title>Hubungi Kami</title>
+{% endblock %}
+{% block content %}
+    <section class="container-contact container">
+        <div class="title-container">
+            <p class="main-title indent-contant-title">Hubungi Kami</p>
+        </div>
+        <div class="contact-map-container">
+            <div class="information-container">
+                <h4 class="bold indent-bottom">Ingin melakukan pemesanan dan informasi lebih lanjut?</h4>
+                <h5 class="bold indent-bottom">Hubungi Kami di</h5>
+                <div class="flex-contact">
+                    <img class="icon-contact" src='{% static 'img/call-answer.png' %}'>
+                    <p class="contact-title">(+62) 61 4154876 / (+62) 61 4515028</p>
+                </div>
+                <div class="flex-contact">
+                    <img class="icon-contact" src='{% static 'img/whatsapp.png' %}'>
+                    <p class="contact-title">(+62) 852 7510 3333</p>
+                </div>
+                <div class="flex-contact">
+                    <img class="icon-contact" src='{% static 'img/placeholder.png' %}'>
+                    <p class="contact-title">Pelita Graphic Supplies<br>
+                        Jalan Mesjid No. 165
+                        <br>Medan, Indonesia</p>
+                </div>
+            </div>
+            <div class="map-address">
+                <div class="map">
+                    <iframe width="580" height="355"
+                            src="https://maps.google.com/maps?width=580&amp;height=355&amp;hl=en&amp;q=pelita%20graphics%20supplies%20medan+(Title)&amp;ie=UTF8&amp;t=&amp;z=18&amp;iwloc=B&amp;output=embed"
+                            frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe>
+                    <div style="position: absolute;width: 80%;bottom: 10px;left: 0;right: 0;margin-left: auto;margin-right: auto;color: #000;text-align: center;">
+                        <small style="line-height: 1.8;font-size: 2px;background: #fff;">Powered by <a
+                                href="http://www.googlemapsgenerator.com/nl/">GMapsGen NL</a> & <a
+                                href="http://merrymobiles.co.uk/">loadonlineph</a></small>
+                    </div>
+                </div>
+                <br/>
+            </div>
+        </div>
+
+        <div class="sosial-media-container">
+            <p class="main-title indent-sosmed-title center">Media Sosial Kami</p>
+            <div class="sosmed-flex">
+                <div class="flex-column margin-sosmed">
+                    <a href="https://www.facebook.com/lexiamachinery.ind" target="_blank" class="flex-row">
+                        <img class="icon-contact" src='{% static 'img/facebook-logo-black.png' %}' alt="facebook">
+                        <p class="contact-title">lexiamachinery.ind</p>
+                    </a>
+                    <a href="https://instagram.com/lexiamachinery.ind?utm_source=ig_profile_share&igshid=5cr38ynhz1np"
+                       target="_blank" class="flex-row">
+                        <img class="icon-contact" src='{% static 'img/instagram-logo-black.png' %}' alt="instagram">
+                        <p class="contact-title">lexiamachinery.ind</p>
+                    </a>
+                </div>
+                <div class="flex-column margin-sosmed">
+                    <a href="https://www.youtube.com/user/JeffryAldiP" target="_blank" class="flex-row">
+                        <img class="icon-contact" src='{% static 'img/youtube-logo-black.png' %}' alt="youtube">
+                        <p class="contact-title">Lexia Machinery</p>
+                    </a>
+                    <a href="https://www.tokopedia.com/lexiamachinery" target="_blank" class="flex-row">
+                        <img class="icon-contact" src='{% static 'img/tokopedia.png' %}'
+                             alt="tokopedia">
+                        <p class="contact-title">Lexia Machinery</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

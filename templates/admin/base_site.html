@@ -1,0 +1,13 @@
+{% extends 'admin/base_site.html' %}
+
+{% load static %}
+
+{% block branding %}
+    <div class="head">
+        <h1 id="name">Admin Dashboard</h1>
+    </div>
+{% endblock %}
+
+{% block nav-global %}
+    <img class="brand_img" src="{% static 'img/logo-lexia-machinery.png'%}" width="200" height="50" alt="logo">
+{% endblock %}

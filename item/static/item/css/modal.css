@@ -1,0 +1,40 @@
+.modal-container {
+    min-height: 480px;
+}
+
+.gallery-attachment {
+    flex: 2.5;
+}
+
+.modal-container p {
+    margin-block-end: 0;
+}
+
+.modal-attachment {
+    max-height: 600px;
+    max-width: 600px;
+}
+.overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    transition: .5s ease;
+    background-color: black;
+}
+
+@media screen and (max-width: 991px) {
+    .modal-attachment {
+        max-width: 320px;
+        max-height: 320px;
+        margin-bottom: 1rem;
+    }
+
+    .modal-container {
+        flex-direction: column !important;
+    }
+}
