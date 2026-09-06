@@ -14,6 +14,7 @@
 </main>
 {% include "footer.html" %}
 {% include "_jsonld_site.html" %}
+{% if page_jsonld %}<script type="application/ld+json">{{ page_jsonld|safe }}</script>{% endif %}
 {% block structured_data %}{% endblock %}
 {% include "script-import.html" %}
 {% block script %}{% endblock %}

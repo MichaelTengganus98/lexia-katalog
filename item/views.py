@@ -2,9 +2,11 @@ import re
 
 from django.http import Http404
 from django.shortcuts import get_object_or_404, render
+from django.urls import reverse
 from django.views.decorators.http import require_GET
 
 from page.models import Category
+from seo.jsonld import breadcrumb, graph, product
 from .models import Item
 # Create your views here.
 
@@ -34,6 +36,15 @@ def item(request, id, slug):
     elif item.picture1:
         page_image = request.build_absolute_uri(item.picture1.url)
 
+    crumbs = [
+        ("Beranda", "/"),
+        ("Katalog", reverse("katalog:all-catalog")),
+        (item.Jenis.jenis, item.Jenis.get_absolute_url()),
+        (item.name, None),
+    ]
+    page_jsonld = graph(request, product(request, item, specDict),
+                        breadcrumb(request, crumbs))
+
     return render(request, 'item/product-detail.html', {
         'barang': item,
         'spec': specDict,
@@ -43,4 +54,5 @@ def item(request, id, slug):
         'page_image': page_image,
         'page_type': 'product',
         'page_noindex': item.noindex,
+        'page_jsonld': page_jsonld,
     })

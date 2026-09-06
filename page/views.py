@@ -1,8 +1,10 @@
 from django.core.paginator import Paginator
 from django.http import Http404
 from django.shortcuts import get_object_or_404, render
+from django.urls import reverse
 from django.views.decorators.http import require_GET
 
+from seo.jsonld import breadcrumb, graph
 from .models import Category
 from item.models import Item
 # Create your views here.
@@ -17,6 +19,7 @@ def page(request, id, slug):
     paginator = Paginator(items, 12)
     p = request.GET.get('page')
     itemsPage = paginator.get_page(p)
+    crumbs = [("Beranda", "/"), ("Katalog", reverse("katalog:all-catalog")), (page.jenis, None)]
     return render(request, 'page/katalog.html', {
         'item': itemsPage,
         'judul': page.jenis,
@@ -24,6 +27,7 @@ def page(request, id, slug):
         'page_title': page.seo_title,
         'page_description': page.seo_description,
         'page_noindex': page.noindex,
+        'page_jsonld': graph(request, breadcrumb(request, crumbs)),
     })
 
 
@@ -34,10 +38,12 @@ def all_catalog(request):
     paginator = Paginator(page, 12)
     p = request.GET.get('page')
     items_page = paginator.get_page(p)
+    crumbs = [("Beranda", "/"), ("Katalog", None)]
     return render(request, 'page/katalog.html', {
         'item': items_page,
         'judul': 'Semua Mesin',
         'page_title': 'Semua Mesin Percetakan & Finishing',
         'page_description': ('Katalog lengkap mesin percetakan dan finishing dari Lexia Machinery '
                              '— potong, laminating, jilid, perforasi, dan lainnya. Stok siap kirim.'),
+        'page_jsonld': graph(request, breadcrumb(request, crumbs)),
     })
