@@ -1,8 +1,12 @@
 # Deploy to staging (cPanel + subdomain/addon domain)
 
-This puts the **`redesign`** branch on a separate URL (e.g. `staging.lexia.co.id`)
-with its own MySQL database, without touching the live site. Production keeps
-running `master`.
+This puts the **`main`** branch on a separate URL (e.g. `staging.lexia.co.id`)
+with its own MySQL database, without touching the live site.
+
+Branches on GitHub (`github.com/MichaelTengganus98/lexia-katalog`):
+- **`main`** — the redesign + SEO + blog + deploy work. Staging runs this.
+- **`master`** — the original pre-redesign site (what production runs today).
+- **`redesign`** — same commit as `main` (kept as an alias; safe to delete).
 
 Settings are 100% environment-driven — you never edit `settings.py`. Everything
 is controlled by the variables in `.env.example`.
@@ -12,7 +16,7 @@ is controlled by the variables in `.env.example`.
 ## 0. One-time: what you need
 
 - cPanel access to the `lexiacoi` account
-- The `redesign` branch pushed to a git remote (GitHub/GitLab) **or** a zip of the project
+- The repo on GitHub: `https://github.com/MichaelTengganus98/lexia-katalog.git` (private)
 - Python 3.7 or 3.8 available in cPanel → *Setup Python App*
 
 Naming used below (change to taste):
@@ -51,8 +55,10 @@ SSH in (cPanel → *Terminal*), then:
 ```bash
 mkdir -p ~/apps
 cd ~/apps
-git clone -b redesign <YOUR_REPO_URL> katalog-staging
-# no repo? upload a zip to ~/apps, unzip it to katalog-staging/
+git clone https://github.com/MichaelTengganus98/lexia-katalog.git katalog-staging
+# (clones the default branch, main). Private repo -> it will prompt for your
+# GitHub username + a Personal Access Token (Settings -> Developer settings ->
+# Tokens) as the password.
 ```
 
 ## 4. Create the Python app
@@ -160,7 +166,7 @@ the docroot) or add `Disallow: /` via a staging-only robots override.
 
 ```bash
 cd ~/apps/katalog-staging
-git pull origin redesign
+git pull origin main
 bash deployment.sh          # pip install + migrate + collectstatic + restart
 ```
 
@@ -168,15 +174,18 @@ New media added through the admin lands in `DJANGO_MEDIA_ROOT` automatically.
 
 ## 10. Promoting to production later
 
-When `redesign` is approved:
+When `main` is approved, point the **production** Python app at it too:
 
 ```bash
-git checkout master && git merge redesign && git push
+# on the production app root (a separate checkout / Python app)
+git fetch origin && git checkout main && git pull
 ```
 
-On the **production** app root: `git pull`, set its env vars
-(`DJANGO_ENV=production`, `DJANGO_PREPEND_WWW=1`, production `DATABASE_URL`,
-production paths), run `bash deployment.sh`. Move content across with a fresh
+Set its env vars (`DJANGO_ENV=production`, `DJANGO_PREPEND_WWW=1`, the
+production `DATABASE_URL`, production `DJANGO_STATIC_ROOT` /
+`DJANGO_MEDIA_ROOT` under `public_html`), then run `bash deployment.sh`.
+Keep `master` around only as a rollback snapshot of the old site. Move
+content across with a fresh
 `dumpdata`/`loaddata` **or** re-enter it in the production admin — the staging
 database does not sync to production automatically.
 
