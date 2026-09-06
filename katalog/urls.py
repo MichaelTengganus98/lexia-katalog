@@ -19,6 +19,7 @@ urlpatterns = [
     path('mesin/', include('item.urls', namespace="item")),
     path('katalog/', include('page.urls', namespace="katalog")),
     path('search/', include('search.urls', namespace="search")),
+    path('blog/', include('blog.urls', namespace="blog")),
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps},
          name='django.contrib.sitemaps.views.sitemap'),
     path('robots.txt', TemplateView.as_view(

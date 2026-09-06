@@ -88,6 +88,36 @@ def local_business(request, site):
     return data
 
 
+def blog_posting(request, post):
+    data = {
+        "@type": "BlogPosting",
+        "headline": post.title,
+        "description": post.seo_description,
+        "url": _abs(request, post.get_absolute_url()),
+        "mainEntityOfPage": _abs(request, post.get_absolute_url()),
+        "inLanguage": "id-ID",
+        "publisher": {
+            "@type": "Organization",
+            "name": "Lexia Machinery",
+            "logo": {
+                "@type": "ImageObject",
+                "url": _abs(request, "/static/img/logo-lexia-machinery.png"),
+            },
+        },
+    }
+    if post.cover_image:
+        data["image"] = _abs(request, post.cover_image.url)
+    if post.published_at:
+        data["datePublished"] = post.published_at.isoformat()
+    if post.updated:
+        data["dateModified"] = post.updated.isoformat()
+    if post.author and post.author.get_full_name():
+        data["author"] = {"@type": "Person", "name": post.author.get_full_name()}
+    else:
+        data["author"] = {"@type": "Organization", "name": "Lexia Machinery"}
+    return data
+
+
 def graph(request, *nodes):
     return json.dumps(
         {"@context": "https://schema.org", "@graph": [n for n in nodes if n]},

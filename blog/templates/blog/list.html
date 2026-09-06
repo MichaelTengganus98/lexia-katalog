@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% load thumbnail %}
+
+{% block content %}
+<section class="page-hero">
+  <div class="inner">
+    <div class="breadcrumb"><a href="{% url 'home' %}">Beranda</a><span>/</span> Blog</div>
+    <h1>Blog</h1>
+    <p class="lead">Tips, panduan, dan wawasan seputar mesin percetakan &amp; finishing.</p>
+  </div>
+</section>
+
+<section class="section">
+  {% if posts %}
+    <div class="post-grid">
+      {% for post in posts %}
+        <a class="post-card" href="{{ post.get_absolute_url }}">
+          <div class="post-cover">
+            {% if post.cover_image %}
+              {% thumbnail post.cover_image "560x360" crop="center" as im %}
+                <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" loading="lazy"
+                     alt="{{ post.title }}">
+              {% endthumbnail %}
+            {% else %}<span>Lexia Machinery</span>{% endif %}
+          </div>
+          <div class="post-body">
+            {% if post.related_category %}<div class="prod-cat">{{ post.related_category.jenis }}</div>{% endif %}
+            <h2>{{ post.title }}</h2>
+            <p class="post-excerpt">{{ post.seo_description }}</p>
+            <div class="post-meta">
+              {% if post.published_at %}{{ post.published_at|date:"j M Y" }} &middot; {% endif %}
+              {{ post.reading_time }} mnt baca
+            </div>
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="empty-note">Belum ada artikel.</div>
+  {% endif %}
+</section>
+
+{% if posts.paginator.num_pages > 1 %}
+<nav class="pager" aria-label="Halaman">
+  {% if posts.has_previous %}<a href="?page={{ posts.previous_page_number }}">&laquo;</a>
+  {% else %}<span class="is-disabled">&laquo;</span>{% endif %}
+  {% for n in posts.paginator.page_range %}
+    {% if n == posts.number %}<span class="is-active">{{ n }}</span>
+    {% else %}<a href="?page={{ n }}">{{ n }}</a>{% endif %}
+  {% endfor %}
+  {% if posts.has_next %}<a href="?page={{ posts.next_page_number }}">&raquo;</a>
+  {% else %}<span class="is-disabled">&raquo;</span>{% endif %}
+</nav>
+{% endif %}
+{% endblock %}

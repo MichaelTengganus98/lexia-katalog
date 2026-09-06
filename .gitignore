@@ -17,3 +17,7 @@ media/upload/image/
 lexiacoi_katalog.sql.gz
 .env
 _nul
+
+# generated example / uploaded media (managed on the server)
+media/blog/
+media/upload/brosur/

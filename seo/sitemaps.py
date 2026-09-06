@@ -1,6 +1,7 @@
 from django.contrib.sitemaps import Sitemap
 from django.urls import reverse
 
+from blog.models import Post
 from item.models import Item
 from page.models import Category
 
@@ -41,8 +42,21 @@ class ItemSitemap(Sitemap):
         return obj.updated
 
 
+class PostSitemap(Sitemap):
+    changefreq = "monthly"
+    priority = 0.6
+    protocol = "https"
+
+    def items(self):
+        return Post.published.filter(noindex=False)
+
+    def lastmod(self, obj):
+        return obj.updated
+
+
 sitemaps = {
     "static": StaticViewSitemap,
     "categories": CategorySitemap,
     "items": ItemSitemap,
+    "posts": PostSitemap,
 }

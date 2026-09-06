@@ -1,6 +1,7 @@
 from django.shortcuts import render
 
 from item.models import Item
+from .models import Brochure
 
 
 def home(request):
@@ -17,6 +18,7 @@ def home(request):
         'featured': featured,
         'hero_item': featured[0] if featured else None,
         'item_count': Item.objects.count(),
+        'brochures': Brochure.objects.filter(is_active=True),
         'page_description': ('Distributor resmi mesin percetakan dan finishing di Medan & Jakarta — '
                             'mesin potong kertas, laminating, lem binding, perforasi, dan lainnya. '
                             'Stok siap kirim, konsultasi gratis.'),

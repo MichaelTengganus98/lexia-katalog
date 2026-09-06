@@ -7,6 +7,7 @@
   <div class="nav-links">
     <a href="{% url 'home' %}"{% if request.path == '/' %} class="is-active"{% endif %}>Beranda</a>
     <a href="{% url 'katalog:all-catalog' %}"{% if '/katalog' in request.path or '/mesin/' in request.path %} class="is-active"{% endif %}>Katalog</a>
+    <a href="{% url 'blog:list' %}"{% if '/blog' in request.path %} class="is-active"{% endif %}>Blog</a>
     <a href="{% url 'about' %}"{% if '/contact' in request.path %} class="is-active"{% endif %}>Tentang Kami</a>
     <a href="{% url 'about' %}">Hubungi Kami</a>
     <a href="https://wa.me/6285275103333" target="_blank" rel="noopener" class="nav-cta">Konsultasi Gratis</a>

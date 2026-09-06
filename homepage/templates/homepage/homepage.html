@@ -73,6 +73,34 @@
   </div>
 </section>
 
+{% if brochures %}
+<section class="section">
+  <div class="section-head">
+    <h2>Brosur &amp; katalog</h2>
+    <p>Unduh brosur produk kami untuk referensi lengkap spesifikasi &amp; harga.</p>
+  </div>
+  <div class="brochure-grid">
+    {% for b in brochures %}
+      <div class="brochure-card">
+        <div class="b-cover">
+          {% thumbnail b.picture "560x420" crop="center" as im %}
+            <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" loading="lazy" alt="{{ b.title }}">
+          {% endthumbnail %}
+        </div>
+        <div class="b-body">
+          <h3>{{ b.title }}</h3>
+          {% if b.description %}<p>{{ b.description }}</p>{% endif %}
+          {% if b.download_url %}
+            <a class="btn btn-outline btn-sm" href="{{ b.download_url }}" target="_blank" rel="noopener"
+               {% if b.file %}download{% endif %}>Unduh brosur</a>
+          {% endif %}
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
 <section class="section graphite">
   <div class="trust">
     <div class="trust-stat"><div class="stat-num">15+</div><div class="stat-label">Tahun melayani industri percetakan</div></div>

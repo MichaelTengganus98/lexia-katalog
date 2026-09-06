@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% load thumbnail %}
+
+{% block content %}
+<section class="page-hero">
+  <div class="inner">
+    <div class="breadcrumb">
+      <a href="{% url 'home' %}">Beranda</a><span>/</span>
+      <a href="{% url 'blog:list' %}">Blog</a><span>/</span>
+      {{ post.title }}
+    </div>
+    <h1>{{ post.title }}</h1>
+    <p class="lead">
+      {% if not post.is_live %}<strong style="color:var(--amber)">[DRAF] </strong>{% endif %}
+      {% if post.published_at %}{{ post.published_at|date:"j F Y" }}{% endif %}
+      {% if post.author and post.author.get_full_name %} &middot; {{ post.author.get_full_name }}{% endif %}
+      &middot; {{ post.reading_time }} menit baca
+    </p>
+  </div>
+</section>
+
+<article class="article">
+  {% if post.cover_image %}
+    <div class="article-cover">
+      {% thumbnail post.cover_image "1120x560" crop="center" as im %}
+        <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}"
+             fetchpriority="high" alt="{{ post.title }}">
+      {% endthumbnail %}
+    </div>
+  {% endif %}
+
+  <div class="article-body">
+    {{ post.body|safe }}
+  </div>
+
+  {% if post.related_category %}
+    <div class="article-cta">
+      <span>Tertarik dengan mesinnya?</span>
+      <a class="btn btn-primary" href="{{ post.related_category.get_absolute_url }}">
+        Lihat {{ post.related_category.jenis }} &rarr;
+      </a>
+    </div>
+  {% endif %}
+
+  <p class="article-back"><a href="{% url 'blog:list' %}">&larr; Semua artikel</a></p>
+</article>
+
+{% if related_posts %}
+<section class="section paper-dim">
+  <div class="section-head"><h2>Artikel lainnya</h2></div>
+  <div class="post-grid">
+    {% for p in related_posts %}
+      <a class="post-card" href="{{ p.get_absolute_url }}">
+        <div class="post-cover">
+          {% if p.cover_image %}
+            {% thumbnail p.cover_image "560x360" crop="center" as im %}
+              <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" loading="lazy" alt="{{ p.title }}">
+            {% endthumbnail %}
+          {% else %}<span>Lexia Machinery</span>{% endif %}
+        </div>
+        <div class="post-body">
+          <h2>{{ p.title }}</h2>
+          <div class="post-meta">{% if p.published_at %}{{ p.published_at|date:"j M Y" }} &middot; {% endif %}{{ p.reading_time }} mnt baca</div>
+        </div>
+      </a>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+{% endblock %}
