@@ -1,14 +1,37 @@
 {% load static %}
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-        crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-        crossorigin="anonymous"></script>
-<script
-        src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
-        integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
-        crossorigin="anonymous"></script>
-<script src="{% static 'js/dropdown.js' %}"></script>
-<script src="{% static 'js/index.js' %}"></script>
+<script>
+  /* live search suggestions — progressive enhancement, no framework */
+  (function () {
+    var box = document.querySelector('[data-search-suggest]');
+    if (!box) return;
+    var input = box.querySelector('input[name="mesin"]');
+    var out = box.querySelector('.search-suggest');
+    var url = box.getAttribute('data-suggest-url');
+    var token = box.getAttribute('data-csrf');
+    var timer;
+    function clear() { if (out) { out.innerHTML = ''; } }
+    input.addEventListener('input', function () {
+      clearTimeout(timer);
+      var q = input.value.trim();
+      if (q.length < 2) { clear(); return; }
+      timer = setTimeout(function () {
+        var body = new URLSearchParams(); body.append('mesin', q);
+        fetch(url, { method: 'POST', headers: { 'X-CSRFToken': token }, body: body })
+          .then(function (r) { return r.json(); })
+          .then(function (data) {
+            if (!out) return;
+            out.innerHTML = '';
+            (data.list || []).forEach(function (name) {
+              var a = document.createElement('a');
+              a.textContent = name;
+              a.href = '/search/?mesin=' + encodeURIComponent(name);
+              out.appendChild(a);
+            });
+          }).catch(clear);
+      }, 200);
+    });
+    document.addEventListener('click', function (e) {
+      if (!box.contains(e.target)) clear();
+    });
+  })();
+</script>

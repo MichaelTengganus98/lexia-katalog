@@ -1,42 +1,18 @@
 <!DOCTYPE html>
 {% load static %}
-<html lang="en">
+<html lang="id">
 <head>
-    {% block title %}
-    {% endblock %}
+    {% block title %}<title>Lexia Machinery</title>{% endblock %}
     {% include "head-import.html" %}
-    {% block head %}
-    {% endblock %}
+    {% block head %}{% endblock %}
 </head>
 <body>
 {% include "navbar.html" %}
-{% block content %} {% endblock %}
+<main>
+    {% block content %}{% endblock %}
+</main>
 {% include "footer.html" %}
-
-{% include 'script-import.html' %}
-{% block script %}
-{% endblock %}
-<script>
-        $(function () {
-            $("#tags").autocomplete({
-                source: function (request, response) {
-                    var csrftoken = $("[name=csrfmiddlewaretoken]").val();
-                    $.ajax({
-                        headers: { "X-CSRFToken": csrftoken },
-                        url: "{% url 'search:searchpost' %}",
-                        dataType: "json",
-                        method: 'POST',
-                        data: {
-                            mesin: $("#tags").val()
-                        },
-                        success: function (data) {
-                            response(data.list);
-                        }
-                    })
-                },
-                appendTo: "#sugges"
-            })
-        });
-    </script>
+{% include "script-import.html" %}
+{% block script %}{% endblock %}
 </body>
 </html>

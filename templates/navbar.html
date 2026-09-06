@@ -1,17 +1,14 @@
 {% load static %}
-<nav id="nav" class="navbar navbar-expand-lg bg-dark navbar-dark justify-content-between fixed-top">
-    <a class="navbar-brand" href="{% url 'home' %}">
-        <h1>LEXIA</h1>
-        <p>Machinery</p>
-    </a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse justify-content-end nav-item" id="collapsibleNavbar">
-        <ul class="navbar-nav" id="mainNav">
-            <li class="nav-item"><a id="a-home" class="nav-link" href="{% url 'home' %}">Beranda</a></li>
-            <li class="nav-item"><a id="a-catalog" class="nav-link" href="{% url 'katalog:all-catalog' %}">Katalog</a></li>
-            <li class="nav-item"><a id="a-contact" class="nav-link" href="{% url 'about' %}">Hubungi Kami</a></li>
-        </ul>
-    </div>
+<nav class="site-nav" id="siteNav">
+  <a href="{% url 'home' %}" class="logo">LEXIA<span>MACHINERY</span></a>
+  <button class="nav-toggle" type="button" aria-label="Menu" aria-expanded="false" onclick="document.getElementById('siteNav').classList.toggle('open')">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="nav-links">
+    <a href="{% url 'home' %}"{% if request.path == '/' %} class="is-active"{% endif %}>Beranda</a>
+    <a href="{% url 'katalog:all-catalog' %}"{% if '/katalog' in request.path or '/mesin/' in request.path %} class="is-active"{% endif %}>Katalog</a>
+    <a href="{% url 'about' %}"{% if '/contact' in request.path %} class="is-active"{% endif %}>Tentang Kami</a>
+    <a href="{% url 'about' %}">Hubungi Kami</a>
+    <a href="https://wa.me/6285275103333" target="_blank" rel="noopener" class="nav-cta">Konsultasi Gratis</a>
+  </div>
 </nav>

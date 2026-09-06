@@ -1,65 +1,6 @@
 {% extends "base.html" %}
-{% load static %}
-{% load thumbnail %}
-{% block head %}
-    <link type="text/css" rel="stylesheet" href="{% static 'page/css/style.css' %}">
-{% endblock %}
-{% block title %}
-    <title>{{ judul }}</title>
-{% endblock %}
-
-{% block script %}
-    <script src="{% static 'page/js/index.js' %}"></script>
-{% endblock %}
-
+{% block title %}<title>{{ judul }} — Lexia Machinery</title>{% endblock %}
 {% block content %}
-    <section class="main-container-catalog container">
-        <nav class="side-nav">
-            <div class="left-container sticky-nav">
-                <h5 class="bold">Katalog</h5>
-                {% csrf_token %}
-                <form id="search-navbar" class="searchbar d-flex align-items-center" method="get"
-                      action="{% url 'search:category' %}">
-                    <input id="tags" class="form-control" type="search" placeholder="Cari Mesin..."
-                           name="mesin" aria-label="Search">
-                    <div id="sugges"></div>
-                    <button class="btn" type="submit"><span class="fa fa-search"></span>
-                    </button>
-                </form>
-                <div class="list-catalog">
-                    <a class="btn-category" href="{% url 'katalog:all-catalog' %}">Semua Mesin</a>
-                    {% for mesin in link_menu %}
-                        <a class="btn-category" href="{% url 'katalog:category' id=mesin.id slug=mesin.slug %}">
-                            {{ mesin.jenis }}
-                        </a>
-                    {% endfor %}
-                </div>
-            </div>
-        </nav>
-
-        <div class="right-container">
-            <h2 class="title-catalog">{{ judul }}</h2>
-            <div class="container-catalog">
-                {% for i in item %}
-                    <div class="box-catalog">
-                        <div class="pict-catalog">
-                            <a href="{% url 'item:mesin' id=i.id slug=i.slug %}" class="sub-title machine-title-indent">
-                                {% thumbnail i.picture1 "200x200" crop="center" as im %}
-                                    <img class="pict" src="{{ im.url }}" alt="{{ i.name }}">
-                                {% endthumbnail %}
-                            </a>
-                        </div>
-                        <p class="machine-title">{{ i.name }}</p>
-                        <a href="{% url 'item:mesin' id=i.id slug=i.slug %}"
-                           class="btn-see-more">Pelajari Lebih Lanjut</a>
-                    </div>
-                {% endfor %}
-            </div>
-        </div>
-    </section>
-    {% if '/search/' in request.path %}
-        {% include 'search/searchpagination.html' %}
-    {% else %}
-        {% include 'page/paginationKatalog.html' %}
-    {% endif %}
+    {% include "page/_catalog.html" %}
+    {% include 'page/paginationKatalog.html' %}
 {% endblock %}

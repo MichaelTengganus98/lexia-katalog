@@ -1,31 +1,25 @@
-<nav class="d-flex justify-content-center wow fadeIn">
-    <ul class="pagination pg-blue">
+{% if item.paginator.num_pages > 1 %}
+<nav class="pager" aria-label="Halaman">
+  {% if item.has_previous %}
+    <a href="?page={{ item.previous_page_number }}" aria-label="Sebelumnya">&laquo;</a>
+  {% else %}
+    <span class="is-disabled">&laquo;</span>
+  {% endif %}
 
-        <!--Arrow left-->
+  {% for l in item.paginator.page_range %}
+    {% if l <= item.number|add:5 and l >= item.number|add:-5 %}
+      {% if l == item.number %}
+        <span class="is-active">{{ l }}</span>
+      {% else %}
+        <a href="?page={{ l }}">{{ l }}</a>
+      {% endif %}
+    {% endif %}
+  {% endfor %}
 
-        <li class="page-item {% if item.has_previous %} enabled {% else %}disabled{% endif %}">
-            <a class="page-link"
-               href="{% if item.has_previous %}?page={{ item.previous_page_number }} {% else %}#{% endif %}"
-               aria-label="Previous">
-                <span aria-hidden="true">«</span>
-                <span class="sr-only">Previous</span>
-            </a>
-        </li>
-        {% for l in  item.paginator.page_range %}
-            {% if l <= item.number|add:5 and l >= item.number|add:-5 %}
-                <li class="page-item {% if forloop.counter == item.number %}active{% endif %}">
-                    <a class="page-link"
-                       href="?page={{ forloop.counter }}">{{ forloop.counter }}</a>
-                </li>
-            {% endif %}
-        {% endfor %}
-
-        <li class="page-item {% if item.has_next %} enabled {% else %}disabled{% endif %}">
-            <a class="page-link waves-effect waves-effect "
-               href="{% if item.has_next %}?page={{ item.next_page_number }}{% else %}#{% endif %}" aria-label="Next">
-                <span aria-hidden="true">»</span>
-                <span class="sr-only">Next</span>
-            </a>
-        </li>
-    </ul>
+  {% if item.has_next %}
+    <a href="?page={{ item.next_page_number }}" aria-label="Berikutnya">&raquo;</a>
+  {% else %}
+    <span class="is-disabled">&raquo;</span>
+  {% endif %}
 </nav>
+{% endif %}

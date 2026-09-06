@@ -1,336 +1,19 @@
+{% extends "base.html" %}
 {% load static %}
 {% load thumbnail %}
-<!DOCTYPE html>
-<html lang="id">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#1B1E22">
-<title>Lexia Machinery — Mesin Percetakan &amp; Finishing</title>
-<link rel="icon" href="{% static 'img/favicon.png' %}" type="image/x-icon">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --graphite: #1B1E22;
-    --steel: #2E333A;
-    --steel-light: #3D444C;
-    --amber: #D9A441;
-    --amber-dark: #B9862E;
-    --rust: #B94A25;
-    --paper: #F1EFE8;
-    --paper-dim: #E4E1D6;
-    --ink: #1B1E22;
-    --muted: #7C8B96;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: 'Inter', sans-serif;
-    background: var(--paper);
-    color: var(--ink);
-    line-height: 1.5;
-  }
-  h1, h2, h3, .plate-label {
-    font-family: 'Oswald', sans-serif;
-    letter-spacing: 0.01em;
-  }
-  a { color: inherit; text-decoration: none; }
-  img { display: block; max-width: 100%; }
+{% load item_extras %}
 
-  /* ---------- NAV ---------- */
-  nav {
-    background: var(--graphite);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 20px 48px;
-    flex-wrap: wrap;
-    gap: 16px;
-  }
-  .logo {
-    font-family: 'Oswald', sans-serif;
-    font-size: 22px;
-    font-weight: 700;
-    color: var(--amber);
-    letter-spacing: 0.03em;
-  }
-  .logo span { color: var(--paper); }
-  .nav-links { display: flex; gap: 36px; flex-wrap: wrap; }
-  .nav-links a { color: var(--paper); font-size: 14px; font-weight: 500; }
-  .nav-links a:hover { color: var(--amber); }
-  .nav-cta {
-    background: var(--rust);
-    color: var(--paper) !important;
-    padding: 10px 20px;
-    font-size: 14px;
-    font-weight: 600;
-  }
+{% block title %}<title>Lexia Machinery — Mesin Percetakan &amp; Finishing</title>{% endblock %}
 
-  /* ---------- HERO ---------- */
-  .hero {
-    display: grid;
-    grid-template-columns: 1.05fr 0.95fr;
-    background: var(--graphite);
-    min-height: 480px;
-  }
-  .hero-text {
-    padding: 64px 56px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-  .hero-eyebrow {
-    color: var(--amber);
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    margin-bottom: 16px;
-    text-transform: uppercase;
-  }
-  .hero-text h1 {
-    color: var(--paper);
-    font-size: 46px;
-    font-weight: 700;
-    line-height: 1.12;
-    margin-bottom: 22px;
-    max-width: 480px;
-  }
-  .hero-text p {
-    color: #A9B0B6;
-    font-size: 16px;
-    max-width: 420px;
-    margin-bottom: 32px;
-  }
-  .hero-buttons { display: flex; gap: 16px; flex-wrap: wrap; }
-  .btn-primary {
-    background: var(--rust);
-    color: var(--paper);
-    padding: 14px 28px;
-    font-weight: 600;
-    font-size: 15px;
-  }
-  .btn-secondary {
-    border: 1px solid #4A525A;
-    color: var(--paper);
-    padding: 14px 28px;
-    font-weight: 500;
-    font-size: 15px;
-  }
-  .hero-photo {
-    position: relative;
-    background: var(--steel);
-    clip-path: polygon(12% 0, 100% 0, 100% 100%, 0% 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 40px;
-    overflow: hidden;
-  }
-  .hero-photo img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  .photo-placeholder {
-    width: 100%;
-    height: 100%;
-    min-height: 240px;
-    border: 1px dashed #5A6169;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: var(--muted);
-    font-size: 13px;
-    text-align: center;
-    gap: 8px;
-    padding: 24px;
-  }
-  .photo-placeholder .icon { font-size: 28px; color: var(--amber); }
-
-  /* ---------- HAZARD STRIPE ---------- */
-  .hazard-strip {
-    height: 10px;
-    background: repeating-linear-gradient(
-      -45deg,
-      var(--amber),
-      var(--amber) 18px,
-      var(--graphite) 18px,
-      var(--graphite) 36px
-    );
-  }
-
-  /* ---------- CATEGORY NAMEPLATES ---------- */
-  .categories { padding: 72px 48px 56px; }
-  .section-head {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    margin-bottom: 32px;
-    gap: 24px;
-    flex-wrap: wrap;
-  }
-  .section-head h2 { font-size: 30px; font-weight: 600; }
-  .section-head p { color: var(--muted); font-size: 14px; max-width: 340px; }
-  .cat-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 18px;
-  }
-  .cat-plate {
-    background: var(--graphite);
-    border-top: 3px solid var(--amber);
-    padding: 22px 18px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    min-height: 120px;
-    justify-content: space-between;
-    transition: transform .15s ease;
-  }
-  .cat-plate:hover { transform: translateY(-3px); }
-  .cat-plate .plate-label {
-    color: var(--paper);
-    font-size: 15px;
-    font-weight: 600;
-    line-height: 1.25;
-  }
-  .cat-plate .plate-sub {
-    color: var(--muted);
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-  }
-
-  /* ---------- FEATURED PRODUCTS ---------- */
-  .products { padding: 24px 48px 72px; background: var(--paper-dim); }
-  .prod-grid {
-    display: grid;
-    grid-template-columns: 1.3fr 1fr 1fr;
-    grid-template-rows: auto auto;
-    gap: 20px;
-    margin-top: 32px;
-  }
-  .prod-card {
-    background: var(--paper);
-    border: 1px solid #D6D2C4;
-    display: flex;
-    flex-direction: column;
-  }
-  .prod-card.featured { grid-row: span 2; }
-  .prod-photo {
-    background: var(--steel-light);
-    aspect-ratio: 4/3;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--muted);
-    font-size: 12px;
-    text-align: center;
-    padding: 16px;
-    overflow: hidden;
-  }
-  .prod-photo img { width: 100%; height: 100%; object-fit: cover; }
-  .prod-card.featured .prod-photo { aspect-ratio: 4/5; }
-  .prod-body { padding: 18px 20px 20px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
-  .prod-body h3 { font-size: 17px; font-weight: 600; }
-  .spec-row {
-    display: flex;
-    justify-content: space-between;
-    gap: 12px;
-    font-size: 12px;
-    color: var(--muted);
-    border-top: 1px solid #E0DCD0;
-    padding-top: 8px;
-  }
-  .spec-row span:last-child { color: var(--ink); font-weight: 500; text-align: right; }
-  .prod-cta {
-    margin-top: auto;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--rust);
-    padding-top: 6px;
-  }
-
-  /* ---------- TRUST BAND ---------- */
-  .trust {
-    background: var(--graphite);
-    padding: 56px 48px;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 24px;
-  }
-  .trust-stat .num {
-    font-family: 'Oswald', sans-serif;
-    font-size: 40px;
-    font-weight: 700;
-    color: var(--amber);
-    line-height: 1;
-  }
-  .trust-stat .label { color: #A9B0B6; font-size: 13px; margin-top: 8px; }
-
-  /* ---------- FOOTER ---------- */
-  footer {
-    background: #14171A;
-    padding: 48px 48px 28px;
-    color: #8A9298;
-    font-size: 13px;
-  }
-  .foot-grid {
-    display: grid;
-    grid-template-columns: 1.4fr 1fr 1fr;
-    gap: 40px;
-    padding-bottom: 32px;
-    border-bottom: 1px solid #2A2E33;
-  }
-  .foot-grid h4 { color: var(--paper); font-size: 14px; font-weight: 600; margin-bottom: 14px; font-family: 'Inter', sans-serif; }
-  .foot-grid p, .foot-grid a { display: block; margin-bottom: 8px; }
-  .foot-grid a:hover { color: var(--amber); }
-  .foot-bottom { padding-top: 20px; }
-
-  /* ---------- RESPONSIVE (design is desktop-first; keep it usable small) ---------- */
-  @media (max-width: 960px) {
-    nav { padding: 16px 24px; }
-    .hero { grid-template-columns: 1fr; }
-    .hero-text { padding: 44px 28px; }
-    .hero-text h1 { font-size: 34px; }
-    .hero-photo { clip-path: none; min-height: 260px; padding: 24px; }
-    .categories, .products, .trust, footer { padding-left: 24px; padding-right: 24px; }
-    .cat-grid { grid-template-columns: repeat(2, 1fr); }
-    .prod-grid { grid-template-columns: repeat(2, 1fr); }
-    .prod-card.featured { grid-row: auto; grid-column: 1 / -1; }
-    .prod-card.featured .prod-photo { aspect-ratio: 16/9; }
-    .trust { grid-template-columns: repeat(2, 1fr); }
-    .foot-grid { grid-template-columns: 1fr; gap: 24px; }
-  }
-  @media (max-width: 560px) {
-    .cat-grid, .prod-grid { grid-template-columns: 1fr; }
-    .trust { grid-template-columns: 1fr; }
-  }
-</style>
-</head>
-<body>
-
-<nav>
-  <a href="{% url 'home' %}" class="logo">LEXIA<span>MACHINERY</span></a>
-  <div class="nav-links">
-    <a href="{% url 'home' %}">Beranda</a>
-    <a href="{% url 'katalog:all-catalog' %}">Katalog</a>
-    <a href="{% url 'about' %}">Tentang Kami</a>
-    <a href="{% url 'about' %}">Hubungi Kami</a>
-  </div>
-  <a href="https://wa.me/6285275103333" target="_blank" rel="noopener" class="nav-cta">Konsultasi Gratis</a>
-</nav>
-
+{% block content %}
 <section class="hero">
   <div class="hero-text">
     <div class="hero-eyebrow">Distributor Resmi &mdash; Medan &middot; Jakarta &middot; Seluruh Indonesia</div>
     <h1>Mesin percetakan yang bekerja sekeras bisnis Anda</h1>
     <p>Potong, laminating, jilid, dan finishing &mdash; satu distributor tepercaya untuk seluruh kebutuhan mesin percetakan dan photocopy Anda.</p>
     <div class="hero-buttons">
-      <a href="{% url 'katalog:all-catalog' %}" class="btn-primary">Lihat Katalog</a>
-      <a href="https://wa.me/6285275103333" target="_blank" rel="noopener" class="btn-secondary">Hubungi Sales</a>
+      <a href="{% url 'katalog:all-catalog' %}" class="btn btn-primary">Lihat Katalog</a>
+      <a href="https://wa.me/6285275103333" target="_blank" rel="noopener" class="btn btn-ghost">Hubungi Sales</a>
     </div>
   </div>
   <div class="hero-photo">
@@ -338,29 +21,24 @@
       {% thumbnail hero_item.picture1 "760x620" crop="center" as im %}
         <img src="{{ im.url }}" alt="{{ hero_item.name }}">
       {% empty %}
-        <div class="photo-placeholder">
-          <div class="icon">&#9881;</div>
-          Foto hero belum tersedia
-        </div>
+        <div class="photo-placeholder"><div class="icon">&#9881;</div>Foto hero belum tersedia</div>
       {% endthumbnail %}
     {% else %}
-      <div class="photo-placeholder">
-        <div class="icon">&#9881;</div>
-        Foto hero belum tersedia
-      </div>
+      <div class="photo-placeholder"><div class="icon">&#9881;</div>Foto hero belum tersedia</div>
     {% endif %}
   </div>
 </section>
 
 <div class="hazard-strip"></div>
 
-<section class="categories">
+<section class="section">
   <div class="section-head">
     <h2>Kategori mesin</h2>
-    <p>{{ categories|length }} kategori, dari potong hingga jahit kawat &mdash; semua tersedia dengan stok siap kirim.</p>
+    <p>{{ link_menu|length }} kategori, dari potong hingga jahit kawat &mdash; semua tersedia dengan stok siap kirim.</p>
+    <a class="link-more" href="{% url 'katalog:all-catalog' %}">Semua mesin &rarr;</a>
   </div>
   <div class="cat-grid">
-    {% for c in categories %}
+    {% for c in link_menu %}
       <a class="cat-plate" href="{% url 'katalog:category' id=c.id slug=c.slug %}">
         <div class="plate-label">{{ c.jenis }}</div>
         <div class="plate-sub">{{ c.item_set.count }} model</div>
@@ -369,24 +47,23 @@
   </div>
 </section>
 
-<section class="products">
+<section class="section paper-dim">
   <div class="section-head">
     <h2>Produk unggulan</h2>
     <p>Model favorit dan rilis terbaru dari katalog kami.</p>
   </div>
-  <div class="prod-grid">
+  <div class="prod-grid featured-layout">
     {% for it in featured %}
       <a class="prod-card{% if forloop.first %} featured{% endif %}" href="{% url 'item:mesin' id=it.id slug=it.slug %}">
         <div class="prod-photo">
           {% thumbnail it.picture1 "640x800" crop="center" as im %}
             <img src="{{ im.url }}" alt="{{ it.name }}">
-          {% empty %}
-            Foto belum tersedia
-          {% endthumbnail %}
+          {% empty %}Foto belum tersedia{% endthumbnail %}
         </div>
         <div class="prod-body">
+          <div class="prod-cat">{{ it.Jenis.jenis }}</div>
           <h3>{{ it.name }}</h3>
-          {% for label, value in it.spec_pairs %}
+          {% for label, value in it.specification|specs:2 %}
             <div class="spec-row"><span>{{ label }}</span><span>{{ value }}</span></div>
           {% endfor %}
           <div class="prod-cta">Pelajari lebih lanjut &rarr;</div>
@@ -396,33 +73,12 @@
   </div>
 </section>
 
-<section class="trust">
-  <div class="trust-stat"><div class="num">15+</div><div class="label">Tahun melayani industri percetakan</div></div>
-  <div class="trust-stat"><div class="num">{{ item_count }}+</div><div class="label">Model mesin tersedia</div></div>
-  <div class="trust-stat"><div class="num">2</div><div class="label">Kota, berkembang ke seluruh Indonesia</div></div>
-  <div class="trust-stat"><div class="num">100%</div><div class="label">Konsultasi &amp; dukungan langsung</div></div>
-</section>
-
-<footer>
-  <div class="foot-grid">
-    <div>
-      <h4>Lexia Machinery</h4>
-      <p>Pelita Graphic Supplies<br>Jalan Mesjid No. 165, Medan, Indonesia</p>
-    </div>
-    <div>
-      <h4>Kontak</h4>
-      <a href="tel:+62614154876">(+62) 61 4154876</a>
-      <a href="https://wa.me/6285275103333" target="_blank" rel="noopener">(+62) 852 7510 3333</a>
-    </div>
-    <div>
-      <h4>Ikuti Kami</h4>
-      <a href="https://instagram.com/lexiamachinery.ind" target="_blank" rel="noopener">Instagram</a>
-      <a href="https://www.facebook.com/lexiamachinery.ind/" target="_blank" rel="noopener">Facebook</a>
-      <a href="https://www.tokopedia.com/lexiamachinery" target="_blank" rel="noopener">Tokopedia</a>
-    </div>
+<section class="section graphite">
+  <div class="trust">
+    <div class="trust-stat"><div class="stat-num">15+</div><div class="stat-label">Tahun melayani industri percetakan</div></div>
+    <div class="trust-stat"><div class="stat-num">{{ item_count }}+</div><div class="stat-label">Model mesin tersedia</div></div>
+    <div class="trust-stat"><div class="stat-num">2</div><div class="stat-label">Kota, berkembang ke seluruh Indonesia</div></div>
+    <div class="trust-stat"><div class="stat-num">100%</div><div class="stat-label">Konsultasi &amp; dukungan langsung</div></div>
   </div>
-  <div class="foot-bottom">&copy; {% now "Y" %} Lexia Machinery &mdash; Pelita Graphic Supplies</div>
-</footer>
-
-</body>
-</html>
+</section>
+{% endblock %}
