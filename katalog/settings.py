@@ -117,16 +117,26 @@ WSGI_APPLICATION = 'katalog.wsgi.application'
 
 # Database — DATABASE_URL wins, otherwise local sqlite file
 # e.g.  DATABASE_URL=mysql://lexiacoi_staging:PASSWORD@localhost/lexiacoi_staging
+#
+# CONN_MAX_AGE defaults to 0 (a fresh connection per request). Persistent
+# connections + shared-hosting MySQL `wait_timeout` cause intermittent
+# "MySQL server has gone away" 500s: Passenger keeps workers alive, MySQL
+# drops the idle connection, and Django (2.1) has no pre-request health
+# check. Set DJANGO_CONN_MAX_AGE to a value *below* the server's
+# wait_timeout only if you've confirmed it's safe.
+_conn_max_age = int((env("DJANGO_CONN_MAX_AGE") or "0").strip())
 DATABASES = {
     "default": dj_database_url.config(
         default="sqlite:///" + os.path.join(BASE_DIR, "db.sqlite3"),
-        conn_max_age=600,
+        conn_max_age=_conn_max_age,
     )
 }
 if DATABASES["default"].get("ENGINE") == "django.db.backends.mysql":
     _opts = DATABASES["default"].setdefault("OPTIONS", {})
     _opts["charset"] = "utf8mb4"
     _opts.setdefault("sql_mode", "STRICT_TRANS_TABLES")
+    # fail fast instead of hanging on a dead socket
+    _opts.setdefault("connect_timeout", 10)
 
 
 AUTH_PASSWORD_VALIDATORS = [
