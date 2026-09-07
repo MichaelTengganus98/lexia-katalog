@@ -521,14 +521,15 @@ a.card:hover,
 .cat-title-block .desc {
   color: var(--text-inv-muted);
   font-size: 14.5px;
-  max-width: 56ch;
+  line-height: 1.65;
+  max-width: 60ch;
   margin-top: 10px;
 }
 .cat-title-block .wrap {
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
-  gap: 24px;
+  align-items: flex-start;
+  gap: 32px;
 }
 .cat-count { text-align: right; flex-shrink: 0; }
 .cat-count .num { font-family: var(--font-display); font-size: 34px; color: var(--amber); }
@@ -540,9 +541,6 @@ a.card:hover,
 }
 
 /* ---------- Catalog layout ---------- */
-.catalog-intro { background: var(--cream); }
-.catalog-intro .wrap { padding-top: 32px; }
-.catalog-intro p { max-width: 760px; margin-bottom: 12px; color: var(--text); }
 .catalog-layout {
   display: grid;
   grid-template-columns: 220px 1fr;
