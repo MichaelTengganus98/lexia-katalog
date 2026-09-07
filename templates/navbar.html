@@ -10,7 +10,7 @@
       <nav class="main-nav">
         <a href="{% url 'home' %}"{% if request.path == '/' %} class="active"{% endif %}>Beranda</a>
         <a href="{% url 'katalog:all-catalog' %}"{% if '/katalog' in request.path or '/mesin/' in request.path %} class="active"{% endif %}>Katalog</a>
-        <a href="{% url 'blog:list' %}"{% if '/blog' in request.path %} class="active"{% endif %}>Blog</a>
+        <a href="{% url 'tentang' %}"{% if '/tentang' in request.path or '/blog' in request.path %} class="active"{% endif %}>Tentang Kami</a>
         <a href="{% url 'about' %}"{% if '/contact' in request.path %} class="active"{% endif %}>Hubungi Kami</a>
       </nav>
       <div class="header-cta">

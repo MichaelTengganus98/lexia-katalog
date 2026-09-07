@@ -67,7 +67,6 @@
             {% empty %}Foto belum tersedia{% endthumbnail %}
           </div>
           <div class="card-body">
-            <div class="prod-cat">{{ it.Jenis.jenis }}</div>
             <h3>{{ it.name }}</h3>
             {% for label, value in it.specification|specs:2 %}
               <div class="spec-row"><span>{{ label }}</span><span class="val">{{ value }}</span></div>

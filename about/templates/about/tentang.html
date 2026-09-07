@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% load static thumbnail %}
+
+{% block content %}
+<div class="wrap">
+  <div class="about-layout">
+    <div class="about-photo">
+      {% if site.about_image %}
+        {% thumbnail site.about_image "760x620" crop="center" as im %}
+          <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="Showroom Pelita Graphic Supplies, Medan">
+        {% endthumbnail %}
+      {% else %}
+        Foto showroom / gudang Pelita Graphic Supplies, Medan
+      {% endif %}
+    </div>
+    <div class="about-copy">
+      <div class="pd-eyebrow">Tentang Kami</div>
+      <h1>{{ site.about_headline }}</h1>
+      {% for p in about_paragraphs %}<p>{{ p }}</p>{% endfor %}
+    </div>
+  </div>
+</div>
+
+<section class="stats-bar">
+  <div class="wrap">
+    <div class="stat"><div class="num">15+</div><div class="label">Tahun melayani industri percetakan</div></div>
+    <div class="stat"><div class="num">{{ item_count }}+</div><div class="label">Model mesin tersedia</div></div>
+    <div class="stat"><div class="num">2</div><div class="label">Kota, berkembang ke seluruh Indonesia</div></div>
+    <div class="stat"><div class="num">100%</div><div class="label">Konsultasi &amp; dukungan langsung</div></div>
+  </div>
+</section>
+
+{% if posts %}
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Tips &amp; Wawasan Percetakan</h2>
+      <p class="note">Panduan praktis seputar mesin percetakan, photocopy, dan finishing &mdash; ditulis untuk membantu bisnis Anda memilih dan merawat mesin dengan tepat.</p>
+      <a class="link-more" href="{% url 'blog:list' %}">Semua artikel &rarr;</a>
+    </div>
+    <div class="blog-grid">
+      {% for post in posts %}
+        <a class="card blog-card" href="{{ post.get_absolute_url }}">
+          <div class="card-photo">
+            {% if post.cover_image %}
+              {% thumbnail post.cover_image "560x360" crop="center" as im %}
+                <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" loading="lazy" alt="{{ post.title }}">
+              {% endthumbnail %}
+            {% else %}Lexia Machinery{% endif %}
+          </div>
+          <div class="card-body">
+            <span class="blog-tag">{{ post.get_tag_display }}</span>
+            <h3>{{ post.title }}</h3>
+            <p class="excerpt">{{ post.seo_description }}</p>
+            <div class="blog-meta">
+              <span>{{ post.reading_time }} mnt baca</span>
+              <span class="read">Baca &rarr;</span>
+            </div>
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+{% endblock %}

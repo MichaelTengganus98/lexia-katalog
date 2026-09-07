@@ -49,6 +49,27 @@ class SiteSettings(models.Model):
         help_text="Gambar share default (1200x630).",
     )
 
+    # Halaman "Tentang Kami"
+    about_headline = models.CharField(
+        "Judul halaman Tentang", max_length=200, blank=True,
+        default="Distributor mesin percetakan tepercaya, sejak awal berdiri di Medan",
+    )
+    about_body = models.TextField(
+        "Isi halaman Tentang", blank=True,
+        default=(
+            "Lexia Machinery, di bawah Pelita Graphic Supplies, menyediakan mesin potong "
+            "kertas, laminating, jilid lem, dan mesin finishing lainnya untuk pelaku usaha "
+            "percetakan dan photocopy di seluruh Indonesia.\n\n"
+            "Kini kami berkembang melayani Medan, Jakarta, dan seluruh Indonesia — dengan "
+            "konsultasi langsung, dukungan purna jual, dan pengiriman ke seluruh penjuru negeri."
+        ),
+        help_text="Satu baris kosong = paragraf baru.",
+    )
+    about_image = models.ImageField(
+        "Foto halaman Tentang", upload_to="seo/", blank=True, null=True,
+        help_text="Showroom / gudang. Rasio 4:3, mis. 1200x900.",
+    )
+
     # Contact / LocalBusiness
     phone_primary = models.CharField(max_length=40, blank=True, default="(+62) 61 4154876")
     phone_secondary = models.CharField(max_length=40, blank=True, default="(+62) 61 4515028")

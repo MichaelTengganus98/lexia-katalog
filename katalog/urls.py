@@ -11,7 +11,7 @@ from django.conf.urls.static import static
 from django.views.generic import TemplateView
 
 from homepage.views import home
-from about.views import about
+from about.views import about, tentang
 from seo.sitemaps import sitemaps
 
 urlpatterns = [
@@ -26,5 +26,6 @@ urlpatterns = [
     path('robots.txt', TemplateView.as_view(
         template_name='robots.txt', content_type='text/plain')),
     path('', home, name='home'),
+    path('tentang', tentang, name="tentang"),
     path('contact', about, name="about"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

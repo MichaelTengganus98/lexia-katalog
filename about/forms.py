@@ -9,11 +9,10 @@ from .models import ContactMessage
 class ContactForm(forms.ModelForm):
     class Meta:
         model = ContactMessage
-        fields = ["name", "whatsapp", "email", "category", "message"]
+        fields = ["name", "whatsapp", "category", "message"]
         widgets = {
             "name": forms.TextInput(attrs={"placeholder": "Nama Anda"}),
             "whatsapp": forms.TextInput(attrs={"placeholder": "08xx-xxxx-xxxx"}),
-            "email": forms.EmailInput(attrs={"placeholder": "email@domain.com (opsional)"}),
             "message": forms.Textarea(attrs={
                 "placeholder": "Ceritakan kebutuhan Anda…", "rows": 5,
             }),
@@ -21,7 +20,6 @@ class ContactForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["email"].required = False
         self.fields["category"].required = False
         self.fields["category"].queryset = Category.objects.all()
         self.fields["category"].empty_label = "Pilih kategori mesin (opsional)"

@@ -20,6 +20,8 @@
           {% with f=form|formfield:name %}
             {% if name == "default_og_image" %}
               {% include "panel/_upload.html" with field=f dim="1200 &times; 630 px" %}
+            {% elif name == "about_image" %}
+              {% include "panel/_upload.html" with field=f dim="1200 &times; 900 px" %}
             {% else %}
               {% include "panel/_field.html" with field=f %}
             {% endif %}

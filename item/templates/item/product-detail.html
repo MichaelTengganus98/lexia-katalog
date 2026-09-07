@@ -124,13 +124,11 @@
             allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"></iframe>
   </div>
   {% endif %}
-</div>
 
-{% if related %}
-<section class="section bg-alt">
-  <div class="wrap">
-    <div class="section-head"><h2>Produk terkait</h2></div>
-    <div class="grid-3">
+  {% if related %}
+  <div class="related">
+    <h2>Produk terkait</h2>
+    <div class="grid-4">
       {% for it in related %}
         <a class="card" href="{% url 'item:mesin' id=it.id slug=it.slug %}">
           <div class="card-photo">
@@ -139,17 +137,13 @@
                    alt="{{ it.name }} — {{ it.Jenis.jenis }}">
             {% empty %}Foto belum tersedia{% endthumbnail %}
           </div>
-          <div class="card-body">
-            <div class="prod-cat">{{ it.Jenis.jenis }}</div>
-            <h3>{{ it.name }}</h3>
-            <span class="card-link">Pelajari lebih lanjut &rarr;</span>
-          </div>
+          <div class="card-body"><h3 style="margin:0">{{ it.name }}</h3></div>
         </a>
       {% endfor %}
     </div>
   </div>
-</section>
-{% endif %}
+  {% endif %}
+</div>
 
 <div class="lightbox" id="lightbox">
   <span class="lb-close" data-lb-close>&times;</span>

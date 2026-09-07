@@ -25,15 +25,6 @@
 <div class="wrap">
   <div class="catalog-layout">
     <aside class="catalog-side">
-      <div class="filter-title">Cari mesin</div>
-      <form class="search-box" method="get" action="{% url 'search:category' %}"
-            data-search-suggest data-suggest-url="{% url 'search:searchpost' %}" data-csrf="{{ csrf_token }}">
-        <input type="search" name="mesin" placeholder="Nama mesin&hellip;" aria-label="Cari mesin"
-               value="{{ request.GET.mesin }}">
-        <button type="submit">Cari</button>
-        <div class="search-suggest"></div>
-      </form>
-
       <div class="filter-title">Kategori</div>
       <ul class="filter-list">
         <li{% if request.resolver_match.url_name == 'all-catalog' %} class="is-active"{% endif %}>
@@ -62,7 +53,6 @@
                 {% empty %}Foto belum tersedia{% endthumbnail %}
               </div>
               <div class="card-body">
-                <div class="prod-cat">{{ i.Jenis.jenis }}</div>
                 <h3>{{ i.name }}</h3>
                 {% for label, value in i.specification|specs:2 %}
                   <div class="spec-row"><span>{{ label }}</span><span class="val">{{ value }}</span></div>

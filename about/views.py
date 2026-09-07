@@ -1,5 +1,7 @@
 from django.shortcuts import redirect, render
 
+from blog.models import Post
+from item.models import Item
 from seo.jsonld import breadcrumb, graph, local_business
 from seo.models import SiteSettings
 from .forms import ContactForm
@@ -34,6 +36,22 @@ def about(request):
         'page_title': 'Hubungi Kami',
         'page_description': ('Hubungi Lexia Machinery — distributor mesin percetakan & finishing '
                              'di Medan. Telepon, WhatsApp, alamat, dan lokasi peta.'),
+        'page_jsonld': graph(request, local_business(request, site),
+                             breadcrumb(request, crumbs)),
+    })
+
+
+def tentang(request):
+    site = SiteSettings.load()
+    crumbs = [("Beranda", "/"), ("Tentang Kami", None)]
+    return render(request, 'about/tentang.html', {
+        'site': site,
+        'about_paragraphs': [p.strip() for p in (site.about_body or "").split("\n\n") if p.strip()],
+        'posts': Post.published.all()[:3],
+        'item_count': Item.objects.count(),
+        'page_title': 'Tentang Kami',
+        'page_description': ('Lexia Machinery — distributor mesin percetakan & finishing di bawah '
+                            'Pelita Graphic Supplies, Medan. Melayani seluruh Indonesia.'),
         'page_jsonld': graph(request, local_business(request, site),
                              breadcrumb(request, crumbs)),
     })

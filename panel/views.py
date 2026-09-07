@@ -314,6 +314,7 @@ def site_settings(request):
         form = SiteSettingsForm(instance=obj)
     groups = [
         ("Identitas", ["site_name", "tagline", "default_meta_description", "default_og_image"]),
+        ("Halaman Tentang Kami", ["about_headline", "about_body", "about_image"]),
         ("Kontak & Lokasi", ["phone_primary", "phone_secondary", "whatsapp_number", "email",
                              "address", "city", "postal_code", "region", "country",
                              "latitude", "longitude", "opening_hours"]),
