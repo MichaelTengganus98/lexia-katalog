@@ -49,13 +49,28 @@ class SiteSettings(models.Model):
         help_text="Gambar share default (1200x630).",
     )
 
+    # Halaman "Beranda" — hero
+    home_kicker = models.CharField(
+        "Beranda: kicker", max_length=160, blank=True,
+        default="Distributor Resmi — Medan · Jakarta · Seluruh Indonesia",
+    )
+    home_headline = models.CharField(
+        "Beranda: judul utama (H1)", max_length=200, blank=True,
+        default="Mesin percetakan yang bekerja sekeras bisnis Anda",
+    )
+    home_lead = models.TextField(
+        "Beranda: paragraf pembuka", blank=True,
+        default=("Potong, laminating, jilid, dan finishing — satu distributor tepercaya "
+                 "untuk seluruh kebutuhan mesin percetakan dan photocopy Anda."),
+    )
+
     # Halaman "Tentang Kami"
     about_headline = models.CharField(
-        "Judul halaman Tentang", max_length=200, blank=True,
+        "Tentang: judul (H1)", max_length=200, blank=True,
         default="Distributor mesin percetakan tepercaya, sejak awal berdiri di Medan",
     )
     about_body = models.TextField(
-        "Isi halaman Tentang", blank=True,
+        "Tentang: isi", blank=True,
         default=(
             "Lexia Machinery, di bawah Pelita Graphic Supplies, menyediakan mesin potong "
             "kertas, laminating, jilid lem, dan mesin finishing lainnya untuk pelaku usaha "
@@ -66,8 +81,14 @@ class SiteSettings(models.Model):
         help_text="Satu baris kosong = paragraf baru.",
     )
     about_image = models.ImageField(
-        "Foto halaman Tentang", upload_to="seo/", blank=True, null=True,
+        "Tentang: foto", upload_to="seo/", blank=True, null=True,
         help_text="Showroom / gudang. Rasio 4:3, mis. 1200x900.",
+    )
+
+    # Halaman "Hubungi Kami"
+    contact_intro = models.TextField(
+        "Hubungi Kami: paragraf pembuka", blank=True,
+        default="Konsultasi kebutuhan mesin percetakan Anda, atau kunjungi langsung showroom kami di Medan.",
     )
 
     # Contact / LocalBusiness

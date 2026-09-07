@@ -1,15 +1,15 @@
 {% extends "base.html" %}
-{% load thumbnail %}
+{% load thumbnail i18n %}
 
 {% block content %}
 <section class="page-title">
   <div class="wrap">
     <h1>{{ post.title }}</h1>
     <p class="desc">
-      {% if not post.is_live %}<strong style="color:var(--amber)">[DRAF] </strong>{% endif %}
+      {% if not post.is_live %}<strong style="color:var(--amber)">[{% trans "DRAF" %}] </strong>{% endif %}
       {% if post.published_at %}{{ post.published_at|date:"j F Y" }}{% endif %}
       {% if post.author and post.author.get_full_name %} &middot; {{ post.author.get_full_name }}{% endif %}
-      &middot; {{ post.reading_time }} menit baca
+      &middot; {% blocktrans with t=post.reading_time %}{{ t }} menit baca{% endblocktrans %}
     </p>
   </div>
 </section>
@@ -30,25 +30,25 @@
 
   {% if post.cta_label and post.cta_url %}
     <div class="article-cta">
-      <span>Tertarik dengan mesinnya?</span>
+      <span>{% trans "Tertarik dengan mesinnya?" %}</span>
       <a class="btn btn-primary" href="{{ post.cta_url }}">{{ post.cta_label }} &rarr;</a>
     </div>
   {% elif post.related_category %}
     <div class="article-cta">
-      <span>Tertarik dengan mesinnya?</span>
+      <span>{% trans "Tertarik dengan mesinnya?" %}</span>
       <a class="btn btn-primary" href="{{ post.related_category.get_absolute_url }}">
-        Lihat {{ post.related_category.jenis }} &rarr;
+        {% blocktrans with cat=post.related_category.jenis %}Lihat {{ cat }}{% endblocktrans %} &rarr;
       </a>
     </div>
   {% endif %}
 
-  <p class="article-back"><a href="{% url 'blog:list' %}">&larr; Semua artikel</a></p>
+  <p class="article-back"><a href="{% url 'blog:list' %}">&larr; {% trans "Semua artikel" %}</a></p>
 </article>
 
 {% if related_posts %}
 <section class="section bg-alt">
   <div class="wrap">
-    <div class="section-head"><h2>Artikel lainnya</h2></div>
+    <div class="section-head"><h2>{% trans "Artikel lainnya" %}</h2></div>
     <div class="blog-grid">
       {% for p in related_posts %}
         <a class="card blog-card" href="{{ p.get_absolute_url }}">
@@ -63,8 +63,8 @@
             <span class="blog-tag">{{ p.get_tag_display }}</span>
             <h3>{{ p.title }}</h3>
             <div class="blog-meta">
-              <span>{% if p.published_at %}{{ p.published_at|date:"j M Y" }} &middot; {% endif %}{{ p.reading_time }} mnt baca</span>
-              <span class="read">Baca &rarr;</span>
+              <span>{% if p.published_at %}{{ p.published_at|date:"j M Y" }} &middot; {% endif %}{% blocktrans with t=p.reading_time %}{{ t }} mnt baca{% endblocktrans %}</span>
+              <span class="read">{% trans "Baca" %} &rarr;</span>
             </div>
           </div>
         </a>

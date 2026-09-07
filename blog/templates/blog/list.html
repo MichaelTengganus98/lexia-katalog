@@ -1,11 +1,11 @@
 {% extends "base.html" %}
-{% load thumbnail %}
+{% load thumbnail i18n %}
 
 {% block content %}
 <section class="page-title">
   <div class="wrap">
     <h1>Blog</h1>
-    <p class="desc">Tips, panduan, dan wawasan seputar mesin percetakan &amp; finishing.</p>
+    <p class="desc">{% trans "Tips, panduan, dan wawasan seputar mesin percetakan & finishing." %}</p>
   </div>
 </section>
 
@@ -28,15 +28,15 @@
               <h3>{{ post.title }}</h3>
               <p class="excerpt">{{ post.seo_description }}</p>
               <div class="blog-meta">
-                <span>{% if post.published_at %}{{ post.published_at|date:"j M Y" }} &middot; {% endif %}{{ post.reading_time }} mnt baca</span>
-                <span class="read">Baca &rarr;</span>
+                <span>{% if post.published_at %}{{ post.published_at|date:"j M Y" }} &middot; {% endif %}{% blocktrans with t=post.reading_time %}{{ t }} mnt baca{% endblocktrans %}</span>
+                <span class="read">{% trans "Baca" %} &rarr;</span>
               </div>
             </div>
           </a>
         {% endfor %}
       </div>
     {% else %}
-      <div class="empty-note">Belum ada artikel.</div>
+      <div class="empty-note">{% trans "Belum ada artikel." %}</div>
     {% endif %}
   </div>
 </section>

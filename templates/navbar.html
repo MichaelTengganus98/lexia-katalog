@@ -1,4 +1,4 @@
-{% load static %}
+{% load static i18n %}
 <header class="site-header" id="siteHeader">
   <div class="wrap">
     <a href="{% url 'home' %}" class="logo">LEXIA<span class="accent">MACHINERY</span></a>
@@ -8,14 +8,21 @@
     </button>
     <div class="nav-wrap">
       <nav class="main-nav">
-        <a href="{% url 'home' %}"{% if request.path == '/' %} class="active"{% endif %}>Beranda</a>
-        <a href="{% url 'katalog:all-catalog' %}"{% if '/katalog' in request.path or '/mesin/' in request.path %} class="active"{% endif %}>Katalog</a>
-        <a href="{% url 'tentang' %}"{% if '/tentang' in request.path or '/blog' in request.path %} class="active"{% endif %}>Tentang Kami</a>
-        <a href="{% url 'about' %}"{% if '/contact' in request.path %} class="active"{% endif %}>Hubungi Kami</a>
+        <a href="{% url 'home' %}"{% if request.resolver_match.url_name == 'home' %} class="active"{% endif %}>{% trans "Beranda" %}</a>
+        <a href="{% url 'katalog:all-catalog' %}"{% if '/katalog' in request.path or '/mesin/' in request.path %} class="active"{% endif %}>{% trans "Katalog" %}</a>
+        <a href="{% url 'tentang' %}"{% if '/tentang' in request.path or '/blog' in request.path %} class="active"{% endif %}>{% trans "Tentang Kami" %}</a>
+        <a href="{% url 'about' %}"{% if '/contact' in request.path %} class="active"{% endif %}>{% trans "Hubungi Kami" %}</a>
       </nav>
       <div class="header-cta">
-        <a href="https://wa.me/6285275103333" target="_blank" rel="noopener" class="btn btn-primary btn-sm">Konsultasi Gratis</a>
+        <a href="https://wa.me/6285275103333" target="_blank" rel="noopener" class="btn btn-primary btn-sm">{% trans "Konsultasi Gratis" %}</a>
+        <div class="lang-switch">
+          {% for l in languages %}
+            <a href="{{ l.url }}" class="lang-btn{% if l.active %} active{% endif %}"
+               hreflang="{{ l.code }}" aria-label="{{ l.name }}">{{ l.code|upper }}</a>
+          {% endfor %}
+        </div>
       </div>
     </div>
   </div>
 </header>
+

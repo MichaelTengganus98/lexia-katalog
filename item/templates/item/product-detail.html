@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load static %}
+{% load static i18n %}
 {% load bold %}
 {% load thumbnail %}
 {% load item_extras %}
@@ -8,12 +8,12 @@
 {% if barang.availability == "Discontinued" %}
 <div class="wrap">
   <div class="notice notice-warn">
-    <strong>Produk ini sudah tidak diproduksi lagi.</strong>
+    <strong>{% trans "Produk ini sudah tidak diproduksi lagi." %}</strong>
     {% if replacement %}
-      Silakan lihat penggantinya:
+      {% trans "Silakan lihat penggantinya:" %}
       <a href="{% url 'item:mesin' id=replacement.id slug=replacement.slug %}">{{ replacement.name }} &rarr;</a>
     {% else %}
-      Hubungi kami untuk rekomendasi produk pengganti.
+      {% trans "Hubungi kami untuk rekomendasi produk pengganti." %}
     {% endif %}
   </div>
 </div>
@@ -84,10 +84,10 @@
       <div class="pd-actions">
         <a class="btn btn-primary" target="_blank" rel="noopener"
            href="https://wa.me/6285275103333?text=Halo%20Lexia%2C%20saya%20tertarik%20dengan%20{{ barang.name|urlencode }}">
-          Pesan Sekarang
+          {% trans "Pesan Sekarang" %}
         </a>
         <a class="btn btn-outline" href="{% url 'katalog:category' id=barang.Jenis.id slug=barang.Jenis.slug %}">
-          Lihat kategori
+          {% trans "Lihat kategori" %}
         </a>
       </div>
     </div>
@@ -95,14 +95,14 @@
 
   {% if barang.description %}
   <div class="detail-section">
-    <h2>Deskripsi</h2>
+    <h2>{% trans "Deskripsi" %}</h2>
     <div class="detail-desc"><p>{{ barang.description|linebreaksbr|bold|safe }}</p></div>
   </div>
   {% endif %}
 
   {% if spec or barang.specification %}
   <div class="spec-table">
-    <h2>Spesifikasi lengkap</h2>
+    <h2>{% trans "Spesifikasi lengkap" %}</h2>
     <table>
       {% if spec %}
         {% for key, value in spec.items %}
@@ -119,7 +119,7 @@
 
   {% if barang.urlVideo %}
   <div class="detail-section">
-    <h2>Video</h2>
+    <h2>{% trans "Video" %}</h2>
     <iframe class="machine-video" src="{{ barang.urlVideo }}" allowfullscreen
             allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"></iframe>
   </div>
@@ -127,7 +127,7 @@
 
   {% if related %}
   <div class="related">
-    <h2>Produk terkait</h2>
+    <h2>{% trans "Produk terkait" %}</h2>
     <div class="grid-4">
       {% for it in related %}
         <a class="card" href="{% url 'item:mesin' id=it.id slug=it.slug %}">
@@ -135,7 +135,7 @@
             {% thumbnail it.picture1 "480x360" crop="center" as im %}
               <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" loading="lazy"
                    alt="{{ it.name }} — {{ it.Jenis.jenis }}">
-            {% empty %}Foto belum tersedia{% endthumbnail %}
+            {% empty %}{% trans "Foto belum tersedia" %}{% endthumbnail %}
           </div>
           <div class="card-body"><h3 style="margin:0">{{ it.name }}</h3></div>
         </a>

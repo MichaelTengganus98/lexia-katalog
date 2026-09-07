@@ -2,6 +2,7 @@ from django.core.paginator import Paginator
 from django.http import Http404
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
+from django.utils.translation import gettext as _
 from django.views.decorators.http import require_GET
 
 from seo.jsonld import breadcrumb, graph
@@ -41,8 +42,8 @@ def all_catalog(request):
     crumbs = [("Beranda", "/"), ("Katalog", None)]
     return render(request, 'page/katalog.html', {
         'item': items_page,
-        'judul': 'Semua Mesin',
-        'page_title': 'Semua Mesin Percetakan & Finishing',
+        'judul': _('Semua Mesin'),
+        'page_title': _('Semua Mesin Percetakan & Finishing'),
         'page_description': ('Katalog lengkap mesin percetakan dan finishing dari Lexia Machinery '
                              '— potong, laminating, jilid, perforasi, dan lainnya. Stok siap kirim.'),
         'page_jsonld': graph(request, breadcrumb(request, crumbs)),

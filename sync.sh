@@ -92,6 +92,14 @@ fi
 echo "==> manage.py migrate --noinput"
 "$PY" manage.py migrate --noinput
 
+# --- 2b. compile translation catalogs (best effort; .mo is also committed) ---
+if command -v msgfmt >/dev/null 2>&1; then
+  echo "==> manage.py compilemessages"
+  "$PY" manage.py compilemessages 2>&1 || echo "!! compilemessages failed — using the committed .mo files"
+else
+  echo "==> compilemessages: gettext not installed — using the committed .mo files"
+fi
+
 # --- 3. static files ----------------------------------------------
 if [ "$SKIP_STATIC" = 1 ]; then
   echo "==> collectstatic: skipped (--no-static)"

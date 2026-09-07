@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load static thumbnail %}
+{% load static thumbnail i18n %}
 
 {% block content %}
 <div class="wrap">
@@ -10,11 +10,11 @@
           <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="Showroom Pelita Graphic Supplies, Medan">
         {% endthumbnail %}
       {% else %}
-        Foto showroom / gudang Pelita Graphic Supplies, Medan
+        {% trans "Foto showroom / gudang Pelita Graphic Supplies, Medan" %}
       {% endif %}
     </div>
     <div class="about-copy">
-      <div class="pd-eyebrow">Tentang Kami</div>
+      <div class="pd-eyebrow">{% trans "Tentang Kami" %}</div>
       <h1>{{ site.about_headline }}</h1>
       {% for p in about_paragraphs %}<p>{{ p }}</p>{% endfor %}
     </div>
@@ -23,10 +23,10 @@
 
 <section class="stats-bar">
   <div class="wrap">
-    <div class="stat"><div class="num">15+</div><div class="label">Tahun melayani industri percetakan</div></div>
-    <div class="stat"><div class="num">{{ item_count }}+</div><div class="label">Model mesin tersedia</div></div>
-    <div class="stat"><div class="num">2</div><div class="label">Kota, berkembang ke seluruh Indonesia</div></div>
-    <div class="stat"><div class="num">100%</div><div class="label">Konsultasi &amp; dukungan langsung</div></div>
+    <div class="stat"><div class="num">15+</div><div class="label">{% trans "Tahun melayani industri percetakan" %}</div></div>
+    <div class="stat"><div class="num">{{ item_count }}+</div><div class="label">{% trans "Model mesin tersedia" %}</div></div>
+    <div class="stat"><div class="num">2</div><div class="label">{% trans "Kota, berkembang ke seluruh Indonesia" %}</div></div>
+    <div class="stat"><div class="num">100%</div><div class="label">{% trans "Konsultasi & dukungan langsung" %}</div></div>
   </div>
 </section>
 
@@ -34,9 +34,9 @@
 <section class="section">
   <div class="wrap">
     <div class="section-head">
-      <h2>Tips &amp; Wawasan Percetakan</h2>
-      <p class="note">Panduan praktis seputar mesin percetakan, photocopy, dan finishing &mdash; ditulis untuk membantu bisnis Anda memilih dan merawat mesin dengan tepat.</p>
-      <a class="link-more" href="{% url 'blog:list' %}">Semua artikel &rarr;</a>
+      <h2>{% trans "Tips & Wawasan Percetakan" %}</h2>
+      <p class="note">{% trans "Panduan praktis seputar mesin percetakan, photocopy, dan finishing — ditulis untuk membantu bisnis Anda memilih dan merawat mesin dengan tepat." %}</p>
+      <a class="link-more" href="{% url 'blog:list' %}">{% trans "Semua artikel" %} &rarr;</a>
     </div>
     <div class="blog-grid">
       {% for post in posts %}
@@ -53,8 +53,8 @@
             <h3>{{ post.title }}</h3>
             <p class="excerpt">{{ post.seo_description }}</p>
             <div class="blog-meta">
-              <span>{{ post.reading_time }} mnt baca</span>
-              <span class="read">Baca &rarr;</span>
+              <span>{% blocktrans with t=post.reading_time %}{{ t }} mnt baca{% endblocktrans %}</span>
+              <span class="read">{% trans "Baca" %} &rarr;</span>
             </div>
           </div>
         </a>

@@ -1,11 +1,11 @@
 {% extends "base.html" %}
-{% load static %}
+{% load static i18n %}
 
 {% block content %}
 <section class="page-title">
   <div class="wrap">
-    <h1>Hubungi Kami</h1>
-    <p class="desc">Konsultasi kebutuhan mesin percetakan Anda, atau kunjungi langsung showroom kami di Medan.</p>
+    <h1>{% trans "Hubungi Kami" %}</h1>
+    {% if site.contact_intro %}<p class="desc">{{ site.contact_intro }}</p>{% endif %}
   </div>
 </section>
 
@@ -19,15 +19,15 @@
     <div class="contact-card">
       {% if sent %}
         <div class="notice notice-ok">
-          <strong>Pesan Anda terkirim.</strong>
-          Terima kasih &mdash; tim kami akan menghubungi Anda dalam 1&times;24 jam kerja.
-          Untuk respons lebih cepat, hubungi kami langsung via
+          <strong>{% trans "Pesan Anda terkirim." %}</strong>
+          {% blocktrans %}Terima kasih — tim kami akan menghubungi Anda dalam 1×24 jam kerja.{% endblocktrans %}
+          {% blocktrans %}Untuk respons lebih cepat, hubungi kami langsung via{% endblocktrans %}
           <a href="https://wa.me/6285275103333" target="_blank" rel="noopener">WhatsApp</a>.
         </div>
-        <a href="{% url 'about' %}" class="btn btn-outline">Kirim pesan lain</a>
+        <a href="{% url 'about' %}" class="btn btn-outline">{% trans "Kirim pesan lain" %}</a>
       {% else %}
-        <h2>Kirim Pesan</h2>
-        <p class="desc">Isi form di bawah, tim kami akan menghubungi Anda dalam 1&times;24 jam.</p>
+        <h2>{% trans "Kirim Pesan" %}</h2>
+        <p class="desc">{% blocktrans %}Isi form di bawah, tim kami akan menghubungi Anda dalam 1×24 jam.{% endblocktrans %}</p>
 
         {% if form.non_field_errors %}
           <div class="notice notice-warn">{{ form.non_field_errors }}</div>
@@ -37,36 +37,36 @@
           {% csrf_token %}
           <div class="form-row">
             <div class="field">
-              <label for="{{ form.name.id_for_label }}">Nama Lengkap</label>
+              <label for="{{ form.name.id_for_label }}">{% trans "Nama Lengkap" %}</label>
               {{ form.name }}
               {% if form.name.errors %}<span class="field-error">{{ form.name.errors|striptags }}</span>{% endif %}
             </div>
             <div class="field">
-              <label for="{{ form.whatsapp.id_for_label }}">No. WhatsApp</label>
+              <label for="{{ form.whatsapp.id_for_label }}">{% trans "No. WhatsApp" %}</label>
               {{ form.whatsapp }}
               {% if form.whatsapp.errors %}<span class="field-error">{{ form.whatsapp.errors|striptags }}</span>{% endif %}
             </div>
           </div>
           <div class="field">
-            <label for="{{ form.category.id_for_label }}">Mesin yang Diminati <span class="opt">(opsional)</span></label>
+            <label for="{{ form.category.id_for_label }}">{% trans "Mesin yang Diminati" %} <span class="opt">({% trans "opsional" %})</span></label>
             {{ form.category }}
           </div>
           <div class="field">
-            <label for="{{ form.message.id_for_label }}">Pesan</label>
+            <label for="{{ form.message.id_for_label }}">{% trans "Pesan" %}</label>
             {{ form.message }}
             {% if form.message.errors %}<span class="field-error">{{ form.message.errors|striptags }}</span>{% endif %}
           </div>
-          <button type="submit" class="btn btn-primary btn-block">Kirim Pesan</button>
+          <button type="submit" class="btn btn-primary btn-block">{% trans "Kirim Pesan" %}</button>
         </form>
       {% endif %}
 
       <div class="info-plate">
         <h3>Pelita Graphic Supplies</h3>
         <dl>
-          <dt>Alamat</dt><dd>Jl. Mesjid No. 165, Kesawan, Medan Barat, Kota Medan, Sumatera Utara</dd>
-          <dt>Telepon</dt><dd>(+62) 61 4154876</dd>
+          <dt>{% trans "Alamat" %}</dt><dd>Jl. Mesjid No. 165, Kesawan, Medan Barat, Kota Medan, Sumatera Utara</dd>
+          <dt>{% trans "Telepon" %}</dt><dd>(+62) 61 4154876</dd>
           <dt>WhatsApp</dt><dd>(+62) 852 7510 3333</dd>
-          <dt>Jam Buka</dt><dd>Senin &ndash; Sabtu, 08.00 &ndash; 17.00 WIB</dd>
+          <dt>{% trans "Jam Buka" %}</dt><dd>{% trans "Senin – Sabtu, 08.00 – 17.00 WIB" %}</dd>
         </dl>
       </div>
     </div>

@@ -135,7 +135,18 @@ button { font-family: inherit; }
   height: 2px;
   background: var(--rust-light);
 }
-.header-cta { display: flex; align-items: center; gap: 18px; }
+.header-cta { display: flex; align-items: center; gap: 16px; }
+.lang-switch { display: flex; border: 1px solid var(--line-dark); flex-shrink: 0; }
+.lang-btn {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .03em;
+  padding: 7px 11px;
+  color: var(--text-inv-muted);
+  line-height: 1;
+}
+.lang-btn:hover { color: var(--text-inv); }
+.lang-btn.active { background: var(--amber); color: var(--ink); }
 .nav-toggle {
   display: none;
   background: none;

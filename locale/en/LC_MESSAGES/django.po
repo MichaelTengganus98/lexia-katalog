@@ -1,0 +1,229 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: lexia-katalog\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-07 14:40+0700\n"
+"PO-Revision-Date: 2026-09-07 14:40+0700\n"
+"Last-Translator: Lexia\n"
+"Language-Team: English\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Beranda"
+msgstr "Home"
+
+msgid "Katalog"
+msgstr "Catalog"
+
+msgid "Tentang Kami"
+msgstr "About Us"
+
+msgid "Hubungi Kami"
+msgstr "Contact Us"
+
+msgid "Konsultasi Gratis"
+msgstr "Free Consultation"
+
+msgid "Kontak"
+msgstr "Contact"
+
+msgid "Ikuti Kami"
+msgstr "Follow Us"
+
+msgid ""
+"Distributor mesin percetakan & finishing — Medan · Jakarta · seluruh "
+"Indonesia."
+msgstr ""
+"Printing & finishing machinery distributor — Medan · Jakarta · nationwide "
+"Indonesia."
+
+msgid "Lihat Katalog"
+msgstr "View Catalog"
+
+msgid "Hubungi Sales"
+msgstr "Contact Sales"
+
+msgid "Foto hero belum tersedia"
+msgstr "Hero photo not available yet"
+
+msgid "Kategori mesin"
+msgstr "Machine categories"
+
+msgid "Semua mesin"
+msgstr "All machines"
+
+msgid "Produk unggulan"
+msgstr "Featured products"
+
+msgid "Model favorit dan rilis terbaru dari katalog kami."
+msgstr "Favourites and the latest releases from our catalog."
+
+msgid "Foto belum tersedia"
+msgstr "Photo not available"
+
+msgid "Pelajari lebih lanjut"
+msgstr "Learn more"
+
+msgid "Brosur & katalog"
+msgstr "Brochures & catalog"
+
+msgid "Unduh brosur produk kami untuk referensi lengkap spesifikasi & harga."
+msgstr "Download our product brochures for full specs & pricing."
+
+msgid "Unduh brosur"
+msgstr "Download brochure"
+
+msgid "Tahun melayani industri percetakan"
+msgstr "Years serving the printing industry"
+
+msgid "Model mesin tersedia"
+msgstr "Machine models available"
+
+msgid "Kota, berkembang ke seluruh Indonesia"
+msgstr "Cities, expanding nationwide"
+
+msgid "Konsultasi & dukungan langsung"
+msgstr "Direct consultation & support"
+
+msgid "Semua Mesin"
+msgstr "All Machines"
+
+msgid "Semua Mesin Percetakan & Finishing"
+msgstr "All Printing & Finishing Machines"
+
+msgid "Model Tersedia"
+msgstr "Models Available"
+
+msgid "Kategori"
+msgstr "Categories"
+
+msgid "Tidak ada mesin pada kategori ini."
+msgstr "No machines in this category."
+
+msgid "Produk ini sudah tidak diproduksi lagi."
+msgstr "This product is no longer manufactured."
+
+msgid "Silakan lihat penggantinya:"
+msgstr "See its replacement:"
+
+msgid "Hubungi kami untuk rekomendasi produk pengganti."
+msgstr "Contact us for a replacement recommendation."
+
+msgid "Pesan Sekarang"
+msgstr "Order Now"
+
+msgid "Lihat kategori"
+msgstr "View category"
+
+msgid "Deskripsi"
+msgstr "Description"
+
+msgid "Spesifikasi lengkap"
+msgstr "Full specifications"
+
+msgid "Video"
+msgstr "Video"
+
+msgid "Produk terkait"
+msgstr "Related products"
+
+msgid "Pesan Anda terkirim."
+msgstr "Your message has been sent."
+
+msgid "Kirim pesan lain"
+msgstr "Send another message"
+
+msgid "Kirim Pesan"
+msgstr "Send Message"
+
+msgid "Nama Lengkap"
+msgstr "Full Name"
+
+msgid "No. WhatsApp"
+msgstr "WhatsApp No."
+
+msgid "Mesin yang Diminati"
+msgstr "Machine of Interest"
+
+msgid "opsional"
+msgstr "optional"
+
+msgid "Pesan"
+msgstr "Message"
+
+msgid "Alamat"
+msgstr "Address"
+
+msgid "Telepon"
+msgstr "Phone"
+
+msgid "Jam Buka"
+msgstr "Opening Hours"
+
+msgid "Senin – Sabtu, 08.00 – 17.00 WIB"
+msgstr "Monday – Saturday, 08:00 – 17:00 WIB"
+
+msgid "Tips, panduan, dan wawasan seputar mesin percetakan & finishing."
+msgstr "Tips, guides, and insight on printing & finishing machinery."
+
+msgid "Baca"
+msgstr "Read"
+
+msgid "Belum ada artikel."
+msgstr "No articles yet."
+
+msgid "DRAF"
+msgstr "DRAFT"
+
+msgid "Tertarik dengan mesinnya?"
+msgstr "Interested in the machine?"
+
+msgid "Semua artikel"
+msgstr "All articles"
+
+msgid "Artikel lainnya"
+msgstr "More articles"
+
+msgid "Foto showroom / gudang Pelita Graphic Supplies, Medan"
+msgstr "Photo of the Pelita Graphic Supplies showroom / warehouse, Medan"
+
+msgid "Tips & Wawasan Percetakan"
+msgstr "Printing Tips & Insight"
+
+msgid ""
+"Panduan praktis seputar mesin percetakan, photocopy, dan finishing — ditulis"
+" untuk membantu bisnis Anda memilih dan merawat mesin dengan tepat."
+msgstr ""
+"Practical guides on printing, photocopy, and finishing machines — written to"
+" help your business choose and maintain the right equipment."
+
+msgid "%(n)s kategori, semua tersedia dengan stok siap kirim."
+msgstr "%(n)s categories, all available with ready-to-ship stock."
+
+msgid "%(m)s model"
+msgstr "%(m)s models"
+
+msgid "%(c)s mesin ditemukan"
+msgstr "%(c)s machines found"
+
+msgid "Terima kasih — tim kami akan menghubungi Anda dalam 1×24 jam kerja."
+msgstr "Thank you — our team will contact you within 1×24 working hours."
+
+msgid "Untuk respons lebih cepat, hubungi kami langsung via"
+msgstr "For a faster response, contact us directly via"
+
+msgid "Isi form di bawah, tim kami akan menghubungi Anda dalam 1×24 jam."
+msgstr "Fill in the form below; our team will contact you within 1×24 hours."
+
+msgid "%(t)s mnt baca"
+msgstr "%(t)s min read"
+
+msgid "%(t)s menit baca"
+msgstr "%(t)s minute read"
+
+msgid "Lihat %(cat)s"
+msgstr "View %(cat)s"
