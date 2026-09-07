@@ -100,6 +100,11 @@ else
   echo "==> compilemessages: gettext not installed — using the committed .mo files"
 fi
 
+# --- 2c. backfill any still-empty Indonesian translation columns --------
+# (the data migrations already do this; harmless safety net for odd states)
+echo "==> manage.py update_translation_fields"
+"$PY" manage.py update_translation_fields 2>&1 || echo "!! update_translation_fields skipped"
+
 # --- 3. static files ----------------------------------------------
 if [ "$SKIP_STATIC" = 1 ]; then
   echo "==> collectstatic: skipped (--no-static)"
