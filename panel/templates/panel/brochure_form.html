@@ -1,0 +1,45 @@
+{% extends "panel/base.html" %}
+
+{% block body %}
+<div class="admin-breadcrumb"><a href="{% url 'panel:brochure_list' %}">Brosur</a> / {{ title }}</div>
+
+<form method="post" enctype="multipart/form-data" class="form-shell" novalidate>
+  {% csrf_token %}
+  {% if form.non_field_errors %}<div class="msg msg-error">{{ form.non_field_errors }}</div>{% endif %}
+
+  <div class="form-card">
+    <div class="form-card-head"><h3>Brosur</h3><p>Gambar sampul tampil sebagai kartu di beranda; berkas PDF opsional untuk diunduh.</p></div>
+    <div class="form-card-body">
+      {% include "panel/_field.html" with field=form.title %}
+      {% include "panel/_field.html" with field=form.description %}
+      {% include "panel/_upload.html" with field=form.picture dim="1000 &times; 750 px" %}
+      <div class="upload-slot">
+        <div class="drop">PDF</div>
+        <div class="meta">
+          <div class="name">{{ form.file.label }}</div>
+          {% if form.instance.file %}<span class="current">Tersimpan: {{ form.instance.file.name }}</span>{% endif %}
+          {{ form.file }}
+          {% for e in form.file.errors %}<span class="field-error">{{ e }}</span>{% endfor %}
+        </div>
+      </div>
+      <div class="field-row-2" style="margin-top:4px">
+        {% include "panel/_field.html" with field=form.order %}
+        <div>{% include "panel/_checkbox.html" with field=form.is_active %}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary">Simpan Brosur</button>
+    <a href="{% url 'panel:brochure_list' %}" class="btn btn-outline">Batal</a>
+    {% if instance %}
+      <button type="submit" form="delForm" class="btn btn-danger to-right"
+              onclick="return confirm('Hapus brosur ini?');">Hapus Brosur</button>
+    {% endif %}
+  </div>
+</form>
+
+{% if instance %}
+<form id="delForm" method="post" action="{% url 'panel:brochure_delete' instance.pk %}">{% csrf_token %}</form>
+{% endif %}
+{% endblock %}

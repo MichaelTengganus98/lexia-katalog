@@ -1,0 +1,37 @@
+{% extends "panel/base.html" %}
+
+{% block body %}
+<div class="tut">
+  <span class="tut-mark">?</span>
+  <div>Kategori mengelompokkan produk di katalog. Isi <b>teks pengantar</b> dan
+    <b>meta SEO</b> tiap kategori agar halaman kategori mudah ditemukan di Google.</div>
+</div>
+
+<div class="admin-page-toolbar">
+  <h2>Semua Kategori <span class="count">({{ cats|length }})</span></h2>
+  <a href="{% url 'panel:category_create' %}" class="btn btn-primary btn-sm">+ Tambah Kategori</a>
+</div>
+
+<div class="admin-panel">
+  <table class="admin-table">
+    <thead><tr><th>Kategori</th><th>Jumlah produk</th><th>Pengantar</th><th>SEO</th><th></th></tr></thead>
+    <tbody>
+      {% for c in cats %}
+        <tr>
+          <td><a class="t-name" href="{% url 'panel:category_edit' c.pk %}">{{ c.jenis }}</a></td>
+          <td class="t-muted">{{ c.item_set.count }}</td>
+          <td class="t-muted">{% if c.intro %}<span class="badge badge-ready">Ada</span>{% else %}<span class="badge badge-draft">Kosong</span>{% endif %}</td>
+          <td class="t-muted">
+            {% if c.noindex %}<span class="badge badge-off">noindex</span>
+            {% elif c.meta_description %}<span class="badge badge-ready">Lengkap</span>
+            {% else %}<span class="badge badge-po">Perlu meta</span>{% endif %}
+          </td>
+          <td><a class="t-edit" href="{% url 'panel:category_edit' c.pk %}">Edit</a></td>
+        </tr>
+      {% empty %}
+        <tr><td colspan="5" class="admin-empty">Belum ada kategori.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

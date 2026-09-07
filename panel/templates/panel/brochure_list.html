@@ -1,0 +1,39 @@
+{% extends "panel/base.html" %}
+{% load thumbnail %}
+
+{% block body %}
+<div class="tut">
+  <span class="tut-mark">?</span>
+  <div>Brosur tampil di bagian <b>"Brosur &amp; katalog"</b> di beranda, diurutkan menurut kolom
+    <b>Urutan</b> (kecil dulu). Nonaktifkan <b>Tampilkan</b> untuk menyembunyikan tanpa menghapus.</div>
+</div>
+
+<div class="admin-page-toolbar">
+  <h2>Semua Brosur <span class="count">({{ brochures|length }})</span></h2>
+  <a href="{% url 'panel:brochure_create' %}" class="btn btn-primary btn-sm">+ Tambah Brosur</a>
+</div>
+
+<div class="admin-panel">
+  <table class="admin-table">
+    <thead><tr><th></th><th>Judul</th><th>Urutan</th><th>Berkas</th><th>Status</th><th></th></tr></thead>
+    <tbody>
+      {% for b in brochures %}
+        <tr>
+          <td style="width:60px">
+            <span class="thumb" style="display:block;width:52px;height:40px;background:var(--slate);overflow:hidden">
+              {% if b.picture %}{% thumbnail b.picture "104x80" crop="center" as im %}<img src="{{ im.url }}" alt="" style="width:100%;height:100%;object-fit:cover">{% endthumbnail %}{% endif %}
+            </span>
+          </td>
+          <td><a class="t-name" href="{% url 'panel:brochure_edit' b.pk %}">{{ b.title }}</a></td>
+          <td class="t-muted">{{ b.order }}</td>
+          <td class="t-muted">{% if b.file %}PDF{% else %}&mdash;{% endif %}</td>
+          <td>{% if b.is_active %}<span class="badge badge-live">Tampil</span>{% else %}<span class="badge badge-draft">Tersembunyi</span>{% endif %}</td>
+          <td><a class="t-edit" href="{% url 'panel:brochure_edit' b.pk %}">Edit</a></td>
+        </tr>
+      {% empty %}
+        <tr><td colspan="6" class="admin-empty">Belum ada brosur.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

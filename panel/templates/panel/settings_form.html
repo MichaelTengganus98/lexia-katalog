@@ -1,0 +1,37 @@
+{% extends "panel/base.html" %}
+{% load panel_extras %}
+
+{% block body %}
+<div class="tut">
+  <span class="tut-mark">?</span>
+  <div>Data situs yang dipakai di seluruh halaman: nama &amp; meta default, info kontak untuk
+    data terstruktur / Google Maps, tautan media sosial, dan kode verifikasi / Analytics.</div>
+</div>
+
+<form method="post" enctype="multipart/form-data" class="form-shell" novalidate>
+  {% csrf_token %}
+  {% if form.non_field_errors %}<div class="msg msg-error">{{ form.non_field_errors }}</div>{% endif %}
+
+  {% for heading, names in groups %}
+    <div class="form-card">
+      <div class="form-card-head"><h3>{{ heading }}</h3></div>
+      <div class="form-card-body">
+        {% for name in names %}
+          {% with f=form|formfield:name %}
+            {% if name == "default_og_image" %}
+              {% include "panel/_upload.html" with field=f dim="1200 &times; 630 px" %}
+            {% else %}
+              {% include "panel/_field.html" with field=f %}
+            {% endif %}
+          {% endwith %}
+        {% endfor %}
+      </div>
+    </div>
+  {% endfor %}
+
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary">Simpan Pengaturan</button>
+    <a href="{% url 'panel:dashboard' %}" class="btn btn-outline">Batal</a>
+  </div>
+</form>
+{% endblock %}

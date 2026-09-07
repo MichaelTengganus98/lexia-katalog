@@ -1,0 +1,58 @@
+{% extends "panel/base.html" %}
+
+{% block body %}
+<div class="admin-breadcrumb"><a href="{% url 'panel:user_list' %}">Pengguna</a> / {{ title }}</div>
+
+<form method="post" class="form-shell" novalidate>
+  {% csrf_token %}
+  {% if form.non_field_errors %}<div class="msg msg-error">{{ form.non_field_errors }}</div>{% endif %}
+
+  <div class="form-card">
+    <div class="form-card-head"><h3>Akun</h3></div>
+    <div class="form-card-body">
+      {% include "panel/_field.html" with field=form.username %}
+      <div class="field-row-2">
+        {% include "panel/_field.html" with field=form.first_name %}
+        {% include "panel/_field.html" with field=form.last_name %}
+      </div>
+      {% include "panel/_field.html" with field=form.email %}
+    </div>
+  </div>
+
+  {% if form.password1 %}
+  <div class="form-card">
+    <div class="form-card-head"><h3>Kata Sandi</h3></div>
+    <div class="form-card-body">
+      {% include "panel/_field.html" with field=form.password1 %}
+      {% include "panel/_field.html" with field=form.password2 %}
+    </div>
+  </div>
+  {% endif %}
+
+  <div class="form-card">
+    <div class="form-card-head"><h3>Peran &amp; Akses</h3></div>
+    <div class="form-card-body">
+      {% include "panel/_checkbox.html" with field=form.is_active %}
+      {% include "panel/_checkbox.html" with field=form.is_staff %}
+      {% include "panel/_checkbox.html" with field=form.is_superuser %}
+      {% if is_self %}<span class="field-hint">Ini akun Anda sendiri — berhati-hatilah menurunkan peran Anda.</span>{% endif %}
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary">Simpan Pengguna</button>
+    <a href="{% url 'panel:user_list' %}" class="btn btn-outline">Batal</a>
+    {% if instance %}
+      <a href="{% url 'panel:user_password' instance.pk %}" class="btn btn-outline">Ubah Kata Sandi</a>
+      {% if not is_self %}
+        <button type="submit" form="delForm" class="btn btn-danger to-right"
+                onclick="return confirm('Hapus pengguna ini?');">Hapus Pengguna</button>
+      {% endif %}
+    {% endif %}
+  </div>
+</form>
+
+{% if instance and not is_self %}
+<form id="delForm" method="post" action="{% url 'panel:user_delete' instance.pk %}">{% csrf_token %}</form>
+{% endif %}
+{% endblock %}

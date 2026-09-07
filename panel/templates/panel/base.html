@@ -19,21 +19,24 @@
     <div class="admin-group-label">Utama</div>
     <nav class="admin-nav">
       <a href="{% url 'panel:dashboard' %}" class="{% if section == 'dashboard' %}active{% endif %}">Dashboard</a>
+      <a href="{% url 'panel:message_list' %}" class="{% if section == 'pesan' %}active{% endif %}">Pesan Masuk{% if new_message_count %} <span class="ext" style="color:var(--rust);font-weight:700">{{ new_message_count }}</span>{% endif %}</a>
     </nav>
 
     <div class="admin-group-label">Konten</div>
     <nav class="admin-nav">
       <a href="{% url 'panel:product_list' %}" class="{% if section == 'produk' %}active{% endif %}">Produk</a>
       <a href="{% url 'panel:post_list' %}" class="{% if section == 'blog' %}active{% endif %}">Blog</a>
-      <a href="/admin/page/category/">Kategori &amp; SEO <span class="ext">&#8599;</span></a>
-      <a href="/admin/homepage/brochure/">Brosur <span class="ext">&#8599;</span></a>
+      <a href="{% url 'panel:category_list' %}" class="{% if section == 'kategori' %}active{% endif %}">Kategori &amp; SEO</a>
+      <a href="{% url 'panel:brochure_list' %}" class="{% if section == 'brosur' %}active{% endif %}">Brosur</a>
     </nav>
 
-    <div class="admin-group-label">Lainnya</div>
+    <div class="admin-group-label">Pengaturan</div>
     <nav class="admin-nav">
-      <a href="/admin/about/contactmessage/">Pesan Masuk <span class="ext">&#8599;</span></a>
-      <a href="/admin/seo/sitesettings/">Pengaturan Situs <span class="ext">&#8599;</span></a>
-      <a href="/admin/auth/user/">Pengguna <span class="ext">&#8599;</span></a>
+      <a href="{% url 'panel:site_settings' %}" class="{% if section == 'pengaturan' %}active{% endif %}">Pengaturan Situs &amp; SEO</a>
+      {% if request.user.is_superuser %}
+        <a href="{% url 'panel:user_list' %}" class="{% if section == 'pengguna' %}active{% endif %}">Pengguna</a>
+      {% endif %}
+      <a href="/admin/">Django Admin <span class="ext">&#8599;</span></a>
     </nav>
   </aside>
 

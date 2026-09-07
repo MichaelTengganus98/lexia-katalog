@@ -57,16 +57,21 @@
   </div>
 
   <div class="form-card">
-    <div class="form-card-head"><h3>Tombol di Akhir Artikel</h3><p>Tombol di bagian bawah artikel. Kosongkan untuk memakai tombol otomatis dari kategori terkait.</p></div>
+    <div class="form-card-head"><h3>Tombol di Akhir Artikel</h3><p>Tombol yang tampil di bagian paling bawah artikel. Pilih tujuannya lewat dropdown — tidak perlu mengetik alamat tautan.</p></div>
     <div class="form-card-body">
-      <div class="link-picker">
+      {{ form.cta_url }}
+      <div class="link-picker" id="ctaPicker">
         <div class="row">
           {% include "panel/_field.html" with field=form.cta_label %}
-          {% include "panel/_field.html" with field=form.cta_url %}
+          {% include "panel/_field.html" with field=form.cta_type %}
         </div>
+        <div class="field" data-cta="halaman">{% include "panel/_field.html" with field=form.cta_page %}</div>
+        <div class="field" data-cta="kategori">{% include "panel/_field.html" with field=form.cta_category %}</div>
+        <div class="field" data-cta="produk">{% include "panel/_field.html" with field=form.cta_product %}</div>
+        <div class="field" data-cta="url">{% include "panel/_field.html" with field=form.cta_external %}</div>
         <div class="link-preview" id="ctaPreview">
-          <span>Tombol:</span> <b id="ctaLabelP">{{ form.cta_label.value|default:"(otomatis dari kategori)" }}</b>
-          <span class="arrow">&rarr;</span> <span id="ctaUrlP">{{ form.cta_url.value|default:"" }}</span>
+          <span>Tombol:</span> <b id="ctaLabelP">—</b>
+          <span class="arrow">&rarr;</span> <span id="ctaTargetP">(otomatis dari kategori)</span>
         </div>
       </div>
     </div>
@@ -123,16 +128,41 @@
     });
   }
 
-  // CTA preview
-  var cl = document.getElementById('{{ form.cta_label.id_for_label }}');
-  var cu = document.getElementById('{{ form.cta_url.id_for_label }}');
-  var clP = document.getElementById('ctaLabelP'), cuP = document.getElementById('ctaUrlP');
-  function upd() {
-    clP.textContent = (cl && cl.value) ? cl.value : '(otomatis dari kategori)';
-    cuP.textContent = (cu && cu.value) ? cu.value : '';
+  // CTA target picker: show only the field for the chosen type + live preview
+  var picker = document.getElementById('ctaPicker');
+  if (picker) {
+    var cl = document.getElementById('{{ form.cta_label.id_for_label }}');
+    var ct = document.getElementById('{{ form.cta_type.id_for_label }}');
+    var rows = {};
+    ['halaman', 'kategori', 'produk', 'url'].forEach(function (k) {
+      rows[k] = picker.querySelector('[data-cta="' + k + '"]');
+    });
+    var clP = document.getElementById('ctaLabelP');
+    var tgP = document.getElementById('ctaTargetP');
+
+    function selText(id) {
+      var el = document.getElementById(id);
+      if (!el) return '';
+      if (el.tagName === 'SELECT') return el.options[el.selectedIndex] ? el.options[el.selectedIndex].text : '';
+      return el.value;
+    }
+    function refresh() {
+      var t = ct.value;
+      Object.keys(rows).forEach(function (k) { if (rows[k]) rows[k].hidden = (k !== t); });
+      clP.textContent = (cl && cl.value) ? cl.value : '—';
+      var tgt = '(otomatis dari kategori)';
+      if (t === 'halaman') tgt = selText('{{ form.cta_page.id_for_label }}');
+      else if (t === 'kategori') tgt = selText('{{ form.cta_category.id_for_label }}');
+      else if (t === 'produk') tgt = selText('{{ form.cta_product.id_for_label }}');
+      else if (t === 'url') tgt = document.getElementById('{{ form.cta_external.id_for_label }}').value || 'https://…';
+      tgP.textContent = tgt;
+    }
+    ct.addEventListener('change', refresh);
+    if (cl) cl.addEventListener('input', refresh);
+    picker.addEventListener('input', refresh);
+    picker.addEventListener('change', refresh);
+    refresh();
   }
-  if (cl) cl.addEventListener('input', upd);
-  if (cu) cu.addEventListener('input', upd);
 })();
 </script>
 {% endblock %}

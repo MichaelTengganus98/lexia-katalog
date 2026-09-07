@@ -1,0 +1,45 @@
+{% extends "panel/base.html" %}
+
+{% block body %}
+<div class="tut">
+  <span class="tut-mark">?</span>
+  <div>Kiriman formulir <b>"Hubungi Kami"</b>. Klik nama untuk membuka, memberi <b>status</b>,
+    dan menulis <b>catatan internal</b>. Membuka pesan baru otomatis menandainya "Dibaca".</div>
+</div>
+
+<div class="admin-page-toolbar">
+  <h2>Pesan Masuk <span class="count">({{ messages_list|length }})</span></h2>
+</div>
+
+<div class="admin-panel">
+  <div class="admin-panel-note">
+    Filter:
+    <a href="{% url 'panel:message_list' %}" class="t-edit{% if not active_status %}{% endif %}">Semua</a>
+    {% for val, label in status_choices %}
+      &middot; <a href="?status={{ val }}" class="t-edit">{{ label }}</a>
+    {% endfor %}
+  </div>
+  <table class="admin-table">
+    <thead><tr><th>Nama</th><th>WhatsApp</th><th>Minat</th><th>Status</th><th>Masuk</th><th></th></tr></thead>
+    <tbody>
+      {% for m in messages_list %}
+        <tr>
+          <td><a class="t-name" href="{% url 'panel:message_detail' m.pk %}">{{ m.name }}</a></td>
+          <td class="t-mono">{{ m.whatsapp }}</td>
+          <td class="t-muted">{% if m.category %}{{ m.category.jenis }}{% else %}&mdash;{% endif %}</td>
+          <td>
+            {% if m.status == 'new' %}<span class="badge badge-po">Baru</span>
+            {% elif m.status == 'done' %}<span class="badge badge-live">Selesai</span>
+            {% elif m.status == 'archived' %}<span class="badge badge-draft">Arsip</span>
+            {% else %}<span class="badge badge-ready">{{ m.get_status_display }}</span>{% endif %}
+          </td>
+          <td class="t-muted">{{ m.created|date:"j M Y, H:i" }}</td>
+          <td><a class="t-edit" href="{% url 'panel:message_detail' m.pk %}">Buka</a></td>
+        </tr>
+      {% empty %}
+        <tr><td colspan="6" class="admin-empty">Belum ada pesan masuk.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

@@ -104,6 +104,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'page.context_navbar.menu_mesin',
                 'seo.context_processors.seo',
+                'panel.context.panel_badges',
             ],
         },
     },

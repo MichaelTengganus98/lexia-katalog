@@ -1,0 +1,40 @@
+{% extends "panel/base.html" %}
+
+{% block body %}
+<div class="admin-breadcrumb"><a href="{% url 'panel:message_list' %}">Pesan Masuk</a> / {{ obj.name }}</div>
+
+<div class="form-shell">
+  <div class="form-card">
+    <div class="form-card-head"><h3>Pesan dari pengunjung</h3><p>Masuk {{ obj.created|date:"j F Y, H:i" }}</p></div>
+    <div class="form-card-body">
+      <table class="admin-table" style="border:1px solid var(--line)">
+        <tr><th style="width:180px">Nama</th><td>{{ obj.name }}</td></tr>
+        <tr><th>WhatsApp</th><td class="t-mono"><a class="t-edit" href="https://wa.me/{{ obj.whatsapp }}" target="_blank" rel="noopener">{{ obj.whatsapp }}</a></td></tr>
+        <tr><th>Email</th><td>{{ obj.email|default:"—" }}</td></tr>
+        <tr><th>Mesin yang diminati</th><td>{% if obj.category %}{{ obj.category.jenis }}{% else %}—{% endif %}</td></tr>
+        <tr><th>Pesan</th><td style="white-space:pre-wrap">{{ obj.message }}</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <form method="post" novalidate>
+    {% csrf_token %}
+    {% if form.non_field_errors %}<div class="msg msg-error">{{ form.non_field_errors }}</div>{% endif %}
+    <div class="form-card">
+      <div class="form-card-head"><h3>Tindak lanjut</h3><p>Status dan catatan hanya untuk tim — tidak tampil ke pengunjung.</p></div>
+      <div class="form-card-body">
+        {% include "panel/_field.html" with field=form.status %}
+        {% include "panel/_field.html" with field=form.handled_note %}
+      </div>
+    </div>
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">Simpan</button>
+      <a href="{% url 'panel:message_list' %}" class="btn btn-outline">Kembali</a>
+      <button type="submit" form="delForm" class="btn btn-danger to-right"
+              onclick="return confirm('Hapus pesan ini?');">Hapus Pesan</button>
+    </div>
+  </form>
+</div>
+
+<form id="delForm" method="post" action="{% url 'panel:message_delete' obj.pk %}">{% csrf_token %}</form>
+{% endblock %}

@@ -17,4 +17,26 @@ urlpatterns = [
     path("blog/tulis/", views.post_form, name="post_create"),
     path("blog/<int:pk>/", views.post_form, name="post_edit"),
     path("blog/<int:pk>/hapus/", views.post_delete, name="post_delete"),
+
+    path("kategori/", views.category_list, name="category_list"),
+    path("kategori/tambah/", views.category_form, name="category_create"),
+    path("kategori/<int:pk>/", views.category_form, name="category_edit"),
+    path("kategori/<int:pk>/hapus/", views.category_delete, name="category_delete"),
+
+    path("brosur/", views.brochure_list, name="brochure_list"),
+    path("brosur/tambah/", views.brochure_form, name="brochure_create"),
+    path("brosur/<int:pk>/", views.brochure_form, name="brochure_edit"),
+    path("brosur/<int:pk>/hapus/", views.brochure_delete, name="brochure_delete"),
+
+    path("pesan/", views.message_list, name="message_list"),
+    path("pesan/<int:pk>/", views.message_detail, name="message_detail"),
+    path("pesan/<int:pk>/hapus/", views.message_delete, name="message_delete"),
+
+    path("pengaturan/", views.site_settings, name="site_settings"),
+
+    path("pengguna/", views.user_list, name="user_list"),
+    path("pengguna/tambah/", views.user_form, name="user_create"),
+    path("pengguna/<int:pk>/", views.user_form, name="user_edit"),
+    path("pengguna/<int:pk>/sandi/", views.user_password, name="user_password"),
+    path("pengguna/<int:pk>/hapus/", views.user_delete, name="user_delete"),
 ]

@@ -51,7 +51,7 @@
           <td class="t-name">{{ m.name }}</td>
           <td class="t-muted">{{ m.get_status_display }}</td>
           <td class="t-muted">{{ m.created|date:"j M Y, H:i" }}</td>
-          <td><a class="t-edit" href="/admin/about/contactmessage/{{ m.pk }}/change/">Buka</a></td>
+          <td><a class="t-edit" href="{% url 'panel:message_detail' m.pk %}">Buka</a></td>
         </tr>
       {% empty %}
         <tr><td colspan="4" class="admin-empty">Belum ada pesan masuk.</td></tr>

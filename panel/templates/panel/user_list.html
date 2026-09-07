@@ -1,0 +1,40 @@
+{% extends "panel/base.html" %}
+
+{% block body %}
+<div class="tut">
+  <span class="tut-mark">?</span>
+  <div>Akun yang bisa masuk ke panel. <b>Staff</b> = boleh membuka panel; <b>Superuser</b> = akses
+    penuh termasuk halaman ini. Ubah kata sandi lewat tautan "Sandi" di tiap baris.</div>
+</div>
+
+<div class="admin-page-toolbar">
+  <h2>Semua Pengguna <span class="count">({{ users|length }})</span></h2>
+  <a href="{% url 'panel:user_create' %}" class="btn btn-primary btn-sm">+ Tambah Pengguna</a>
+</div>
+
+<div class="admin-panel">
+  <table class="admin-table">
+    <thead><tr><th>Username</th><th>Nama</th><th>Email</th><th>Peran</th><th>Login terakhir</th><th></th></tr></thead>
+    <tbody>
+      {% for u in users %}
+        <tr>
+          <td><a class="t-name" href="{% url 'panel:user_edit' u.pk %}">{{ u.username }}</a></td>
+          <td class="t-muted">{{ u.get_full_name|default:"—" }}</td>
+          <td class="t-muted">{{ u.email|default:"—" }}</td>
+          <td>
+            {% if not u.is_active %}<span class="badge badge-off">Nonaktif</span>
+            {% elif u.is_superuser %}<span class="badge badge-live">Superuser</span>
+            {% elif u.is_staff %}<span class="badge badge-ready">Staff</span>
+            {% else %}<span class="badge badge-draft">—</span>{% endif %}
+          </td>
+          <td class="t-muted">{{ u.last_login|date:"j M Y, H:i"|default:"belum pernah" }}</td>
+          <td>
+            <a class="t-edit" href="{% url 'panel:user_edit' u.pk %}">Edit</a>
+            &middot; <a class="t-edit" href="{% url 'panel:user_password' u.pk %}">Sandi</a>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

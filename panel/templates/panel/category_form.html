@@ -1,0 +1,47 @@
+{% extends "panel/base.html" %}
+
+{% block body %}
+<div class="admin-breadcrumb"><a href="{% url 'panel:category_list' %}">Kategori &amp; SEO</a> / {{ title }}</div>
+
+<div class="tut">
+  <span class="tut-mark">?</span>
+  <div>{% if instance %}Mengedit kategori <b>{{ instance.jenis }}</b>.{% else %}Buat kategori produk baru.{% endif %}
+    Nama kategori juga dipakai untuk membuat URL halaman kategori.</div>
+</div>
+
+<form method="post" enctype="multipart/form-data" class="form-shell" novalidate>
+  {% csrf_token %}
+  {% if form.non_field_errors %}<div class="msg msg-error">{{ form.non_field_errors }}</div>{% endif %}
+
+  <div class="form-card">
+    <div class="form-card-head"><h3>Kategori</h3><p>Nama dan teks pengantar yang tampil di atas daftar produk.</p></div>
+    <div class="form-card-body">
+      {% include "panel/_field.html" with field=form.jenis %}
+      {% include "panel/_field.html" with field=form.intro %}
+    </div>
+  </div>
+
+  <div class="form-card">
+    <div class="form-card-head"><h3>SEO</h3><p>Semua opsional — kosongkan untuk memakai nilai otomatis dari nama &amp; pengantar.</p></div>
+    <div class="form-card-body">
+      {% include "panel/_field.html" with field=form.meta_title %}
+      {% include "panel/_field.html" with field=form.meta_description %}
+      {% include "panel/_upload.html" with field=form.og_image dim="1200 &times; 630 px" %}
+      {% include "panel/_checkbox.html" with field=form.noindex %}
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary">Simpan Kategori</button>
+    <a href="{% url 'panel:category_list' %}" class="btn btn-outline">Batal</a>
+    {% if instance %}
+      <button type="submit" form="delForm" class="btn btn-danger to-right"
+              onclick="return confirm('Hapus kategori ini?');">Hapus Kategori</button>
+    {% endif %}
+  </div>
+</form>
+
+{% if instance %}
+<form id="delForm" method="post" action="{% url 'panel:category_delete' instance.pk %}">{% csrf_token %}</form>
+{% endif %}
+{% endblock %}
