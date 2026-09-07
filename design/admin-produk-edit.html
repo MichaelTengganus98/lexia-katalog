@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edit Produk | Lexia Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders:wght@600;700;800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="admin-shell">
+  <aside class="admin-side">
+    <div class="admin-logo">LEXIA<span class="accent">ADMIN</span></div>
+    <div class="admin-group-label">Utama</div>
+    <nav class="admin-nav"><a href="admin.html">Dashboard</a></nav>
+    <div class="admin-group-label">Konten</div>
+    <nav class="admin-nav">
+      <a href="admin-produk.html" class="active">Produk</a>
+      <a href="#">Halaman &amp; SEO</a>
+      <a href="admin-blog.html">Blog</a>
+    </nav>
+    <div class="admin-group-label">Pengaturan</div>
+    <nav class="admin-nav"><a href="#">Pengguna</a><a href="#">Media</a></nav>
+  </aside>
+
+  <main class="admin-main">
+    <div class="admin-topbar">
+      <h1>Edit Produk</h1>
+      <div class="admin-user"><b>Jeffry Aldi</b> · Admin</div>
+    </div>
+
+    <div class="admin-body">
+      <div class="admin-breadcrumb"><a href="admin-produk.html">Produk</a> / Edit Produk</div>
+
+      <div class="tut">
+        <span class="tut-mark">?</span>
+        <div>Anda sedang mengedit <b>Mesin Potong Kertas Hydraulic 5310</b>. Perubahan baru tampil di website setelah Anda menekan <b>Simpan Perubahan</b> di bagian bawah. Field bertanda <b>*</b> wajib diisi.</div>
+      </div>
+
+      <div class="form-shell">
+
+        <div class="form-card">
+          <div class="form-card-head"><h3>Informasi Dasar</h3><p>Nama, kategori, dan deskripsi singkat produk.</p></div>
+          <div class="form-card-body">
+            <div class="field">
+              <label>Nama Produk *</label>
+              <input type="text" value="Mesin Potong Kertas Hydraulic 5310">
+            </div>
+            <div class="field-row-2">
+              <div class="field">
+                <label>Kategori *</label>
+                <select>
+                  <option>Mesin Potong Kertas</option>
+                  <option>Mesin Laminating Kertas</option>
+                  <option>Mesin Lem Binding Buku</option>
+                  <option>Mesin Lem Hardcover</option>
+                  <option>Mesin Pelubang Kertas</option>
+                  <option>Mesin Perforasi</option>
+                  <option>Mesin Jahit Kawat</option>
+                  <option>Mesin Creasing</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>Kode / SKU Model</label>
+                <input type="text" value="5310">
+              </div>
+            </div>
+            <div class="field" style="margin-bottom:0;">
+              <label>Deskripsi Singkat *</label>
+              <textarea>Dirancang untuk kebutuhan pemotongan kertas presisi tinggi di industri percetakan dan photocopy. Dilengkapi sistem hydraulic dan mechanical foot pedal.</textarea>
+              <span class="field-hint">Tampil di bagian atas halaman detail produk. Idealnya 25–40 kata.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-card">
+          <div class="form-card-head"><h3>Foto Produk</h3><p>Foto utama tampil besar di halaman detail dan menjadi kartu di katalog / beranda.</p></div>
+          <div class="form-card-body">
+
+            <div class="thumb-note" style="margin-bottom:20px;">
+              <div class="box">
+                <div class="t">Jika dipakai sebagai #1 Unggulan (kartu besar di beranda)</div>
+                <div class="dim">1600 × 1200 px</div>
+                <div class="d">Rasio 4:3 · maks 2 MB · JPG / PNG / WebP</div>
+              </div>
+              <div class="box">
+                <div class="t">Kartu katalog &amp; unggulan standar (#2–#5)</div>
+                <div class="dim">1000 × 750 px</div>
+                <div class="d">Rasio 4:3 · maks 1 MB · JPG / PNG / WebP</div>
+              </div>
+            </div>
+
+            <div class="upload-slot">
+              <div class="drop">Foto tersimpan</div>
+              <div class="meta">
+                <div class="name">Foto Utama * — foto-hydraulic-5310-utama.jpg</div>
+                <span class="spec-hint">Disarankan: <b>1600 × 1200 px</b>, rasio 4:3, maks <b>2 MB</b></span>
+              </div>
+              <button type="button" class="btn btn-outline btn-sm">Ganti</button>
+            </div>
+            <div class="upload-slot">
+              <div class="drop">Foto tersimpan</div>
+              <div class="meta">
+                <div class="name">Foto Tambahan 2 — foto-hydraulic-5310-samping.jpg</div>
+                <span class="spec-hint">Disarankan: <b>1000 × 750 px</b>, rasio 4:3, maks <b>1 MB</b></span>
+              </div>
+              <button type="button" class="btn btn-outline btn-sm">Ganti</button>
+            </div>
+            <div class="upload-slot" style="margin-bottom:0;">
+              <div class="drop">Foto tersimpan</div>
+              <div class="meta">
+                <div class="name">Foto Tambahan 3 — foto-hydraulic-5310-panel.jpg</div>
+                <span class="spec-hint">Disarankan: <b>1000 × 750 px</b>, rasio 4:3, maks <b>1 MB</b></span>
+              </div>
+              <button type="button" class="btn btn-outline btn-sm">Ganti</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-card">
+          <div class="form-card-head"><h3>Video Produk</h3><p>Sematkan video demo dari YouTube — tidak perlu unggah file video.</p></div>
+          <div class="form-card-body">
+            <div class="video-embed-box">
+              <div class="checkbox-row">
+                <input type="checkbox" id="videoToggle" onchange="document.getElementById('videoFields').hidden = !this.checked">
+                <label for="videoToggle">Sertakan video demo produk dari YouTube</label>
+              </div>
+              <div class="video-embed-fields" id="videoFields" hidden>
+                <div class="field">
+                  <label>Tautan YouTube</label>
+                  <input type="text" placeholder="https://www.youtube.com/watch?v=...">
+                  <span class="field-hint">Tempel tautan video biasa atau tautan singkat (youtu.be) — akan otomatis disematkan sebagai player di tab "Video" pada galeri foto produk.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-card">
+          <div class="form-card-head"><h3>Spesifikasi Teknis</h3><p>Tampil sebagai tabel spesifikasi di halaman detail produk.</p></div>
+          <div class="form-card-body">
+            <div class="field-row-2">
+              <div class="field"><label>Nama Spesifikasi</label><input type="text" value="Lebar Max Kertas"></div>
+              <div class="field"><label>Nilai</label><input type="text" value="530 mm"></div>
+            </div>
+            <div class="field-row-2">
+              <div class="field"><label>Nama Spesifikasi</label><input type="text" value="Daya Input"></div>
+              <div class="field"><label>Nilai</label><input type="text" value="220V / 50Hz"></div>
+            </div>
+            <div class="field-row-2">
+              <div class="field"><label>Nama Spesifikasi</label><input type="text" value="Konsumsi Daya"></div>
+              <div class="field"><label>Nilai</label><input type="text" value="2,2 Kw"></div>
+            </div>
+            <button type="button" class="btn btn-outline btn-sm">+ Tambah Baris Spesifikasi</button>
+          </div>
+        </div>
+
+        <div class="form-card">
+          <div class="form-card-head"><h3>Ketersediaan</h3><p>Menentukan label yang tampil di katalog dan halaman detail produk.</p></div>
+          <div class="form-card-body">
+            <div class="avail-options">
+              <label class="avail-card checked">
+                <input type="radio" name="avail" checked onclick="document.getElementById('discBox').hidden = true">
+                <div class="t">Ready Stock</div>
+                <div class="d">Tersedia, siap kirim.</div>
+              </label>
+              <label class="avail-card">
+                <input type="radio" name="avail" onclick="document.getElementById('discBox').hidden = true">
+                <div class="t">Pre-Order (PO)</div>
+                <div class="d">Perlu waktu indent / pemesanan.</div>
+              </label>
+              <label class="avail-card">
+                <input type="radio" name="avail" onclick="document.getElementById('discBox').hidden = false">
+                <div class="t">Discontinued</div>
+                <div class="d">Tidak lagi dijual.</div>
+              </label>
+            </div>
+
+            <div class="discontinued-box" id="discBox" hidden>
+              <label>Arahkan pengunjung ke produk pengganti</label>
+              <select>
+                <option>Pilih produk pengganti...</option>
+                <optgroup label="Mesin Potong Kertas">
+                  <option>Mesin Potong Kertas Hydraulic 5310</option>
+                  <option>Mesin Potong Kertas Hydraulic HP4908</option>
+                </optgroup>
+                <optgroup label="Mesin Laminating Kertas">
+                  <option>Mesin Laminating Kertas 390 B</option>
+                </optgroup>
+                <optgroup label="Mesin Lem Binding Buku">
+                  <option>Mesin Lem Binding Buku 60R</option>
+                  <option>Mesin Lem Binding Buku 50Z</option>
+                </optgroup>
+                <optgroup label="Mesin Jahit Kawat">
+                  <option>Mesin Jahit Kawat 801</option>
+                </optgroup>
+              </select>
+              <span class="field-hint">Produk ini boleh dari kategori yang sama atau berbeda. Halaman detail produk lama akan menampilkan pesan "produk digantikan oleh" dengan tautan ke produk yang Anda pilih di sini.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-card">
+          <div class="form-card-head"><h3>Tampilkan di Beranda</h3><p>Atur apakah produk ini masuk daftar "Produk unggulan" dan di urutan berapa.</p></div>
+          <div class="form-card-body">
+            <div class="field" style="margin-bottom:0;">
+              <label>Prioritas Unggulan</label>
+              <select style="max-width:260px;">
+                <option>Tidak ditampilkan di beranda</option>
+                <option selected>#1 — Kartu besar (hero)</option>
+                <option>#2</option>
+                <option>#3</option>
+                <option>#4</option>
+                <option>#5</option>
+              </select>
+              <span class="field-hint">Jika Anda memilih posisi yang sudah dipakai produk lain, produk itu akan bergeser satu urutan ke bawah. Anda juga bisa mengatur urutan dengan cara <b>seret (drag)</b> di halaman <a href="admin-produk.html" style="color:var(--rust);">Produk</a>.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <a href="admin-produk.html" class="btn btn-primary">Simpan Perubahan</a>
+          <a href="admin-produk.html" class="btn btn-outline">Batal</a>
+          <a href="#" class="btn btn-outline" style="margin-left:auto;border-color:#c65b3d;color:#9c3e22;">Hapus Produk</a>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Produk | Lexia Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders:wght@600;700;800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="admin-shell">
+  <aside class="admin-side">
+    <div class="admin-logo">LEXIA<span class="accent">ADMIN</span></div>
+    <div class="admin-group-label">Utama</div>
+    <nav class="admin-nav"><a href="admin.html">Dashboard</a></nav>
+    <div class="admin-group-label">Konten</div>
+    <nav class="admin-nav">
+      <a href="admin-produk.html" class="active">Produk</a>
+      <a href="#">Halaman &amp; SEO</a>
+      <a href="admin-blog.html">Blog</a>
+    </nav>
+    <div class="admin-group-label">Pengaturan</div>
+    <nav class="admin-nav"><a href="#">Pengguna</a><a href="#">Media</a></nav>
+  </aside>
+
+  <main class="admin-main">
+    <div class="admin-topbar">
+      <h1>Produk</h1>
+      <div class="admin-user"><b>Jeffry Aldi</b> · Admin</div>
+    </div>
+
+    <div class="admin-body">
+      <div class="tut">
+        <span class="tut-mark">?</span>
+        <div>Halaman ini berisi <b>semua produk</b> yang tampil di katalog. Klik nama produk untuk mengedit, atau <b>Tambah Produk</b> untuk menambah model baru. Status <b>Discontinued</b> berarti produk tidak lagi dijual — halaman produk tersebut akan otomatis mengarahkan pengunjung ke produk pengganti yang Anda tentukan.</div>
+      </div>
+
+      <div class="admin-page-toolbar">
+        <h2>Semua Produk <span style="color:var(--text-muted); font-weight:400;">(20)</span></h2>
+        <a href="admin-produk-tambah.html" class="btn btn-primary btn-sm">+ Tambah Produk</a>
+      </div>
+
+      <div class="admin-panel" style="margin-bottom:28px;">
+        <table class="admin-table">
+          <thead>
+            <tr><th>PRODUK</th><th>KATEGORI</th><th>KETERSEDIAAN</th><th>UNGGULAN</th><th></th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><a href="admin-produk-edit.html" style="color:var(--text);font-weight:600;">Mesin Potong Kertas Hydraulic 5310</a></td>
+              <td>Mesin Potong Kertas</td>
+              <td><span class="badge badge-ready">Ready Stock</span></td>
+              <td>#1</td>
+              <td><a href="admin-produk-edit.html" style="color:var(--rust);font-weight:600;font-size:13px;">Edit</a></td>
+            </tr>
+            <tr>
+              <td><a href="admin-produk-edit.html" style="color:var(--text);font-weight:600;">Mesin Laminating Kertas 390 B</a></td>
+              <td>Mesin Laminating Kertas</td>
+              <td><span class="badge badge-ready">Ready Stock</span></td>
+              <td>#2</td>
+              <td><a href="admin-produk-edit.html" style="color:var(--rust);font-weight:600;font-size:13px;">Edit</a></td>
+            </tr>
+            <tr>
+              <td><a href="admin-produk-edit.html" style="color:var(--text);font-weight:600;">Mesin Lem Binding Buku 60R</a></td>
+              <td>Mesin Lem Binding Buku</td>
+              <td><span class="badge badge-po">Pre-Order</span></td>
+              <td>#3</td>
+              <td><a href="admin-produk-edit.html" style="color:var(--rust);font-weight:600;font-size:13px;">Edit</a></td>
+            </tr>
+            <tr>
+              <td><a href="admin-produk-edit.html" style="color:var(--text);font-weight:600;">Mesin Jahit Kawat 801</a></td>
+              <td>Mesin Jahit Kawat</td>
+              <td><span class="badge badge-ready">Ready Stock</span></td>
+              <td>#4</td>
+              <td><a href="admin-produk-edit.html" style="color:var(--rust);font-weight:600;font-size:13px;">Edit</a></td>
+            </tr>
+            <tr>
+              <td><a href="admin-produk-edit.html" style="color:var(--text);font-weight:600;">Mesin Creasing Elektrik E660</a></td>
+              <td>Mesin Creasing</td>
+              <td><span class="badge badge-ready">Ready Stock</span></td>
+              <td>#5</td>
+              <td><a href="admin-produk-edit.html" style="color:var(--rust);font-weight:600;font-size:13px;">Edit</a></td>
+            </tr>
+            <tr>
+              <td><a href="admin-produk-edit.html" style="color:var(--text);font-weight:600;">Mesin Lem Hardcover LR 380</a></td>
+              <td>Mesin Lem Hardcover</td>
+              <td><span class="badge badge-po">Pre-Order</span></td>
+              <td>—</td>
+              <td><a href="admin-produk-edit.html" style="color:var(--rust);font-weight:600;font-size:13px;">Edit</a></td>
+            </tr>
+            <tr>
+              <td><a href="admin-produk-edit.html" style="color:var(--text);font-weight:600;">Mesin Potong Kertas 4606Z</a></td>
+              <td>Mesin Potong Kertas</td>
+              <td><span class="badge badge-discontinued">Discontinued → HP4908</span></td>
+              <td>—</td>
+              <td><a href="admin-produk-edit.html" style="color:var(--rust);font-weight:600;font-size:13px;">Edit</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="admin-panel">
+        <div class="admin-panel-head">Produk Unggulan di Homepage</div>
+        <div style="padding: 18px 22px 4px; font-size:13px; color:var(--text-muted);">
+          Urutan #1–#5 ini menentukan susunan "Produk unggulan" di beranda. #1 tampil besar (kartu hero), #2–#5 tampil dalam ukuran standar. <b style="color:var(--text);">Seret (drag) kartu</b> untuk mengubah urutan.
+        </div>
+        <div style="padding: 18px 22px 22px;">
+          <ul class="priority-list" id="priorityList">
+            <li class="priority-item" draggable="true">
+              <span class="rank">1</span><span class="handle">⠿</span>
+              <span class="thumb"></span>
+              <span class="pname">Mesin Potong Kertas Hydraulic 5310<br><span class="pcat">Mesin Potong Kertas</span></span>
+            </li>
+            <li class="priority-item" draggable="true">
+              <span class="rank">2</span><span class="handle">⠿</span>
+              <span class="thumb"></span>
+              <span class="pname">Mesin Laminating Kertas 390 B<br><span class="pcat">Mesin Laminating Kertas</span></span>
+            </li>
+            <li class="priority-item" draggable="true">
+              <span class="rank">3</span><span class="handle">⠿</span>
+              <span class="thumb"></span>
+              <span class="pname">Mesin Lem Binding Buku 60R<br><span class="pcat">Mesin Lem Binding Buku</span></span>
+            </li>
+            <li class="priority-item" draggable="true">
+              <span class="rank">4</span><span class="handle">⠿</span>
+              <span class="thumb"></span>
+              <span class="pname">Mesin Jahit Kawat 801<br><span class="pcat">Mesin Jahit Kawat</span></span>
+            </li>
+            <li class="priority-item" draggable="true">
+              <span class="rank">5</span><span class="handle">⠿</span>
+              <span class="thumb"></span>
+              <span class="pname">Mesin Creasing Elektrik E660<br><span class="pcat">Mesin Creasing</span></span>
+            </li>
+          </ul>
+          <div class="priority-empty" style="margin-top:10px;">+ Tambah produk lain ke daftar unggulan</div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+  // Drag-to-reorder demo for the featured-priority list. Updates the rank
+  // numbers after each drop so #1 stays the homepage hero slot.
+  const list = document.getElementById('priorityList');
+  let dragEl = null;
+  list.addEventListener('dragstart', e => {
+    dragEl = e.target.closest('.priority-item');
+    dragEl.classList.add('dragging');
+  });
+  list.addEventListener('dragend', () => {
+    dragEl.classList.remove('dragging');
+    dragEl = null;
+    [...list.children].forEach((li, i) => li.querySelector('.rank').textContent = i + 1);
+  });
+  list.addEventListener('dragover', e => {
+    e.preventDefault();
+    const after = [...list.querySelectorAll('.priority-item:not(.dragging)')].find(li => {
+      const box = li.getBoundingClientRect();
+      return e.clientY < box.top + box.height / 2;
+    });
+    if (after) list.insertBefore(dragEl, after);
+    else list.appendChild(dragEl);
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tulis Artikel | Lexia Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders:wght@600;700;800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="admin-shell">
+  <aside class="admin-side">
+    <div class="admin-logo">LEXIA<span class="accent">ADMIN</span></div>
+    <div class="admin-group-label">Utama</div>
+    <nav class="admin-nav"><a href="admin.html">Dashboard</a></nav>
+    <div class="admin-group-label">Konten</div>
+    <nav class="admin-nav">
+      <a href="admin-produk.html">Produk</a>
+      <a href="#">Halaman &amp; SEO</a>
+      <a href="admin-blog.html" class="active">Blog</a>
+    </nav>
+    <div class="admin-group-label">Pengaturan</div>
+    <nav class="admin-nav"><a href="#">Pengguna</a><a href="#">Media</a></nav>
+  </aside>
+
+  <main class="admin-main">
+    <div class="admin-topbar">
+      <h1>Tulis Artikel</h1>
+      <div class="admin-user"><b>Jeffry Aldi</b> · Admin</div>
+    </div>
+
+    <div class="admin-body">
+      <div class="admin-breadcrumb"><a href="admin-blog.html">Blog</a> / Tulis Artikel</div>
+
+      <div class="tut">
+        <span class="tut-mark">?</span>
+        <div>Tulis artikel dari atas ke bawah. Gunakan tombol <b>🔗 Tautan</b> di toolbar untuk menyisipkan tautan di dalam teks artikel. Di bagian paling bawah, atur <b>tombol penutup artikel</b> — pilih halaman atau produk tujuan dari dropdown, tanpa perlu menulis alamat tautan secara manual.</div>
+      </div>
+
+      <div class="form-shell">
+
+        <div class="form-card">
+          <div class="form-card-head"><h3>Judul &amp; Kategori</h3></div>
+          <div class="form-card-body">
+            <div class="field">
+              <label>Judul Artikel *</label>
+              <input type="text" placeholder="Contoh: Cara Memilih Mesin Laminating untuk Usaha Percetakan">
+            </div>
+            <div class="field-row-2" style="margin-bottom:0;">
+              <div class="field">
+                <label>Kategori Tag *</label>
+                <select>
+                  <option>Panduan Membeli</option>
+                  <option>Perbandingan</option>
+                  <option>Perawatan</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>Estimasi Waktu Baca</label>
+                <input type="text" placeholder="Contoh: 5 min baca">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-card">
+          <div class="form-card-head"><h3>Ringkasan</h3><p>Muncul di kartu artikel, sebelum orang membuka artikel penuh.</p></div>
+          <div class="form-card-body">
+            <textarea placeholder="1–2 kalimat ringkasan artikel." style="margin:0;"></textarea>
+            <span class="field-hint">Idealnya di bawah 25 kata agar tidak terpotong di kartu artikel.</span>
+          </div>
+        </div>
+
+        <div class="form-card">
+          <div class="form-card-head"><h3>Foto Sampul</h3></div>
+          <div class="form-card-body">
+            <div class="upload-slot" style="margin-bottom:0;">
+              <div class="drop">Foto Sampul</div>
+              <div class="meta">
+                <div class="name">Foto Sampul Artikel *</div>
+                <span class="spec-hint">Disarankan: <b>1200 × 750 px</b>, rasio 16:10, maks <b>1.5 MB</b>, JPG / WebP</span>
+              </div>
+              <button type="button" class="btn btn-outline btn-sm">Unggah</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-card">
+          <div class="form-card-head"><h3>Isi Artikel</h3><p>Pilih teks lalu klik tombol toolbar untuk memformat, atau klik 🔗 Tautan untuk menyisipkan tautan di titik kursor.</p></div>
+          <div class="form-card-body">
+            <div class="editor-toolbar">
+              <button type="button" title="Bold"><b>B</b></button>
+              <button type="button" title="Italic"><i>I</i></button>
+              <button type="button" title="Heading">H2</button>
+              <button type="button" title="Daftar">≡</button>
+              <button type="button" class="link-btn" onclick="document.getElementById('inlinePopover').hidden = !document.getElementById('inlinePopover').hidden">🔗 Tautan</button>
+            </div>
+            <textarea class="editor-body" placeholder="Tulis isi artikel di sini..."></textarea>
+
+            <div class="inline-link-popover" id="inlinePopover" hidden>
+              <div class="link-picker" style="border:none; padding:0;">
+                <div class="row">
+                  <div class="field" style="margin:0;">
+                    <label>Teks yang ditautkan</label>
+                    <input type="text" placeholder="Contoh: mesin laminating hot & cold">
+                  </div>
+                  <div class="field" style="margin:0;">
+                    <label>Tujuan tautan</label>
+                    <select onchange="lexiaShowTarget(this,'inline')">
+                      <option value="halaman">Halaman Internal</option>
+                      <option value="produk">Halaman Produk</option>
+                      <option value="url">URL Eksternal</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="field" id="inline-target-halaman" style="margin-bottom:0;">
+                  <label>Pilih halaman</label>
+                  <select><option>Beranda</option><option>Katalog</option><option>Tentang Kami</option><option>Hubungi Kami</option></select>
+                </div>
+                <div class="field" id="inline-target-produk" style="margin-bottom:0;" hidden>
+                  <label>Pilih produk</label>
+                  <select><option>Mesin Potong Kertas Hydraulic 5310</option><option>Mesin Laminating Kertas 390 B</option><option>Mesin Lem Binding Buku 60R</option></select>
+                </div>
+                <div class="field" id="inline-target-url" style="margin-bottom:0;" hidden>
+                  <label>URL Eksternal</label>
+                  <input type="text" placeholder="https://...">
+                </div>
+              </div>
+              <div style="margin-top:14px;"><button type="button" class="btn btn-primary btn-sm" onclick="document.getElementById('inlinePopover').hidden = true">Sisipkan Tautan</button></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-card">
+          <div class="form-card-head"><h3>Tombol di Akhir Artikel</h3><p>Tombol yang tampil di bagian paling bawah artikel. Pilih tujuannya lewat dropdown — tidak perlu mengetik alamat tautan.</p></div>
+          <div class="form-card-body">
+            <div class="link-picker">
+              <div class="row">
+                <div class="field" style="margin:0;">
+                  <label>Teks Tombol *</label>
+                  <input type="text" id="cta-label" placeholder="Contoh: Lihat Katalog Laminating" oninput="lexiaUpdatePreview()">
+                </div>
+                <div class="field" style="margin:0;">
+                  <label>Tujuan Tombol *</label>
+                  <select id="cta-type" onchange="lexiaShowTarget(this,'cta'); lexiaUpdatePreview()">
+                    <option value="halaman">Halaman Internal</option>
+                    <option value="produk">Halaman Produk</option>
+                    <option value="url">URL Eksternal</option>
+                  </select>
+                </div>
+              </div>
+              <div class="field" id="cta-target-halaman" style="margin-bottom:0;">
+                <label>Pilih halaman</label>
+                <select id="cta-halaman-val" onchange="lexiaUpdatePreview()">
+                  <option>Beranda</option><option selected>Katalog</option><option>Tentang Kami</option><option>Hubungi Kami</option>
+                </select>
+              </div>
+              <div class="field" id="cta-target-produk" style="margin-bottom:0;" hidden>
+                <label>Pilih produk</label>
+                <select id="cta-produk-val" onchange="lexiaUpdatePreview()">
+                  <option>Mesin Potong Kertas Hydraulic 5310</option><option>Mesin Laminating Kertas 390 B</option><option>Mesin Lem Binding Buku 60R</option>
+                </select>
+              </div>
+              <div class="field" id="cta-target-url" style="margin-bottom:0;" hidden>
+                <label>URL Eksternal</label>
+                <input type="text" id="cta-url-val" placeholder="https://..." oninput="lexiaUpdatePreview()">
+              </div>
+              <div class="link-preview" id="cta-preview">
+                <span>Tombol:</span> <b id="cta-preview-label">Lihat Katalog Laminating</b> <span class="arrow">→</span> <span id="cta-preview-target">Katalog</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <a href="admin-blog.html" class="btn btn-primary">Publikasikan Artikel</a>
+          <a href="admin-blog.html" class="btn btn-outline">Simpan sebagai Draf</a>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+  function lexiaShowTarget(selectEl, prefix){
+    const val = selectEl.value;
+    ['halaman','produk','url'].forEach(t => {
+      const el = document.getElementById(prefix + '-target-' + t);
+      if (el) el.hidden = (t !== val);
+    });
+  }
+  function lexiaUpdatePreview(){
+    const label = document.getElementById('cta-label').value || 'Lihat Katalog Laminating';
+    const type = document.getElementById('cta-type').value;
+    let target = '';
+    if (type === 'halaman') target = document.getElementById('cta-halaman-val').value;
+    if (type === 'produk') target = document.getElementById('cta-produk-val').value;
+    if (type === 'url') target = document.getElementById('cta-url-val').value || 'https://...';
+    document.getElementById('cta-preview-label').textContent = label;
+    document.getElementById('cta-preview-target').textContent = target;
+  }
+</script>
+
+</body>
+</html>

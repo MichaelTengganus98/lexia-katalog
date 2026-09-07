@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard | Lexia Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders:wght@600;700;800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="admin-shell">
+  <aside class="admin-side">
+    <div class="admin-logo">LEXIA<span class="accent">ADMIN</span></div>
+    <div class="admin-group-label">Utama</div>
+    <nav class="admin-nav">
+      <a href="admin.html" class="active">Dashboard</a>
+    </nav>
+    <div class="admin-group-label">Konten</div>
+    <nav class="admin-nav">
+      <a href="admin-produk.html">Produk</a>
+      <a href="#">Halaman &amp; SEO</a>
+      <a href="admin-blog.html">Blog</a>
+    </nav>
+    <div class="admin-group-label">Pengaturan</div>
+    <nav class="admin-nav">
+      <a href="#">Pengguna</a>
+      <a href="#">Media</a>
+    </nav>
+  </aside>
+
+  <main class="admin-main">
+    <div class="admin-topbar">
+      <h1>Dashboard</h1>
+      <div class="admin-user"><b>Jeffry Aldi</b> · Admin</div>
+    </div>
+
+    <div class="admin-body">
+      <div class="tut">
+        <span class="tut-mark">?</span>
+        <div>Ini <b>ringkasan cepat</b> isi website Anda. Untuk mengubah produk, buka menu <b>Produk</b> di sisi kiri. Untuk menulis atau mengubah artikel, buka menu <b>Blog</b>. Kartu "Perlu Perhatian" menandakan produk yang belum lengkap datanya (misalnya foto atau meta SEO belum diisi).</div>
+      </div>
+      <div class="admin-stats">
+        <div class="admin-stat"><div class="num">20</div><div class="label">PRODUK AKTIF</div></div>
+        <div class="admin-stat"><div class="num">8</div><div class="label">KATEGORI</div></div>
+        <div class="admin-stat"><div class="num">3</div><div class="label">ARTIKEL BLOG</div></div>
+        <div class="admin-stat"><div class="num">2</div><div class="label">PERLU PERHATIAN</div></div>
+      </div>
+
+      <div class="admin-panel">
+        <div class="admin-panel-head">Produk terbaru diubah</div>
+        <table class="admin-table">
+          <thead>
+            <tr><th>NAMA PRODUK</th><th>KATEGORI</th><th>TERAKHIR DIUBAH</th><th>STATUS SEO</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><a href="admin-produk-edit.html" style="color:var(--rust);font-weight:600;">Mesin Potong Kertas Hydraulic 5310</a></td>
+              <td>Mesin Potong Kertas</td>
+              <td>2 hari lalu</td>
+              <td><span class="tag tag-ok">Lengkap</span></td>
+            </tr>
+            <tr>
+              <td><a href="admin-produk-edit.html" style="color:var(--rust);font-weight:600;">Mesin Lem Hardcover LR 380</a></td>
+              <td>Mesin Lem Hardcover</td>
+              <td>2 hari lalu</td>
+              <td><span class="tag tag-warn">Perlu Meta</span></td>
+            </tr>
+            <tr>
+              <td><a href="admin-produk-edit.html" style="color:var(--rust);font-weight:600;">Mesin Jahit Kawat 801</a></td>
+              <td>Mesin Jahit Kawat</td>
+              <td>1 minggu lalu</td>
+              <td><span class="tag tag-ok">Lengkap</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edit Artikel | Lexia Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders:wght@600;700;800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="admin-shell">
+  <aside class="admin-side">
+    <div class="admin-logo">LEXIA<span class="accent">ADMIN</span></div>
+    <div class="admin-group-label">Utama</div>
+    <nav class="admin-nav"><a href="admin.html">Dashboard</a></nav>
+    <div class="admin-group-label">Konten</div>
+    <nav class="admin-nav">
+      <a href="admin-produk.html">Produk</a>
+      <a href="#">Halaman &amp; SEO</a>
+      <a href="admin-blog.html" class="active">Blog</a>
+    </nav>
+    <div class="admin-group-label">Pengaturan</div>
+    <nav class="admin-nav"><a href="#">Pengguna</a><a href="#">Media</a></nav>
+  </aside>
+
+  <main class="admin-main">
+    <div class="admin-topbar">
+      <h1>Edit Artikel</h1>
+      <div class="admin-user"><b>Jeffry Aldi</b> · Admin</div>
+    </div>
+
+    <div class="admin-body">
+      <div class="admin-breadcrumb"><a href="admin-blog.html">Blog</a> / Edit Artikel</div>
+
+      <div class="tut">
+        <span class="tut-mark">?</span>
+        <div>Anda sedang mengedit <b>Cara Memilih Mesin Laminating untuk Usaha Percetakan</b>. Gunakan tombol <b>🔗 Tautan</b> di toolbar untuk menyisipkan tautan di dalam teks. Tekan <b>Simpan Perubahan</b> di bagian bawah setelah selesai.</div>
+      </div>
+
+      <div class="form-shell">
+
+        <div class="form-card">
+          <div class="form-card-head"><h3>Judul &amp; Kategori</h3></div>
+          <div class="form-card-body">
+            <div class="field">
+              <label>Judul Artikel *</label>
+              <input type="text" value="Cara Memilih Mesin Laminating untuk Usaha Percetakan">
+            </div>
+            <div class="field-row-2" style="margin-bottom:0;">
+              <div class="field">
+                <label>Kategori Tag *</label>
+                <select>
+                  <option selected>Panduan Membeli</option>
+                  <option>Perbandingan</option>
+                  <option>Perawatan</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>Estimasi Waktu Baca</label>
+                <input type="text" value="5 min baca">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-card">
+          <div class="form-card-head"><h3>Ringkasan</h3><p>Muncul di kartu artikel, sebelum orang membuka artikel penuh.</p></div>
+          <div class="form-card-body">
+            <textarea style="margin:0;">Perbandingan mesin laminating hot & cold, kapasitas kertas, dan tips memilih sesuai skala usaha.</textarea>
+            <span class="field-hint">Idealnya di bawah 25 kata agar tidak terpotong di kartu artikel.</span>
+          </div>
+        </div>
+
+        <div class="form-card">
+          <div class="form-card-head"><h3>Foto Sampul</h3></div>
+          <div class="form-card-body">
+            <div class="upload-slot" style="margin-bottom:0;">
+              <div class="drop">Foto tersimpan</div>
+              <div class="meta">
+                <div class="name">Foto Sampul Artikel * — laminating-close-up.jpg</div>
+                <span class="spec-hint">Disarankan: <b>1200 × 750 px</b>, rasio 16:10, maks <b>1.5 MB</b>, JPG / WebP</span>
+              </div>
+              <button type="button" class="btn btn-outline btn-sm">Ganti</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-card">
+          <div class="form-card-head"><h3>Isi Artikel</h3><p>Pilih teks lalu klik tombol toolbar untuk memformat, atau klik 🔗 Tautan untuk menyisipkan tautan di titik kursor.</p></div>
+          <div class="form-card-body">
+            <div class="editor-toolbar">
+              <button type="button" title="Bold"><b>B</b></button>
+              <button type="button" title="Italic"><i>I</i></button>
+              <button type="button" title="Heading">H2</button>
+              <button type="button" title="Daftar">≡</button>
+              <button type="button" class="link-btn" onclick="document.getElementById('inlinePopover').hidden = !document.getElementById('inlinePopover').hidden">🔗 Tautan</button>
+            </div>
+            <textarea class="editor-body">Memilih mesin laminating yang tepat bergantung pada volume produksi harian dan jenis dokumen yang biasa Anda kerjakan.
+
+Laminating hot cocok untuk kartu nama, ID card, dan menu — hasil lebih rapat dan tahan lama. Laminating cold lebih aman untuk dokumen sensitif panas seperti foto tertentu dan dilakukan tanpa pemanasan.
+
+Untuk usaha dengan volume tinggi, pertimbangkan mesin dengan kecepatan di atas 10 m/menit agar antrean pelanggan tidak menumpuk.</textarea>
+
+            <div class="inline-link-popover" id="inlinePopover" hidden>
+              <div class="link-picker" style="border:none; padding:0;">
+                <div class="row">
+                  <div class="field" style="margin:0;">
+                    <label>Teks yang ditautkan</label>
+                    <input type="text" placeholder="Contoh: mesin laminating hot & cold">
+                  </div>
+                  <div class="field" style="margin:0;">
+                    <label>Tujuan tautan</label>
+                    <select onchange="lexiaShowTarget(this,'inline')">
+                      <option value="halaman">Halaman Internal</option>
+                      <option value="produk">Halaman Produk</option>
+                      <option value="url">URL Eksternal</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="field" id="inline-target-halaman" style="margin-bottom:0;">
+                  <label>Pilih halaman</label>
+                  <select><option>Beranda</option><option>Katalog</option><option>Tentang Kami</option><option>Hubungi Kami</option></select>
+                </div>
+                <div class="field" id="inline-target-produk" style="margin-bottom:0;" hidden>
+                  <label>Pilih produk</label>
+                  <select><option>Mesin Potong Kertas Hydraulic 5310</option><option>Mesin Laminating Kertas 390 B</option><option>Mesin Lem Binding Buku 60R</option></select>
+                </div>
+                <div class="field" id="inline-target-url" style="margin-bottom:0;" hidden>
+                  <label>URL Eksternal</label>
+                  <input type="text" placeholder="https://...">
+                </div>
+              </div>
+              <div style="margin-top:14px;"><button type="button" class="btn btn-primary btn-sm" onclick="document.getElementById('inlinePopover').hidden = true">Sisipkan Tautan</button></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-card">
+          <div class="form-card-head"><h3>Tombol di Akhir Artikel</h3><p>Tombol yang tampil di bagian paling bawah artikel. Pilih tujuannya lewat dropdown — tidak perlu mengetik alamat tautan.</p></div>
+          <div class="form-card-body">
+            <div class="link-picker">
+              <div class="row">
+                <div class="field" style="margin:0;">
+                  <label>Teks Tombol *</label>
+                  <input type="text" id="cta-label" value="Lihat Katalog Laminating" oninput="lexiaUpdatePreview()">
+                </div>
+                <div class="field" style="margin:0;">
+                  <label>Tujuan Tombol *</label>
+                  <select id="cta-type" onchange="lexiaShowTarget(this,'cta'); lexiaUpdatePreview()">
+                    <option value="halaman">Halaman Internal</option>
+                    <option value="produk">Halaman Produk</option>
+                    <option value="url">URL Eksternal</option>
+                  </select>
+                </div>
+              </div>
+              <div class="field" id="cta-target-halaman" style="margin-bottom:0;">
+                <label>Pilih halaman</label>
+                <select id="cta-halaman-val" onchange="lexiaUpdatePreview()">
+                  <option>Beranda</option><option selected>Katalog</option><option>Tentang Kami</option><option>Hubungi Kami</option>
+                </select>
+              </div>
+              <div class="field" id="cta-target-produk" style="margin-bottom:0;" hidden>
+                <label>Pilih produk</label>
+                <select id="cta-produk-val" onchange="lexiaUpdatePreview()">
+                  <option>Mesin Potong Kertas Hydraulic 5310</option><option>Mesin Laminating Kertas 390 B</option><option>Mesin Lem Binding Buku 60R</option>
+                </select>
+              </div>
+              <div class="field" id="cta-target-url" style="margin-bottom:0;" hidden>
+                <label>URL Eksternal</label>
+                <input type="text" id="cta-url-val" placeholder="https://..." oninput="lexiaUpdatePreview()">
+              </div>
+              <div class="link-preview" id="cta-preview">
+                <span>Tombol:</span> <b id="cta-preview-label">Lihat Katalog Laminating</b> <span class="arrow">→</span> <span id="cta-preview-target">Katalog</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <a href="admin-blog.html" class="btn btn-primary">Simpan Perubahan</a>
+          <a href="tentang.html" class="btn btn-outline">Lihat di Website</a>
+          <a href="#" class="btn btn-outline" style="margin-left:auto;border-color:#c65b3d;color:#9c3e22;">Hapus Artikel</a>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+  function lexiaShowTarget(selectEl, prefix){
+    const val = selectEl.value;
+    ['halaman','produk','url'].forEach(t => {
+      const el = document.getElementById(prefix + '-target-' + t);
+      if (el) el.hidden = (t !== val);
+    });
+  }
+  function lexiaUpdatePreview(){
+    const label = document.getElementById('cta-label').value || 'Lihat Katalog Laminating';
+    const type = document.getElementById('cta-type').value;
+    let target = '';
+    if (type === 'halaman') target = document.getElementById('cta-halaman-val').value;
+    if (type === 'produk') target = document.getElementById('cta-produk-val').value;
+    if (type === 'url') target = document.getElementById('cta-url-val').value || 'https://...';
+    document.getElementById('cta-preview-label').textContent = label;
+    document.getElementById('cta-preview-target').textContent = target;
+  }
+</script>
+
+</body>
+</html>

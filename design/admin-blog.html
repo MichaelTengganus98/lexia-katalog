@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blog | Lexia Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders:wght@600;700;800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="admin-shell">
+  <aside class="admin-side">
+    <div class="admin-logo">LEXIA<span class="accent">ADMIN</span></div>
+    <div class="admin-group-label">Utama</div>
+    <nav class="admin-nav"><a href="admin.html">Dashboard</a></nav>
+    <div class="admin-group-label">Konten</div>
+    <nav class="admin-nav">
+      <a href="admin-produk.html">Produk</a>
+      <a href="#">Halaman &amp; SEO</a>
+      <a href="admin-blog.html" class="active">Blog</a>
+    </nav>
+    <div class="admin-group-label">Pengaturan</div>
+    <nav class="admin-nav"><a href="#">Pengguna</a><a href="#">Media</a></nav>
+  </aside>
+
+  <main class="admin-main">
+    <div class="admin-topbar">
+      <h1>Blog</h1>
+      <div class="admin-user"><b>Jeffry Aldi</b> · Admin</div>
+    </div>
+
+    <div class="admin-body">
+      <div class="tut">
+        <span class="tut-mark">?</span>
+        <div>Artikel di sini tampil di halaman <b>Tentang Kami</b> pada bagian "Tips &amp; Wawasan Percetakan". Klik judul artikel untuk mengedit, atau <b>Tulis Artikel</b> untuk membuat artikel baru.</div>
+      </div>
+
+      <div class="admin-page-toolbar">
+        <h2>Semua Artikel <span style="color:var(--text-muted); font-weight:400;">(3)</span></h2>
+        <a href="admin-blog-tambah.html" class="btn btn-primary btn-sm">+ Tulis Artikel</a>
+      </div>
+
+      <div class="admin-panel">
+        <table class="admin-table">
+          <thead>
+            <tr><th>JUDUL</th><th>KATEGORI</th><th>TAUTAN AKHIR ARTIKEL</th><th>TERAKHIR DIUBAH</th><th></th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><a href="admin-blog-edit.html" style="color:var(--text);font-weight:600;">Cara Memilih Mesin Laminating untuk Usaha Percetakan</a></td>
+              <td>Panduan Membeli</td>
+              <td style="font-family:var(--font-mono);font-size:12.5px;">→ Katalog Laminating</td>
+              <td>5 hari lalu</td>
+              <td><a href="admin-blog-edit.html" style="color:var(--rust);font-weight:600;font-size:13px;">Edit</a></td>
+            </tr>
+            <tr>
+              <td><a href="admin-blog-edit.html" style="color:var(--text);font-weight:600;">Perbedaan Jilid Lem Panas dan Jilid Spiral: Mana yang Tepat?</a></td>
+              <td>Perbandingan</td>
+              <td style="font-family:var(--font-mono);font-size:12.5px;">→ Katalog Lem Binding</td>
+              <td>9 hari lalu</td>
+              <td><a href="admin-blog-edit.html" style="color:var(--rust);font-weight:600;font-size:13px;">Edit</a></td>
+            </tr>
+            <tr>
+              <td><a href="admin-blog-edit.html" style="color:var(--text);font-weight:600;">5 Tips Merawat Mesin Potong Kertas Hydraulic Agar Awet</a></td>
+              <td>Perawatan</td>
+              <td style="font-family:var(--font-mono);font-size:12.5px;">→ Hubungi Kami</td>
+              <td>2 minggu lalu</td>
+              <td><a href="admin-blog-edit.html" style="color:var(--rust);font-weight:600;font-size:13px;">Edit</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+
+</body>
+</html>
