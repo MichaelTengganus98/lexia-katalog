@@ -36,7 +36,8 @@
   --font-body:    "IBM Plex Sans", -apple-system, "Segoe UI", sans-serif;
   --font-mono:    "IBM Plex Mono", "Courier New", monospace;
 
-  --container: 1400px;
+  --container: none;   /* full-bleed: content spans the viewport, gutters only */
+  --gutter: 48px;
   --radius-s: 3px;
 }
 
@@ -71,7 +72,7 @@ button { font-family: inherit; }
   width: 100%;
   max-width: var(--container);
   margin: 0 auto;
-  padding: 0 40px;
+  padding: 0 var(--gutter);
 }
 
 /* ---------- Hazard stripe divider — signature motif ---------- */
@@ -501,7 +502,7 @@ a.card:hover,
 
 /* ---------- Breadcrumb strip ---------- */
 .breadcrumb-bar { background: var(--cream-2); border-bottom: 1px solid var(--line); }
-.breadcrumb-bar .wrap { padding: 15px 40px; font-size: 13px; color: var(--text-muted); }
+.breadcrumb-bar .wrap { padding: 15px var(--gutter); font-size: 13px; color: var(--text-muted); }
 .breadcrumb-bar a:hover { color: var(--rust); }
 .breadcrumb-bar .sep { margin: 0 8px; opacity: .5; }
 .breadcrumb-bar .current { color: var(--text); font-weight: 600; }
@@ -616,7 +617,7 @@ a.card:hover,
   gap: 2px;
   flex-wrap: wrap;
   margin-top: -24px;
-  padding: 0 40px 60px;
+  padding: 0 var(--gutter) 60px;
 }
 .pagination .page,
 .pager a,
@@ -1061,10 +1062,9 @@ table.spec-table { margin-top: 0; }
   .filter-list li.is-active a { border-color: var(--amber); }
 }
 
+@media (max-width: 1100px) { :root { --gutter: 32px; } }
+
 @media (max-width: 900px) {
-  .wrap,
-  .breadcrumb-bar .wrap,
-  .pager { padding-left: 28px; padding-right: 28px; }
   .nav-toggle { display: flex; }
   .nav-wrap {
     display: none;
@@ -1075,7 +1075,7 @@ table.spec-table { margin-top: 0; }
     align-items: stretch;
     gap: 0;
     background: var(--ink);
-    padding: 8px 28px 20px;
+    padding: 8px var(--gutter) 20px;
     border-top: 1px solid var(--line-dark-soft);
   }
   .site-header.open .nav-wrap { display: flex; }
@@ -1121,11 +1121,9 @@ table.spec-table { margin-top: 0; }
 }
 
 @media (max-width: 560px) {
-  .wrap { padding: 0 20px; }
-  .breadcrumb-bar .wrap { padding-left: 20px; padding-right: 20px; }
+  :root { --gutter: 20px; }
   .article,
   .article-back { padding-left: 20px; padding-right: 20px; }
-  .pager { padding: 0 20px; }
 
   .hero h1 { font-size: 32px; }
   .page-title h1,
