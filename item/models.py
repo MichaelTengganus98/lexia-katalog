@@ -21,7 +21,7 @@ AVAILABILITY_CHOICES = [
 
 class Item(SeoModel):
     Jenis = models.ForeignKey(Category, on_delete=models.CASCADE)
-    name = models.CharField("Nama barang", max_length=300, unique=True)
+    name = models.CharField("Nama barang", max_length=255, unique=True)
     favorite = models.BooleanField("Favorite", blank=True, default=False)
     description = models.TextField("Deskripsi barang", blank=True, null=True)
     picture1 = models.ImageField("Foto barang Utama", upload_to=name_upload, blank=False)

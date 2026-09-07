@@ -120,7 +120,9 @@ DATABASES = {
     )
 }
 if DATABASES["default"].get("ENGINE") == "django.db.backends.mysql":
-    DATABASES["default"].setdefault("OPTIONS", {})["charset"] = "utf8mb4"
+    _opts = DATABASES["default"].setdefault("OPTIONS", {})
+    _opts["charset"] = "utf8mb4"
+    _opts.setdefault("sql_mode", "STRICT_TRANS_TABLES")
 
 
 AUTH_PASSWORD_VALIDATORS = [
