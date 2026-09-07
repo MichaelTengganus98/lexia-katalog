@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lexia Machinery — Hubungi Kami</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --graphite: #1B1E22; --steel: #2E333A; --steel-light: #3D444C;
+    --amber: #D9A441; --rust: #B94A25; --paper: #F1EFE8; --paper-dim: #E4E1D6;
+    --ink: #1B1E22; --muted: #7C8B96;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', sans-serif; background: var(--paper); color: var(--ink); line-height: 1.5; }
+  h1, h2, h3 { font-family: 'Oswald', sans-serif; }
+  a { color: inherit; text-decoration: none; }
+
+  nav { background: var(--graphite); display: flex; align-items: center; justify-content: space-between; padding: 20px 48px; flex-wrap: wrap; }
+  .logo { font-family: 'Oswald', sans-serif; font-size: 22px; font-weight: 700; color: var(--amber); letter-spacing: 0.03em; }
+  .logo span { color: var(--paper); }
+  .nav-right { display: flex; align-items: center; gap: 28px; }
+  .nav-links { display: flex; gap: 36px; }
+  .nav-links a { color: var(--paper); font-size: 14px; font-weight: 500; }
+  .nav-cta { background: var(--rust); color: var(--paper) !important; padding: 10px 20px; font-size: 14px; font-weight: 600; }
+  .lang-switch { display: flex; border: 1px solid #4A525A; }
+  .lang-btn { background: none; border: none; color: #A9B0B6; font-size: 12px; font-weight: 600; padding: 6px 12px; cursor: pointer; font-family: 'Inter'; }
+  .lang-btn.active { background: var(--amber); color: var(--graphite); }
+  .hamburger { display: none; background: none; border: none; color: var(--paper); font-size: 22px; cursor: pointer; }
+
+  .page-hero { background: var(--graphite); padding: 48px; }
+  .page-hero h1 { color: var(--paper); font-size: 34px; font-weight: 600; }
+  .page-hero p { color: var(--muted); font-size: 14px; margin-top: 8px; max-width: 480px; }
+
+  .contact-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+  .map-side { min-height: 560px; }
+  .map-side iframe { width: 100%; height: 100%; border: 0; display: block; }
+
+  .form-side { padding: 56px 56px; background: var(--paper); }
+  .form-side h2 { font-size: 24px; font-weight: 600; margin-bottom: 8px; }
+  .form-side .sub { color: var(--muted); font-size: 14px; margin-bottom: 28px; }
+
+  .field { margin-bottom: 18px; }
+  .field label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+  .field input, .field textarea, .field select { width: 100%; border: 1px solid #C9C5B7; background: #fff; padding: 12px 14px; font-family: 'Inter', sans-serif; font-size: 14px; }
+  .field textarea { resize: vertical; min-height: 100px; }
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+  .btn-submit { background: var(--rust); color: var(--paper); border: none; padding: 15px 32px; font-weight: 600; font-size: 15px; cursor: pointer; font-family: 'Inter', sans-serif; }
+
+  .store-plate { background: var(--graphite); border-top: 3px solid var(--amber); padding: 22px 24px; margin-top: 32px; }
+  .store-plate h3 { color: var(--paper); font-size: 15px; font-weight: 600; margin-bottom: 12px; }
+  .store-plate .row { display: flex; gap: 10px; color: #A9B0B6; font-size: 13px; margin-bottom: 8px; }
+  .store-plate .row b { color: var(--amber); min-width: 90px; display: inline-block; font-weight: 600; text-transform: uppercase; font-size: 11px; letter-spacing: 0.05em; }
+
+  footer { background: #14171A; padding: 28px 48px; color: #8A9298; font-size: 13px; text-align: center; }
+
+  @media (max-width: 900px) {
+    .hamburger { display: block; }
+    .nav-right { flex-direction: column; align-items: flex-start; width: 100%; display: none; margin-top: 14px; gap: 14px; }
+    .nav-right.open { display: flex; }
+    .nav-links { flex-direction: column; gap: 12px; }
+    .page-hero { padding: 28px 20px; }
+    .contact-layout { grid-template-columns: 1fr; }
+    .map-side { min-height: 300px; }
+    .form-side { padding: 32px 20px; }
+    .field-row { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">LEXIA<span>MACHINERY</span></div>
+  <button class="hamburger" onclick="document.getElementById('navRight').classList.toggle('open')">&#9776;</button>
+  <div class="nav-right" id="navRight">
+    <div class="nav-links">
+      <a data-id="Beranda" data-en="Home" href="#">Beranda</a>
+      <a data-id="Katalog" data-en="Catalog" href="#">Katalog</a>
+      <a data-id="Tentang Kami" data-en="About Us" href="#">Tentang Kami</a>
+      <a data-id="Hubungi Kami" data-en="Contact Us" href="#">Hubungi Kami</a>
+    </div>
+    <a href="#" class="nav-cta" data-id="Konsultasi Gratis" data-en="Free Consultation">Konsultasi Gratis</a>
+    <div class="lang-switch">
+      <button class="lang-btn active" id="lang-id" onclick="setLang('id')">ID</button>
+      <button class="lang-btn" id="lang-en" onclick="setLang('en')">EN</button>
+    </div>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <h1 data-id="Hubungi Kami" data-en="Contact Us">Hubungi Kami</h1>
+  <p data-id="Konsultasi kebutuhan mesin percetakan Anda, atau kunjungi langsung showroom kami di Medan." data-en="Get a consultation for your printing machine needs, or visit our showroom in Medan directly.">Konsultasi kebutuhan mesin percetakan Anda, atau kunjungi langsung showroom kami di Medan.</p>
+</div>
+
+<div class="contact-layout">
+  <div class="map-side">
+    <iframe
+      src="https://www.google.com/maps?q=Jl.+Mesjid+No.165,+Kesawan,+Medan+Barat,+Kota+Medan,+Sumatera+Utara&output=embed"
+      allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+    </iframe>
+  </div>
+
+  <div class="form-side">
+    <h2 data-id="Kirim Pesan" data-en="Send a Message">Kirim Pesan</h2>
+    <p class="sub" data-id="Isi form di bawah, tim kami akan menghubungi Anda dalam 1x24 jam." data-en="Fill in the form below, our team will contact you within 24 hours.">Isi form di bawah, tim kami akan menghubungi Anda dalam 1x24 jam.</p>
+
+    <form>
+      <div class="field-row">
+        <div class="field">
+          <label data-id="Nama Lengkap" data-en="Full Name">Nama Lengkap</label>
+          <input type="text" placeholder="Nama Anda" data-id-ph="Nama Anda" data-en-ph="Your name">
+        </div>
+        <div class="field">
+          <label data-id="No. WhatsApp" data-en="WhatsApp Number">No. WhatsApp</label>
+          <input type="text" placeholder="08xx-xxxx-xxxx">
+        </div>
+      </div>
+      <div class="field">
+        <label data-id="Mesin yang Diminati (opsional)" data-en="Machine of Interest (optional)">Mesin yang Diminati (opsional)</label>
+        <select>
+          <option data-id="Pilih kategori mesin" data-en="Select a machine category">Pilih kategori mesin</option>
+          <option>Mesin Potong Kertas</option>
+          <option>Mesin Laminating Kertas</option>
+          <option>Mesin Lem Binding Buku</option>
+          <option>Mesin Lem Hardcover</option>
+          <option>Mesin Pelubang Kertas</option>
+          <option>Mesin Perforasi</option>
+          <option>Mesin Jahit Kawat</option>
+          <option>Mesin Creasing</option>
+        </select>
+      </div>
+      <div class="field">
+        <label data-id="Pesan" data-en="Message">Pesan</label>
+        <textarea placeholder="Ceritakan kebutuhan Anda..." data-id-ph="Ceritakan kebutuhan Anda..." data-en-ph="Tell us what you need..."></textarea>
+      </div>
+      <button type="button" class="btn-submit" data-id="Kirim via WhatsApp" data-en="Send via WhatsApp">Kirim via WhatsApp</button>
+    </form>
+
+    <div class="store-plate">
+      <h3>Pelita Graphics Supplies</h3>
+      <div class="row"><b data-id="Alamat" data-en="Address">Alamat</b> Jl. Mesjid No. 165, Kesawan, Medan Barat, Kota Medan, Sumatera Utara</div>
+      <div class="row"><b data-id="Telepon" data-en="Phone">Telepon</b> (+62) 61 4154876</div>
+      <div class="row"><b>WhatsApp</b> (+62) 852 7510 3333</div>
+      <div class="row"><b data-id="Jam Buka" data-en="Hours">Jam Buka</b> <span data-id="Senin - Sabtu, 08.00 - 17.00 WIB" data-en="Monday - Saturday, 8:00 AM - 5:00 PM (WIB)">Senin - Sabtu, 08.00 - 17.00 WIB</span></div>
+    </div>
+  </div>
+</div>
+
+<footer data-id="&copy; 2026 Lexia Machinery — Pelita Graphic Supplies" data-en="&copy; 2026 Lexia Machinery — Pelita Graphic Supplies">&copy; 2026 Lexia Machinery — Pelita Graphic Supplies</footer>
+
+<script>
+function setLang(lang) {
+  document.querySelectorAll('[data-id]').forEach(el => {
+    el.innerHTML = lang === 'id' ? el.getAttribute('data-id') : el.getAttribute('data-en');
+  });
+  document.querySelectorAll('[data-id-ph]').forEach(el => {
+    el.placeholder = lang === 'id' ? el.getAttribute('data-id-ph') : el.getAttribute('data-en-ph');
+  });
+  document.getElementById('lang-id').classList.toggle('active', lang === 'id');
+  document.getElementById('lang-en').classList.toggle('active', lang === 'en');
+  document.documentElement.lang = lang;
+}
+</script>
+
+</body>
+</html>

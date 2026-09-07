@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lexia Machinery — Detail Produk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --graphite: #1B1E22; --steel: #2E333A; --steel-light: #3D444C;
+    --amber: #D9A441; --rust: #B94A25; --paper: #F1EFE8; --paper-dim: #E4E1D6;
+    --ink: #1B1E22; --muted: #7C8B96; --good: #4C8B5F;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', sans-serif; background: var(--paper); color: var(--ink); line-height: 1.5; }
+  h1, h2, h3, .plate-label { font-family: 'Oswald', sans-serif; letter-spacing: 0.01em; }
+  a { color: inherit; text-decoration: none; }
+
+  nav { background: var(--graphite); display: flex; align-items: center; justify-content: space-between; padding: 20px 48px; }
+  .logo { font-family: 'Oswald', sans-serif; font-size: 22px; font-weight: 700; color: var(--amber); letter-spacing: 0.03em; }
+  .logo span { color: var(--paper); }
+  .nav-right { display: flex; align-items: center; gap: 28px; }
+  .nav-links { display: flex; gap: 36px; }
+  .nav-links a { color: var(--paper); font-size: 14px; font-weight: 500; }
+  .nav-cta { background: var(--rust); color: var(--paper) !important; padding: 10px 20px; font-size: 14px; font-weight: 600; }
+  .lang-switch { display: flex; border: 1px solid #4A525A; }
+  .lang-btn { background: none; border: none; color: #A9B0B6; font-size: 12px; font-weight: 600; padding: 6px 12px; cursor: pointer; font-family: 'Inter'; }
+  .lang-btn.active { background: var(--amber); color: var(--graphite); }
+  .hamburger { display: none; background: none; border: none; color: var(--paper); font-size: 22px; cursor: pointer; }
+
+  .breadcrumb { padding: 18px 48px; background: var(--paper-dim); font-size: 13px; color: var(--muted); display: flex; gap: 8px; flex-wrap: wrap; }
+  .breadcrumb .current { color: var(--ink); font-weight: 500; }
+
+  .product-top { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; padding: 48px; }
+
+  .gallery-main { background: var(--steel-light); aspect-ratio: 4/3.4; display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: 13px; text-align: center; padding: 24px; margin-bottom: 12px; position: relative; }
+  .gallery-thumbs { display: flex; gap: 10px; flex-wrap: wrap; }
+  .thumb { width: 68px; height: 68px; background: var(--steel); border: 1px solid #4A525A; display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: 9px; }
+  .thumb.active { border-color: var(--amber); }
+  .thumb.video-thumb { position: relative; }
+  .thumb.video-thumb::after { content: "▶"; position: absolute; color: var(--amber); font-size: 14px; }
+
+  .avail-badge { position: absolute; top: 14px; left: 14px; padding: 6px 14px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; }
+  .avail-badge.ready { background: var(--good); color: #fff; }
+  .avail-badge.po { background: #C98A1E; color: #fff; }
+  .avail-badge.disc { background: #666; color: #fff; }
+
+  .disc-notice { background: #EAEAEA; border-left: 4px solid #888; padding: 14px 18px; margin-bottom: 20px; font-size: 13px; color: #444; }
+  .disc-notice a { color: var(--rust); font-weight: 600; }
+
+  .product-info .eyebrow { color: var(--rust); font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 10px; }
+  .product-info h1 { font-size: 30px; font-weight: 600; margin-bottom: 18px; line-height: 1.2; }
+  .product-info .desc { font-size: 15px; color: #4A4E52; margin-bottom: 28px; max-width: 520px; }
+
+  .key-specs { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 28px; }
+  .key-spec { background: var(--graphite); border-top: 3px solid var(--amber); padding: 14px 16px; }
+  .key-spec .k-label { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
+  .key-spec .k-value { color: var(--paper); font-family: 'Oswald', sans-serif; font-size: 20px; font-weight: 600; }
+
+  .cta-row { display: flex; gap: 14px; flex-wrap: wrap; }
+  .btn-primary { background: var(--rust); color: var(--paper); padding: 15px 30px; font-weight: 600; font-size: 15px; }
+  .btn-secondary { border: 1px solid #B4B0A2; color: var(--ink); padding: 15px 30px; font-weight: 500; font-size: 15px; }
+
+  .full-spec { padding: 0 48px 56px; }
+  .full-spec h2 { font-size: 22px; font-weight: 600; margin-bottom: 20px; }
+  .spec-plate { background: var(--graphite); padding: 8px; overflow-x: auto; }
+  .spec-plate table { width: 100%; border-collapse: collapse; min-width: 420px; }
+  .spec-plate tr { border-bottom: 1px solid #33383E; }
+  .spec-plate tr:last-child { border-bottom: none; }
+  .spec-plate td { padding: 14px 20px; font-size: 14px; }
+  .spec-plate td:first-child { color: var(--muted); width: 40%; text-transform: uppercase; font-size: 12px; letter-spacing: 0.04em; }
+  .spec-plate td:last-child { color: var(--paper); font-weight: 500; }
+
+  .related { background: var(--paper-dim); padding: 48px; }
+  .related h2 { font-size: 22px; font-weight: 600; margin-bottom: 24px; }
+  .related-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+  .rel-card { background: var(--paper); border: 1px solid #D6D2C4; }
+  .rel-photo { background: var(--steel-light); aspect-ratio: 4/3; display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: 11px; text-align: center; padding: 12px; }
+  .rel-card h3 { font-size: 13px; font-weight: 600; padding: 12px 14px 14px; line-height: 1.3; }
+
+  footer { background: #14171A; padding: 28px 48px; color: #8A9298; font-size: 13px; text-align: center; }
+
+  @media (max-width: 900px) {
+    .nav-links, .lang-switch, .nav-cta { display: none; }
+    .nav-right.open .nav-links { display: flex; }
+    nav { flex-wrap: wrap; padding: 16px 20px; }
+    .hamburger { display: block; }
+    .nav-right { flex-direction: column; align-items: flex-start; width: 100%; }
+    .nav-right.open { display: flex; margin-top: 14px; gap: 14px; }
+    .nav-right.open .lang-switch, .nav-right.open .nav-cta { display: flex; }
+    .breadcrumb { padding: 14px 20px; }
+    .product-top { grid-template-columns: 1fr; padding: 24px 20px; gap: 24px; }
+    .key-specs { grid-template-columns: 1fr 1fr; }
+    .full-spec { padding: 0 20px 40px; }
+    .related { padding: 32px 20px; }
+    .related-grid { grid-template-columns: repeat(2, 1fr); }
+    .cta-row { flex-direction: column; }
+    .btn-primary, .btn-secondary { text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">LEXIA<span>MACHINERY</span></div>
+  <button class="hamburger" onclick="document.getElementById('navRight').classList.toggle('open')">&#9776;</button>
+  <div class="nav-right" id="navRight">
+    <div class="nav-links">
+      <a data-id="Beranda" data-en="Home" href="#">Beranda</a>
+      <a data-id="Katalog" data-en="Catalog" href="#">Katalog</a>
+      <a data-id="Tentang Kami" data-en="About Us" href="#">Tentang Kami</a>
+      <a data-id="Hubungi Kami" data-en="Contact Us" href="#">Hubungi Kami</a>
+    </div>
+    <a href="#" class="nav-cta" data-id="Konsultasi Gratis" data-en="Free Consultation">Konsultasi Gratis</a>
+    <div class="lang-switch">
+      <button class="lang-btn active" id="lang-id" onclick="setLang('id')">ID</button>
+      <button class="lang-btn" id="lang-en" onclick="setLang('en')">EN</button>
+    </div>
+  </div>
+</nav>
+
+<div class="breadcrumb">
+  <a data-id="Beranda" data-en="Home" href="#">Beranda</a> / <a data-id="Katalog" data-en="Catalog" href="#">Katalog</a> / <a href="#">Mesin Potong Kertas</a> / <span class="current">Hydraulic 5310</span>
+</div>
+
+<div class="product-top">
+  <div class="gallery">
+    <div class="gallery-main">
+      <span class="avail-badge ready" data-id="Tersedia" data-en="Ready Stock">Tersedia</span>
+      <span data-id="FOTO UTAMA: Mesin Potong Kertas Hydraulic 5310, tampak penuh, latar gelap" data-en="MAIN PHOTO: Hydraulic Paper Cutting Machine 5310, full view, dark background">FOTO UTAMA: Mesin Potong Kertas Hydraulic 5310, tampak penuh, latar gelap</span>
+    </div>
+    <div class="gallery-thumbs">
+      <div class="thumb active" data-id="Foto 1" data-en="Photo 1">Foto 1</div>
+      <div class="thumb" data-id="Foto 2" data-en="Photo 2">Foto 2</div>
+      <div class="thumb" data-id="Foto 3" data-en="Photo 3">Foto 3</div>
+      <div class="thumb video-thumb" data-id="Video" data-en="Video">Video</div>
+    </div>
+  </div>
+
+  <div class="product-info">
+    <div class="eyebrow">Mesin Potong Kertas</div>
+    <h1>Mesin Potong Kertas Hydraulic 5310</h1>
+    <p class="desc" data-id="Dirancang untuk kebutuhan pemotongan kertas presisi tinggi di industri percetakan dan photocopy. Dilengkapi sistem hydraulic dan mechanical foot pedal, mesin ini mampu memotong kertas hingga lebar 530mm dengan hasil rapi dan konsisten untuk setiap tumpukan." data-en="Designed for high-precision paper cutting needs in the printing and photocopy industry. Equipped with a hydraulic system and mechanical foot pedal, this machine cuts paper up to 530mm wide with clean, consistent results for every stack.">Dirancang untuk kebutuhan pemotongan kertas presisi tinggi di industri percetakan dan photocopy. Dilengkapi sistem hydraulic dan mechanical foot pedal, mesin ini mampu memotong kertas hingga lebar 530mm dengan hasil rapi dan konsisten untuk setiap tumpukan.</p>
+
+    <div class="key-specs">
+      <div class="key-spec"><div class="k-label" data-id="Lebar max kertas" data-en="Max paper width">Lebar max kertas</div><div class="k-value">530 mm</div></div>
+      <div class="key-spec"><div class="k-label" data-id="Operasional" data-en="Operation">Operasional</div><div class="k-value" data-id="Layar sentuh 10&Prime;" data-en="10&Prime; touchscreen">Layar sentuh 10&Prime;</div></div>
+      <div class="key-spec"><div class="k-label" data-id="Daya input" data-en="Power input">Daya input</div><div class="k-value">220V / 50Hz</div></div>
+      <div class="key-spec"><div class="k-label" data-id="Konsumsi daya" data-en="Power consumption">Konsumsi daya</div><div class="k-value">2,2 Kw</div></div>
+    </div>
+
+    <div class="cta-row">
+      <a href="#" class="btn-primary" data-id="Pesan via WhatsApp" data-en="Order via WhatsApp">Pesan via WhatsApp</a>
+      <a href="#" class="btn-secondary" data-id="Unduh Brosur" data-en="Download Brochure">Unduh Brosur</a>
+    </div>
+  </div>
+</div>
+
+<div class="full-spec">
+  <h2 data-id="Spesifikasi lengkap" data-en="Full specifications">Spesifikasi lengkap</h2>
+  <div class="spec-plate">
+    <table>
+      <tr><td data-id="Pengaman" data-en="Safety">Pengaman</td><td data-id="Sensor fotoelektronik tersuspensi (enam titik)" data-en="Suspended photoelectronic sensor (six points)">Sensor fotoelektronik tersuspensi (enam titik)</td></tr>
+      <tr><td data-id="Pengumpan Kertas" data-en="Paper Feeding">Pengumpan Kertas</td><td data-id="Ball screw + rel pemandu ganda" data-en="Ball screw + double guide rails">Ball screw + rel pemandu ganda</td></tr>
+      <tr><td data-id="Mata Pisau" data-en="Blade">Mata Pisau</td><td data-id="Besi baja" data-en="Steel">Besi baja</td></tr>
+      <tr><td data-id="Operasional" data-en="Operation">Operasional</td><td data-id="Layar sentuh 10&Prime;" data-en="10&Prime; touchscreen">Layar sentuh 10&Prime;</td></tr>
+      <tr><td data-id="Penekan Kertas" data-en="Paper Pressing">Penekan Kertas</td><td data-id="Hydraulic + pedal kaki mekanis" data-en="Hydraulic + mechanical foot pedal">Hydraulic + pedal kaki mekanis</td></tr>
+      <tr><td data-id="Lebar Min Kertas" data-en="Min Paper Width">Lebar Min Kertas</td><td>40 mm</td></tr>
+      <tr><td data-id="Lebar Max Kertas" data-en="Max Paper Width">Lebar Max Kertas</td><td>530 mm</td></tr>
+      <tr><td data-id="Konsumsi Daya" data-en="Power Consumption">Konsumsi Daya</td><td>2,2 Kw</td></tr>
+      <tr><td data-id="Daya Input" data-en="Power Input">Daya Input</td><td>220 V / 50 Hz</td></tr>
+      <tr><td data-id="Ukuran" data-en="Dimensions">Ukuran</td><td>92 x 122 x 148 mm</td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="related">
+  <h2 data-id="Produk terkait" data-en="Related products">Produk terkait</h2>
+  <div class="related-grid">
+    <div class="rel-card"><div class="rel-photo">FOTO: HP4908</div><h3>Mesin Potong Kertas Hydraulic HP4908</h3></div>
+    <div class="rel-card"><div class="rel-photo">FOTO: 4606Z</div><h3>Mesin Potong Kertas 4606Z</h3></div>
+    <div class="rel-card"><div class="rel-photo">FOTO: 390 B</div><h3>Mesin Laminating Kertas 390 B</h3></div>
+    <div class="rel-card"><div class="rel-photo">FOTO: 470A</div><h3>Mesin Perforasi 470 A</h3></div>
+  </div>
+</div>
+
+<footer data-id="&copy; 2026 Lexia Machinery — Pelita Graphic Supplies" data-en="&copy; 2026 Lexia Machinery — Pelita Graphic Supplies">&copy; 2026 Lexia Machinery — Pelita Graphic Supplies</footer>
+
+<script>
+function setLang(lang) {
+  document.querySelectorAll('[data-id]').forEach(el => {
+    el.innerHTML = lang === 'id' ? el.getAttribute('data-id') : el.getAttribute('data-en');
+  });
+  document.getElementById('lang-id').classList.toggle('active', lang === 'id');
+  document.getElementById('lang-en').classList.toggle('active', lang === 'en');
+  document.documentElement.lang = lang;
+}
+</script>
+
+</body>
+</html>

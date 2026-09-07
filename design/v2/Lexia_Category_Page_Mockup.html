@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lexia Machinery — Katalog Kategori</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --graphite: #1B1E22; --steel: #2E333A; --steel-light: #3D444C;
+    --amber: #D9A441; --rust: #B94A25; --paper: #F1EFE8; --paper-dim: #E4E1D6;
+    --ink: #1B1E22; --muted: #7C8B96;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', sans-serif; background: var(--paper); color: var(--ink); line-height: 1.5; }
+  h1, h2, h3, .plate-label { font-family: 'Oswald', sans-serif; letter-spacing: 0.01em; }
+  a { color: inherit; text-decoration: none; }
+
+  nav { background: var(--graphite); display: flex; align-items: center; justify-content: space-between; padding: 20px 48px; }
+  .logo { font-family: 'Oswald', sans-serif; font-size: 22px; font-weight: 700; color: var(--amber); letter-spacing: 0.03em; }
+  .logo span { color: var(--paper); }
+  .nav-right { display: flex; align-items: center; gap: 28px; }
+  .nav-links { display: flex; gap: 36px; }
+  .nav-links a { color: var(--paper); font-size: 14px; font-weight: 500; }
+  .nav-cta { background: var(--rust); color: var(--paper) !important; padding: 10px 20px; font-size: 14px; font-weight: 600; }
+  .lang-switch { display: flex; border: 1px solid #4A525A; }
+  .lang-btn { background: none; border: none; color: #A9B0B6; font-size: 12px; font-weight: 600; padding: 6px 12px; cursor: pointer; font-family: 'Inter'; }
+  .lang-btn.active { background: var(--amber); color: var(--graphite); }
+  .hamburger { display: none; background: none; border: none; color: var(--paper); font-size: 22px; cursor: pointer; }
+
+  .breadcrumb { padding: 18px 48px; background: var(--paper-dim); font-size: 13px; color: var(--muted); display: flex; gap: 8px; }
+  .breadcrumb .current { color: var(--ink); font-weight: 500; }
+
+  .cat-hero { background: var(--graphite); padding: 40px 48px; display: flex; justify-content: space-between; align-items: center; }
+  .cat-hero h1 { color: var(--paper); font-size: 32px; font-weight: 600; }
+  .cat-hero p { color: var(--muted); font-size: 14px; margin-top: 6px; max-width: 480px; }
+  .cat-count { text-align: right; color: var(--amber); font-family: 'Oswald', sans-serif; font-size: 28px; font-weight: 700; }
+  .cat-count span { display: block; color: var(--muted); font-size: 12px; font-family: 'Inter'; font-weight: 400; text-transform: uppercase; letter-spacing: 0.06em; }
+
+  .layout { display: grid; grid-template-columns: 240px 1fr; gap: 32px; padding: 36px 48px 72px; }
+  .sidebar h3 { font-size: 14px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin-bottom: 16px; font-family: 'Inter'; font-weight: 600; }
+  .sidebar ul { list-style: none; }
+  .sidebar li { border-bottom: 1px solid #D6D2C4; }
+  .sidebar a { display: flex; justify-content: space-between; padding: 12px 4px; font-size: 14px; }
+  .sidebar .active { color: var(--rust); font-weight: 600; border-left: 3px solid var(--rust); padding-left: 10px; }
+  .sidebar .count { color: var(--muted); font-size: 12px; }
+
+  .prod-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .prod-card { background: var(--paper); border: 1px solid #D6D2C4; display: flex; flex-direction: column; }
+  .prod-photo { background: var(--steel-light); aspect-ratio: 4/3; display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: 12px; text-align: center; padding: 16px; }
+  .prod-body { padding: 16px 18px 18px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+  .prod-body h3 { font-size: 15px; font-weight: 600; line-height: 1.3; }
+  .spec-row { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); border-top: 1px solid #E0DCD0; padding-top: 8px; }
+  .spec-row span:last-child { color: var(--ink); font-weight: 500; }
+  .prod-cta { margin-top: auto; font-size: 13px; font-weight: 600; color: var(--rust); padding-top: 4px; }
+
+  .pagination { display: flex; justify-content: center; gap: 8px; margin-top: 40px; }
+  .pagination a { width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border: 1px solid #D6D2C4; font-size: 13px; font-weight: 500; }
+  .pagination .active { background: var(--graphite); color: var(--paper); border-color: var(--graphite); }
+
+  @media (max-width: 900px) {
+    nav { flex-wrap: wrap; padding: 16px 20px; }
+    .hamburger { display: block; }
+    .nav-right { flex-direction: column; align-items: flex-start; width: 100%; display: none; margin-top: 14px; gap: 14px; }
+    .nav-right.open { display: flex; }
+    .nav-links { flex-direction: column; gap: 12px; }
+    .cat-hero { flex-direction: column; align-items: flex-start; gap: 12px; padding: 28px 20px; }
+    .cat-count { text-align: left; }
+    .layout { grid-template-columns: 1fr; padding: 24px 20px 48px; }
+    .sidebar ul { display: flex; flex-wrap: wrap; gap: 8px; }
+    .sidebar li { border-bottom: none; }
+    .sidebar a { border: 1px solid #D6D2C4; padding: 8px 12px; }
+    .prod-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">LEXIA<span>MACHINERY</span></div>
+  <button class="hamburger" onclick="document.getElementById('navRight').classList.toggle('open')">&#9776;</button>
+  <div class="nav-right" id="navRight">
+    <div class="nav-links">
+      <a data-id="Beranda" data-en="Home" href="#">Beranda</a>
+      <a data-id="Katalog" data-en="Catalog" href="#">Katalog</a>
+      <a data-id="Tentang Kami" data-en="About Us" href="#">Tentang Kami</a>
+      <a data-id="Hubungi Kami" data-en="Contact Us" href="#">Hubungi Kami</a>
+    </div>
+    <a href="#" class="nav-cta" data-id="Konsultasi Gratis" data-en="Free Consultation">Konsultasi Gratis</a>
+    <div class="lang-switch">
+      <button class="lang-btn active" id="lang-id" onclick="setLang('id')">ID</button>
+      <button class="lang-btn" id="lang-en" onclick="setLang('en')">EN</button>
+    </div>
+  </div>
+</nav>
+
+<div class="breadcrumb">
+  <a data-id="Beranda" data-en="Home" href="#">Beranda</a> / <a data-id="Katalog" data-en="Catalog" href="#">Katalog</a> / <span class="current" data-id="Mesin Lem Binding Buku" data-en="Book Glue Binding Machines">Mesin Lem Binding Buku</span>
+</div>
+
+<div class="cat-hero">
+  <div>
+    <h1>Mesin Lem Binding Buku</h1>
+    <p data-id="Mesin jilid lem panas untuk buku, skripsi, dan majalah tebal — kapasitas mulai 200 hingga 250 buku per jam." data-en="Hot-melt glue binding machines for books, theses, and thick magazines — capacity from 200 to 250 books per hour.">Mesin jilid lem panas untuk buku, skripsi, dan majalah tebal — kapasitas mulai 200 hingga 250 buku per jam.</p>
+  </div>
+  <div class="cat-count">6<span data-id="Model tersedia" data-en="Models available">Model tersedia</span></div>
+</div>
+
+<div class="layout">
+  <aside class="sidebar">
+    <h3 data-id="Kategori" data-en="Categories">Kategori</h3>
+    <ul>
+      <li><a href="#" data-id="Semua Mesin" data-en="All Machines">Semua Mesin<span class="count">20</span></a></li>
+      <li><a href="#" class="active">Mesin Lem Binding Buku<span class="count">6</span></a></li>
+      <li><a href="#">Mesin Laminating Kertas<span class="count">5</span></a></li>
+      <li><a href="#">Mesin Potong Kertas<span class="count">4</span></a></li>
+      <li><a href="#">Mesin Jahit Kawat<span class="count">2</span></a></li>
+      <li><a href="#">Mesin Lem Hardcover<span class="count">1</span></a></li>
+      <li><a href="#">Mesin Pelubang Kertas<span class="count">1</span></a></li>
+      <li><a href="#">Mesin Perforasi<span class="count">1</span></a></li>
+      <li><a href="#">Mesin Creasing<span class="count">1</span></a></li>
+    </ul>
+  </aside>
+
+  <main>
+    <div class="prod-grid">
+      <div class="prod-card">
+        <div class="prod-photo">FOTO: 50R</div>
+        <div class="prod-body">
+          <h3>Mesin Lem Binding Buku 50R</h3>
+          <div class="spec-row"><span data-id="Kapasitas" data-en="Capacity">Kapasitas</span><span data-id="200 buku/jam" data-en="200 books/hr">200 buku/jam</span></div>
+          <div class="prod-cta" data-id="Pelajari lebih lanjut &rarr;" data-en="Learn more &rarr;">Pelajari lebih lanjut &rarr;</div>
+        </div>
+      </div>
+      <div class="prod-card">
+        <div class="prod-photo">FOTO: 50Z</div>
+        <div class="prod-body">
+          <h3>Mesin Lem Binding Buku 50Z</h3>
+          <div class="spec-row"><span data-id="Kapasitas" data-en="Capacity">Kapasitas</span><span data-id="230 buku/jam" data-en="230 books/hr">230 buku/jam</span></div>
+          <div class="prod-cta" data-id="Pelajari lebih lanjut &rarr;" data-en="Learn more &rarr;">Pelajari lebih lanjut &rarr;</div>
+        </div>
+      </div>
+      <div class="prod-card">
+        <div class="prod-photo">FOTO: 55H</div>
+        <div class="prod-body">
+          <h3>Mesin Lem Binding Buku 55H - A3</h3>
+          <div class="spec-row"><span data-id="Kapasitas" data-en="Capacity">Kapasitas</span><span data-id="200 buku/jam" data-en="200 books/hr">200 buku/jam</span></div>
+          <div class="prod-cta" data-id="Pelajari lebih lanjut &rarr;" data-en="Learn more &rarr;">Pelajari lebih lanjut &rarr;</div>
+        </div>
+      </div>
+      <div class="prod-card">
+        <div class="prod-photo">FOTO: 60M</div>
+        <div class="prod-body">
+          <h3>Mesin Lem Binding Buku 60M - A3</h3>
+          <div class="spec-row"><span data-id="Kapasitas" data-en="Capacity">Kapasitas</span><span data-id="200 buku/jam" data-en="200 books/hr">200 buku/jam</span></div>
+          <div class="prod-cta" data-id="Pelajari lebih lanjut &rarr;" data-en="Learn more &rarr;">Pelajari lebih lanjut &rarr;</div>
+        </div>
+      </div>
+      <div class="prod-card">
+        <div class="prod-photo">FOTO: 60R</div>
+        <div class="prod-body">
+          <h3>Mesin Lem Binding Buku 60R</h3>
+          <div class="spec-row"><span data-id="Kapasitas" data-en="Capacity">Kapasitas</span><span data-id="250 buku/jam" data-en="250 books/hr">250 buku/jam</span></div>
+          <div class="prod-cta" data-id="Pelajari lebih lanjut &rarr;" data-en="Learn more &rarr;">Pelajari lebih lanjut &rarr;</div>
+        </div>
+      </div>
+      <div class="prod-card">
+        <div class="prod-photo">FOTO: F04</div>
+        <div class="prod-body">
+          <h3>Mesin Lem Binding Buku F04</h3>
+          <div class="spec-row"><span data-id="Kapasitas" data-en="Capacity">Kapasitas</span><span data-id="200 buku/jam" data-en="200 books/hr">200 buku/jam</span></div>
+          <div class="prod-cta" data-id="Pelajari lebih lanjut &rarr;" data-en="Learn more &rarr;">Pelajari lebih lanjut &rarr;</div>
+        </div>
+      </div>
+    </div>
+    <div class="pagination"><a href="#" class="active">1</a></div>
+  </main>
+</div>
+
+<script>
+function setLang(lang) {
+  document.querySelectorAll('[data-id]').forEach(el => {
+    el.innerHTML = lang === 'id' ? el.getAttribute('data-id') : el.getAttribute('data-en');
+  });
+  document.getElementById('lang-id').classList.toggle('active', lang === 'id');
+  document.getElementById('lang-en').classList.toggle('active', lang === 'en');
+  document.documentElement.lang = lang;
+}
+</script>
+
+</body>
+</html>

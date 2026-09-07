@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lexia Admin — Redesign Concept</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --graphite: #1B1E22; --steel: #2E333A; --steel-light: #3D444C;
+    --amber: #D9A441; --rust: #B94A25; --paper: #F1EFE8; --paper-dim: #E4E1D6;
+    --ink: #1B1E22; --muted: #7C8B96; --good: #4C8B5F; --info-bg: #EAF1F5; --info-border: #6B93A8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', sans-serif; background: var(--paper-dim); color: var(--ink); }
+  h1, h2, h3 { font-family: 'Oswald', sans-serif; }
+  a { color: inherit; text-decoration: none; }
+
+  .app { display: grid; grid-template-columns: 240px 1fr; min-height: 100vh; }
+
+  .sidebar { background: var(--graphite); padding: 24px 0; }
+  .sidebar .logo { color: var(--amber); font-family: 'Oswald'; font-weight: 700; font-size: 18px; padding: 0 24px 20px; letter-spacing: 0.03em; display: flex; justify-content: space-between; align-items: center; }
+  .sidebar .logo span { color: var(--paper); }
+  .admin-lang { display: flex; border: 1px solid #4A525A; margin: 0 24px 20px; width: fit-content; }
+  .admin-lang button { background: none; border: none; color: #A9B0B6; font-size: 11px; font-weight: 600; padding: 5px 10px; cursor: pointer; font-family: 'Inter'; }
+  .admin-lang button.active { background: var(--amber); color: var(--graphite); }
+  .nav-group { margin-bottom: 18px; }
+  .nav-group .group-label { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; padding: 0 24px 8px; }
+  .nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 24px; color: #C7CBCF; font-size: 14px; cursor: pointer; border-left: 3px solid transparent; }
+  .nav-item:hover { background: var(--steel); }
+  .nav-item.active { background: var(--steel); border-left-color: var(--amber); color: var(--paper); font-weight: 600; }
+
+  .topbar { background: #fff; border-bottom: 1px solid #D6D2C4; padding: 16px 32px; display: flex; justify-content: space-between; align-items: center; }
+  .topbar h1 { font-size: 20px; font-weight: 600; }
+  .topbar .user { font-size: 13px; color: var(--muted); }
+  .hamburger { display: none; background: none; border: none; font-size: 22px; cursor: pointer; }
+
+  .content { padding: 32px; }
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  .tutorial-box {
+    background: var(--info-bg); border-left: 4px solid var(--info-border);
+    padding: 14px 18px; margin-bottom: 24px; font-size: 13px; color: #33474F; display: flex; gap: 10px;
+  }
+  .tutorial-box .bulb { font-size: 16px; }
+
+  .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 28px; }
+  .stat-card { background: #fff; border: 1px solid #D6D2C4; border-top: 3px solid var(--amber); padding: 18px 20px; }
+  .stat-card .num { font-family: 'Oswald'; font-size: 28px; font-weight: 700; }
+  .stat-card .label { color: var(--muted); font-size: 12px; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.04em; }
+  .recent-table { background: #fff; border: 1px solid #D6D2C4; overflow-x: auto; }
+  .recent-table h3 { padding: 16px 20px; border-bottom: 1px solid #E0DCD0; font-size: 15px; font-weight: 600; }
+  .row { display: grid; grid-template-columns: 2fr 1fr 1fr 100px; padding: 14px 20px; border-bottom: 1px solid #EFECE3; font-size: 13px; align-items: center; min-width: 600px; }
+  .row.head { color: var(--muted); text-transform: uppercase; font-size: 11px; letter-spacing: 0.04em; }
+  .badge { display: inline-block; padding: 3px 10px; font-size: 11px; font-weight: 600; border-radius: 2px; }
+  .badge.ok { background: #E4F0E7; color: var(--good); }
+  .badge.warn { background: #FBEAE2; color: var(--rust); }
+  .badge.po { background: #FDF3DC; color: #96700F; }
+  .badge.discontinued { background: #EAEAEA; color: #666; }
+
+  .form-layout { display: grid; grid-template-columns: 1fr 320px; gap: 24px; }
+  .panel { background: #fff; border: 1px solid #D6D2C4; padding: 24px; margin-bottom: 20px; }
+  .panel h3 { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+  .panel .hint { color: var(--muted); font-size: 12px; margin-bottom: 18px; }
+  .field { margin-bottom: 16px; }
+  .field label { display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+  .field label .counter { color: var(--muted); font-weight: 400; font-size: 11px; }
+  .field input, .field textarea, .field select { width: 100%; border: 1px solid #C9C5B7; padding: 11px 13px; font-family: 'Inter'; font-size: 14px; }
+  .field textarea { resize: vertical; min-height: 90px; }
+  .field .warn-note { color: var(--rust); font-size: 11px; margin-top: 5px; }
+  .field .ok-note { color: var(--good); font-size: 11px; margin-top: 5px; }
+  .field .spec-hint { background: #F5F3EC; border: 1px dashed #C9C5B7; font-size: 11.5px; color: #6B675A; padding: 8px 10px; margin-top: 6px; }
+
+  .content-lang-tabs { display: flex; gap: 4px; margin-bottom: 16px; }
+  .clt { padding: 6px 14px; background: #F1EFE8; border: 1px solid #D6D2C4; font-size: 12px; font-weight: 600; cursor: pointer; }
+  .clt.active { background: var(--graphite); color: var(--paper); border-color: var(--graphite); }
+  .clt .flag { margin-right: 4px; }
+
+  .serp-preview { background: #fafafa; border: 1px solid #E0DCD0; padding: 14px 16px; margin-top: 8px; }
+  .serp-preview .serp-title { color: #1a0dab; font-size: 15px; margin-bottom: 2px; }
+  .serp-preview .serp-url { color: #006621; font-size: 12px; margin-bottom: 4px; }
+  .serp-preview .serp-desc { color: #545454; font-size: 12.5px; }
+
+  .spec-rows .spec-row-input { display: grid; grid-template-columns: 1fr 1fr 32px; gap: 8px; margin-bottom: 8px; }
+  .spec-rows input { border: 1px solid #C9C5B7; padding: 9px 11px; font-size: 13px; }
+  .remove-spec { display: flex; align-items: center; justify-content: center; color: var(--rust); cursor: pointer; font-size: 16px; }
+  .add-spec-btn { color: var(--rust); font-size: 13px; font-weight: 600; cursor: pointer; margin-top: 4px; display: inline-block; }
+
+  .dropzone-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .dropzone { aspect-ratio: 1; border: 1.5px dashed #C9C5B7; display: flex; align-items: center; justify-content: center; font-size: 11px; color: var(--muted); text-align: center; padding: 8px; background: #FAFAF7; }
+  .dropzone.filled { border-style: solid; background: var(--steel-light); color: #D6D9DB; }
+
+  .sidebar-panel { background: #fff; border: 1px solid #D6D2C4; padding: 20px; }
+  .sidebar-panel h4 { font-size: 13px; font-weight: 600; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); }
+  .status-pill { display: inline-block; background: #E4F0E7; color: var(--good); font-size: 12px; font-weight: 600; padding: 5px 12px; margin-bottom: 16px; }
+  .btn-save { width: 100%; background: var(--rust); color: #fff; border: none; padding: 13px; font-weight: 600; font-size: 14px; cursor: pointer; margin-bottom: 10px; }
+  .btn-draft { width: 100%; background: none; border: 1px solid #C9C5B7; padding: 13px; font-weight: 500; font-size: 14px; cursor: pointer; margin-bottom: 10px;}
+  .lang-complete-row { display: flex; justify-content: space-between; font-size: 12px; padding: 6px 0; border-bottom: 1px solid #EFECE3; }
+  .lang-complete-row:last-child { border-bottom: none; }
+
+  .page-tabs { display: flex; gap: 4px; margin-bottom: 20px; flex-wrap: wrap; }
+  .page-tab { padding: 10px 18px; background: #fff; border: 1px solid #D6D2C4; font-size: 13px; font-weight: 500; cursor: pointer; }
+  .page-tab.active { background: var(--graphite); color: var(--paper); border-color: var(--graphite); }
+
+  .toolbar { display: flex; justify-content: space-between; margin-bottom: 18px; flex-wrap: wrap; gap: 10px; }
+  .btn-new { background: var(--rust); color: #fff; border: none; padding: 11px 20px; font-weight: 600; font-size: 13px; cursor: pointer; }
+  .blog-row { display: grid; grid-template-columns: 60px 2fr 1fr 1fr 90px 80px; padding: 12px 20px; border-bottom: 1px solid #EFECE3; align-items: center; font-size: 13px; min-width: 700px; }
+  .blog-row.head { color: var(--muted); text-transform: uppercase; font-size: 11px; }
+  .thumb-sm { width: 44px; height: 44px; background: var(--steel-light); }
+  .icon-btn { background: none; border: 1px solid #D6D2C4; padding: 5px 10px; font-size: 12px; cursor: pointer; }
+
+  .prod-row { display: grid; grid-template-columns: 50px 2fr 1fr 1fr 1fr 80px; padding: 12px 20px; border-bottom: 1px solid #EFECE3; align-items: center; font-size: 13px; min-width: 700px; }
+  .prod-row.head { color: var(--muted); text-transform: uppercase; font-size: 11px; }
+
+  .feat-list { background: #fff; border: 1px solid #D6D2C4; }
+  .feat-row { display: grid; grid-template-columns: 30px 60px 1fr 140px 90px; gap: 14px; align-items: center; padding: 14px 20px; border-bottom: 1px solid #EFECE3; }
+  .feat-row:last-child { border-bottom: none; }
+  .drag-handle { color: var(--muted); cursor: grab; font-size: 16px; text-align: center; }
+  .feat-thumb { width: 50px; height: 50px; background: var(--steel-light); }
+  .feat-name { font-size: 13px; font-weight: 600; }
+  .feat-slot-note { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .feat-row select { border: 1px solid #C9C5B7; padding: 7px 10px; font-size: 12px; width: 100%; }
+  .remove-feat { color: var(--rust); font-size: 12px; font-weight: 600; cursor: pointer; text-align: right; }
+
+  .avail-options { display: flex; gap: 10px; margin-bottom: 12px; }
+  .avail-opt { flex: 1; border: 1.5px solid #C9C5B7; padding: 12px; text-align: center; font-size: 13px; font-weight: 600; cursor: pointer; }
+  .avail-opt.ready { color: var(--good); }
+  .avail-opt.po { color: #96700F; }
+  .avail-opt.disc { color: #666; }
+  .avail-opt.selected.ready { background: #E4F0E7; border-color: var(--good); }
+  .avail-opt.selected.po { background: #FDF3DC; border-color: #96700F; }
+  .avail-opt.selected.disc { background: #EAEAEA; border-color: #888; }
+  .replacement-field { display: none; }
+  .replacement-field.show { display: block; }
+
+  .video-preview { background: var(--graphite); aspect-ratio: 16/9; max-width: 320px; display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: 12px; text-align: center; padding: 16px; margin-top: 10px; }
+
+  @media (max-width: 900px) {
+    .app { grid-template-columns: 1fr; }
+    .sidebar { position: fixed; left: -260px; top: 0; bottom: 0; width: 240px; z-index: 50; transition: left 0.2s; overflow-y: auto; }
+    .sidebar.open { left: 0; }
+    .hamburger { display: block; }
+    .form-layout { grid-template-columns: 1fr; }
+    .stat-grid { grid-template-columns: repeat(2, 1fr); }
+    .avail-options { flex-direction: column; }
+    .content { padding: 18px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <div class="sidebar" id="sidebar">
+    <div class="logo">LEXIA<span>ADMIN</span></div>
+    <div class="admin-lang">
+      <button class="active" id="admin-lang-id" onclick="setAdminLang('id')">ID</button>
+      <button id="admin-lang-en" onclick="setAdminLang('en')">EN</button>
+    </div>
+
+    <div class="nav-group">
+      <div class="group-label" data-id="Utama" data-en="Main">Utama</div>
+      <div class="nav-item active" onclick="showScreen('dashboard', this)" data-id="Dashboard" data-en="Dashboard">Dashboard</div>
+    </div>
+
+    <div class="nav-group">
+      <div class="group-label" data-id="Konten" data-en="Content">Konten</div>
+      <div class="nav-item" onclick="showScreen('produk-list', this)" data-id="Produk" data-en="Products">Produk</div>
+      <div class="nav-item" onclick="showScreen('featured', this)" data-id="Produk Unggulan (Beranda)" data-en="Featured Products (Homepage)">Produk Unggulan (Beranda)</div>
+      <div class="nav-item" onclick="showScreen('halaman', this)" data-id="Halaman &amp; SEO" data-en="Pages &amp; SEO">Halaman &amp; SEO</div>
+      <div class="nav-item" onclick="showScreen('blog-list', this)" data-id="Blog" data-en="Blog">Blog</div>
+    </div>
+
+    <div class="nav-group">
+      <div class="group-label" data-id="Pengaturan" data-en="Settings">Pengaturan</div>
+      <div class="nav-item" data-id="Pengguna" data-en="Users">Pengguna</div>
+      <div class="nav-item" data-id="Media" data-en="Media">Media</div>
+    </div>
+  </div>
+
+  <div>
+    <div class="topbar">
+      <div style="display:flex; align-items:center; gap:14px;">
+        <button class="hamburger" onclick="document.getElementById('sidebar').classList.toggle('open')">&#9776;</button>
+        <h1 id="topbar-title">Dashboard</h1>
+      </div>
+      <div class="user">Jeffry Aldi &middot; Admin</div>
+    </div>
+
+    <div class="content">
+
+      <!-- DASHBOARD -->
+      <div class="screen active" id="screen-dashboard">
+        <div class="tutorial-box"><span class="bulb">&#128161;</span><span data-id="Ini halaman utama admin. Lihat ringkasan produk, kategori, dan artikel blog di sini. Klik menu di sebelah kiri untuk mulai mengedit." data-en="This is the admin home page. See a summary of products, categories, and blog articles here. Click the menu on the left to start editing.">Ini halaman utama admin. Lihat ringkasan produk, kategori, dan artikel blog di sini. Klik menu di sebelah kiri untuk mulai mengedit.</span></div>
+        <div class="stat-grid">
+          <div class="stat-card"><div class="num">20</div><div class="label" data-id="Produk aktif" data-en="Active products">Produk aktif</div></div>
+          <div class="stat-card"><div class="num">8</div><div class="label" data-id="Kategori" data-en="Categories">Kategori</div></div>
+          <div class="stat-card"><div class="num">3</div><div class="label" data-id="Artikel blog" data-en="Blog articles">Artikel blog</div></div>
+          <div class="stat-card"><div class="num">2</div><div class="label" data-id="Perlu perhatian" data-en="Needs attention">Perlu perhatian</div></div>
+        </div>
+        <div class="recent-table">
+          <h3 data-id="Produk terbaru diubah" data-en="Recently updated products">Produk terbaru diubah</h3>
+          <div class="row head"><div data-id="Nama Produk" data-en="Product Name">Nama Produk</div><div data-id="Kategori" data-en="Category">Kategori</div><div data-id="Terakhir diubah" data-en="Last updated">Terakhir diubah</div><div data-id="Status SEO" data-en="SEO Status">Status SEO</div></div>
+          <div class="row"><div>Mesin Potong Kertas Hydraulic 5310</div><div>Mesin Potong Kertas</div><div data-id="2 hari lalu" data-en="2 days ago">2 hari lalu</div><div><span class="badge ok" data-id="Lengkap" data-en="Complete">Lengkap</span></div></div>
+          <div class="row"><div>Mesin Lem Hardcover LR 380</div><div>Mesin Lem Hardcover</div><div data-id="2 hari lalu" data-en="2 days ago">2 hari lalu</div><div><span class="badge warn" data-id="Perlu Meta" data-en="Needs Meta">Perlu Meta</span></div></div>
+          <div class="row"><div>Mesin Jahit Kawat 801</div><div>Mesin Jahit Kawat</div><div data-id="1 minggu lalu" data-en="1 week ago">1 minggu lalu</div><div><span class="badge ok" data-id="Lengkap" data-en="Complete">Lengkap</span></div></div>
+        </div>
+      </div>
+
+      <!-- PRODUK LIST -->
+      <div class="screen" id="screen-produk-list">
+        <div class="tutorial-box"><span class="bulb">&#128161;</span><span data-id="Ini daftar semua produk. Klik 'Edit' untuk mengubah produk, atau 'Tambah Produk Baru' untuk menambah mesin baru ke katalog." data-en="This is the list of all products. Click 'Edit' to change a product, or 'Add New Product' to add a new machine to the catalog.">Ini daftar semua produk. Klik 'Edit' untuk mengubah produk, atau 'Tambah Produk Baru' untuk menambah mesin baru ke katalog.</span></div>
+        <div class="toolbar">
+          <div></div>
+          <button class="btn-new" onclick="showScreen('produk-edit', null)" data-id="+ Tambah Produk Baru" data-en="+ Add New Product">+ Tambah Produk Baru</button>
+        </div>
+        <div class="recent-table">
+          <div class="prod-row head"><div></div><div data-id="Nama Produk" data-en="Product Name">Nama Produk</div><div data-id="Kategori" data-en="Category">Kategori</div><div data-id="Ketersediaan" data-en="Availability">Ketersediaan</div><div data-id="Tampil di Beranda" data-en="On Homepage">Tampil di Beranda</div><div></div></div>
+          <div class="prod-row"><div class="thumb-sm"></div><div>Mesin Potong Kertas Hydraulic 5310</div><div>Mesin Potong Kertas</div><div><span class="badge ok" data-id="Tersedia" data-en="Ready Stock">Tersedia</span></div><div data-id="Ya, #1" data-en="Yes, #1">Ya, #1</div><div class="icon-btn" onclick="showScreen('produk-edit', null)" data-id="Edit" data-en="Edit">Edit</div></div>
+          <div class="prod-row"><div class="thumb-sm"></div><div>Mesin Lem Hardcover LR 380</div><div>Mesin Lem Hardcover</div><div><span class="badge po" data-id="Pre-Order" data-en="Pre-Order">Pre-Order</span></div><div data-id="Tidak" data-en="No">Tidak</div><div class="icon-btn" data-id="Edit" data-en="Edit">Edit</div></div>
+          <div class="prod-row"><div class="thumb-sm"></div><div>Mesin Perforasi 470 A</div><div>Mesin Perforasi</div><div><span class="badge discontinued" data-id="Dihentikan" data-en="Discontinued">Dihentikan</span></div><div data-id="Tidak" data-en="No">Tidak</div><div class="icon-btn" data-id="Edit" data-en="Edit">Edit</div></div>
+        </div>
+      </div>
+
+      <!-- PRODUK EDITOR -->
+      <div class="screen" id="screen-produk-edit">
+        <div class="tutorial-box"><span class="bulb">&#128161;</span><span data-id="Isi informasi dasar, lalu gunakan tombol ID/EN untuk mengisi deskripsi dan SEO dalam dua bahasa. Ukuran foto sudah direkomendasikan di bagian Foto Produk." data-en="Fill in the basic info, then use the ID/EN buttons to fill in the description and SEO in both languages. Recommended photo sizes are shown in the Product Photos section.">Isi informasi dasar, lalu gunakan tombol ID/EN untuk mengisi deskripsi dan SEO dalam dua bahasa. Ukuran foto sudah direkomendasikan di bagian Foto Produk.</span></div>
+        <div class="form-layout">
+          <div>
+            <div class="panel">
+              <h3 data-id="Informasi Dasar" data-en="Basic Information">Informasi Dasar</h3>
+              <p class="hint" data-id="Nama produk tampil di judul halaman, kartu produk, dan menu terkait — jaga tetap singkat." data-en="Product name appears in the page title, product cards, and related menus — keep it short.">Nama produk tampil di judul halaman, kartu produk, dan menu terkait — jaga tetap singkat.</p>
+              <div class="field">
+                <label><span data-id="Nama Produk" data-en="Product Name">Nama Produk</span> <span class="counter">32/60</span></label>
+                <input type="text" value="Mesin Potong Kertas Hydraulic 5310 - Lexia">
+                <div class="ok-note" data-id="✓ Panjang aman, tidak akan terpotong di listing" data-en="✓ Safe length, won't be cut off in listings">✓ Panjang aman, tidak akan terpotong di listing</div>
+              </div>
+              <div class="field">
+                <label data-id="Kategori" data-en="Category">Kategori</label>
+                <select><option>Mesin Potong Kertas</option></select>
+              </div>
+            </div>
+
+            <div class="panel">
+              <h3 data-id="Ketersediaan Produk" data-en="Product Availability">Ketersediaan Produk</h3>
+              <p class="hint" data-id="Pilih status stok produk ini." data-en="Choose the stock status for this product.">Pilih status stok produk ini.</p>
+              <div class="avail-options">
+                <div class="avail-opt ready selected" onclick="setAvail('ready', this)" data-id="Tersedia (Ready Stock)" data-en="Ready Stock">Tersedia (Ready Stock)</div>
+                <div class="avail-opt po" onclick="setAvail('po', this)" data-id="Pre-Order (PO)" data-en="Pre-Order (PO)">Pre-Order (PO)</div>
+                <div class="avail-opt disc" onclick="setAvail('disc', this)" data-id="Dihentikan" data-en="Discontinued">Dihentikan</div>
+              </div>
+              <div class="field replacement-field" id="replacement-field">
+                <label data-id="Alihkan ke Produk Pengganti" data-en="Redirect to Replacement Product">Alihkan ke Produk Pengganti</label>
+                <select>
+                  <optgroup label="Mesin Potong Kertas">
+                    <option>Mesin Potong Kertas Hydraulic 5310</option>
+                    <option>Mesin Potong Kertas Hydraulic HP4908</option>
+                    <option>Mesin Potong Kertas 4606Z</option>
+                  </optgroup>
+                  <optgroup label="Mesin Laminating Kertas">
+                    <option>Mesin Laminating Kertas 390 B</option>
+                    <option>Mesin Laminating Kertas 390AF Plus</option>
+                  </optgroup>
+                  <optgroup label="Mesin Perforasi">
+                    <option>Mesin Perforasi 470 A</option>
+                  </optgroup>
+                </select>
+                <p class="hint" style="margin-top:8px; margin-bottom:0;" data-id="Pengunjung yang membuka halaman produk ini akan diarahkan melihat produk pengganti di atas." data-en="Visitors who open this product's page will be directed to view the replacement product above.">Pengunjung yang membuka halaman produk ini akan diarahkan melihat produk pengganti di atas.</p>
+              </div>
+            </div>
+
+            <div class="panel">
+              <div class="content-lang-tabs">
+                <div class="clt active" onclick="setContentTab(this, 'seo')" data-id="Konten Indonesia" data-en="Indonesian Content">🇮🇩 Konten Indonesia</div>
+                <div class="clt" onclick="setContentTab(this, 'seo')" data-id="English Content" data-en="English Content">🇬🇧 English Content</div>
+              </div>
+              <h3 data-id="SEO &amp; Tampilan di Google" data-en="SEO &amp; Google Appearance">SEO &amp; Tampilan di Google</h3>
+              <p class="hint" data-id="Field ini menentukan bagaimana produk muncul di hasil pencarian Google — terpisah dari nama produk di atas." data-en="This field determines how the product appears in Google search results — separate from the product name above.">Field ini menentukan bagaimana produk muncul di hasil pencarian Google — terpisah dari nama produk di atas.</p>
+              <div class="field">
+                <label><span data-id="Judul SEO (Meta Title)" data-en="SEO Title (Meta Title)">Judul SEO (Meta Title)</span> <span class="counter">54/60</span></label>
+                <input type="text" value="Mesin Potong Kertas Hydraulic 5310 - Lexia Machinery Medan">
+              </div>
+              <div class="field">
+                <label><span data-id="Deskripsi SEO (Meta Description)" data-en="SEO Description (Meta Description)">Deskripsi SEO (Meta Description)</span> <span class="counter">142/155</span></label>
+                <textarea>Mesin potong kertas hydraulic 5310 dengan lebar potong hingga 530mm dan layar sentuh 10". Presisi tinggi untuk percetakan. Hubungi Lexia Machinery Medan.</textarea>
+              </div>
+              <div class="serp-preview">
+                <div class="serp-title">Mesin Potong Kertas Hydraulic 5310 - Lexia Machinery Medan</div>
+                <div class="serp-url">lexia.co.id › mesin › potong-kertas-hydraulic-5310</div>
+                <div class="serp-desc">Mesin potong kertas hydraulic 5310 dengan lebar potong hingga 530mm dan layar sentuh 10". Presisi tinggi untuk percetakan...</div>
+              </div>
+            </div>
+
+            <div class="panel">
+              <h3 data-id="Deskripsi Produk" data-en="Product Description">Deskripsi Produk</h3>
+              <textarea style="min-height:120px">Mesin Potong Kertas Hydraulic 5310 dirancang untuk kebutuhan pemotongan kertas presisi tinggi di industri percetakan dan photocopy...</textarea>
+            </div>
+
+            <div class="panel">
+              <h3 data-id="Spesifikasi" data-en="Specifications">Spesifikasi</h3>
+              <p class="hint" data-id="Isi per baris — lebih mudah dibaca &amp; diedit dibanding satu kotak teks panjang." data-en="Fill in row by row — easier to read &amp; edit than one long text box.">Isi per baris — lebih mudah dibaca &amp; diedit dibanding satu kotak teks panjang.</p>
+              <div class="spec-rows">
+                <div class="spec-row-input"><input value="Lebar Max Kertas"><input value="530 mm"><div class="remove-spec">&times;</div></div>
+                <div class="spec-row-input"><input value="Operasional"><input value="Layar sentuh 10&quot;"><div class="remove-spec">&times;</div></div>
+                <div class="spec-row-input"><input value="Konsumsi Daya"><input value="2,2 Kw"><div class="remove-spec">&times;</div></div>
+              </div>
+              <div class="add-spec-btn" data-id="+ Tambah baris spesifikasi" data-en="+ Add specification row">+ Tambah baris spesifikasi</div>
+            </div>
+
+            <div class="panel">
+              <h3 data-id="Video Produk (YouTube)" data-en="Product Video (YouTube)">Video Produk (YouTube)</h3>
+              <p class="hint" data-id="Tempel link video YouTube produk ini (opsional). Video akan tampil di galeri foto produk." data-en="Paste this product's YouTube video link (optional). The video will appear in the product photo gallery.">Tempel link video YouTube produk ini (opsional). Video akan tampil di galeri foto produk.</p>
+              <div class="field">
+                <label data-id="Link YouTube" data-en="YouTube Link">Link YouTube</label>
+                <input type="text" placeholder="https://www.youtube.com/watch?v=xxxxxxxxxxx">
+              </div>
+              <div class="video-preview" data-id="Pratinjau video akan muncul di sini setelah link ditempel" data-en="Video preview will appear here after the link is pasted">Pratinjau video akan muncul di sini setelah link ditempel</div>
+            </div>
+
+            <div class="panel">
+              <h3 data-id="Foto Produk" data-en="Product Photos">Foto Produk</h3>
+              <p class="hint" data-id="Seret &amp; lepas hingga 8 foto — foto pertama jadi foto utama." data-en="Drag &amp; drop up to 8 photos — the first photo becomes the main photo.">Seret &amp; lepas hingga 8 foto — foto pertama jadi foto utama.</p>
+              <div class="field spec-hint" data-id="📐 Ukuran ideal: 1200 x 1200 px (rasio 1:1) &middot; Maks. 2 MB per foto &middot; Format JPG atau PNG &middot; Gunakan latar belakang gelap yang konsisten untuk semua foto produk." data-en="📐 Ideal size: 1200 x 1200 px (1:1 ratio) &middot; Max 2 MB per photo &middot; JPG or PNG format &middot; Use a consistent dark background for all product photos.">📐 Ukuran ideal: 1200 x 1200 px (rasio 1:1) &middot; Maks. 2 MB per foto &middot; Format JPG atau PNG &middot; Gunakan latar belakang gelap yang konsisten untuk semua foto produk.</div>
+              <div class="dropzone-grid">
+                <div class="dropzone filled" data-id="Foto 1 (Utama)" data-en="Photo 1 (Main)">Foto 1<br>(Utama)</div>
+                <div class="dropzone filled" data-id="Foto 2" data-en="Photo 2">Foto 2</div>
+                <div class="dropzone" data-id="+ Tambah" data-en="+ Add">+ Tambah</div>
+                <div class="dropzone" data-id="+ Tambah" data-en="+ Add">+ Tambah</div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="sidebar-panel">
+              <h4 data-id="Status" data-en="Status">Status</h4>
+              <span class="status-pill" data-id="● Aktif &amp; Tayang" data-en="● Active &amp; Live">● Aktif &amp; Tayang</span>
+              <div class="lang-complete-row"><span>🇮🇩 Indonesia</span><span class="badge ok" data-id="Lengkap" data-en="Complete">Lengkap</span></div>
+              <div class="lang-complete-row"><span>🇬🇧 English</span><span class="badge warn" data-id="Belum lengkap" data-en="Incomplete">Belum lengkap</span></div>
+              <br>
+              <button class="btn-save" data-id="Simpan Perubahan" data-en="Save Changes">Simpan Perubahan</button>
+              <button class="btn-draft" data-id="Simpan sebagai Draf" data-en="Save as Draft">Simpan sebagai Draf</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PRODUK UNGGULAN (FEATURED) -->
+      <div class="screen" id="screen-featured">
+        <div class="tutorial-box"><span class="bulb">&#128161;</span><span data-id="Atur produk mana yang tampil di beranda dan urutannya. Seret ikon ⠿ untuk mengubah urutan, atau pilih nomor prioritas langsung. Slot #1 tampil lebih besar di beranda — pilih produk dengan foto terbaik." data-en="Set which products appear on the homepage and in what order. Drag the ⠿ icon to reorder, or pick a priority number directly. Slot #1 displays larger on the homepage — choose the product with your best photo.">Atur produk mana yang tampil di beranda dan urutannya. Seret ikon ⠿ untuk mengubah urutan, atau pilih nomor prioritas langsung. Slot #1 tampil lebih besar di beranda — pilih produk dengan foto terbaik.</span></div>
+        <div class="feat-list">
+          <div class="feat-row">
+            <div class="drag-handle">&#9899;&#9899;</div>
+            <div class="feat-thumb"></div>
+            <div>
+              <div class="feat-name">Mesin Potong Kertas Hydraulic 5310</div>
+              <div class="feat-slot-note" data-id="Slot #1 — tampil besar, gunakan foto rasio 4:5 (potret)" data-en="Slot #1 — displays large, use a 4:5 (portrait) photo">Slot #1 — tampil besar, gunakan foto rasio 4:5 (potret)</div>
+            </div>
+            <select><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select>
+            <div class="remove-feat" data-id="Hapus" data-en="Remove">Hapus</div>
+          </div>
+          <div class="feat-row">
+            <div class="drag-handle">&#9899;&#9899;</div>
+            <div class="feat-thumb"></div>
+            <div>
+              <div class="feat-name">Mesin Laminating Kertas 390 B</div>
+              <div class="feat-slot-note" data-id="Slot #2 — foto rasio 4:3 (landscape)" data-en="Slot #2 — 4:3 (landscape) photo">Slot #2 — foto rasio 4:3 (landscape)</div>
+            </div>
+            <select><option>1</option><option selected>2</option><option>3</option><option>4</option><option>5</option></select>
+            <div class="remove-feat" data-id="Hapus" data-en="Remove">Hapus</div>
+          </div>
+          <div class="feat-row">
+            <div class="drag-handle">&#9899;&#9899;</div>
+            <div class="feat-thumb"></div>
+            <div>
+              <div class="feat-name">Mesin Lem Binding Buku 60R</div>
+              <div class="feat-slot-note" data-id="Slot #3 — foto rasio 4:3 (landscape)" data-en="Slot #3 — 4:3 (landscape) photo">Slot #3 — foto rasio 4:3 (landscape)</div>
+            </div>
+            <select><option>1</option><option>2</option><option selected>3</option><option>4</option><option>5</option></select>
+            <div class="remove-feat" data-id="Hapus" data-en="Remove">Hapus</div>
+          </div>
+          <div class="feat-row">
+            <div class="drag-handle">&#9899;&#9899;</div>
+            <div class="feat-thumb"></div>
+            <div>
+              <div class="feat-name">Mesin Jahit Kawat 801</div>
+              <div class="feat-slot-note" data-id="Slot #4 — foto rasio 4:3 (landscape)" data-en="Slot #4 — 4:3 (landscape) photo">Slot #4 — foto rasio 4:3 (landscape)</div>
+            </div>
+            <select><option>1</option><option>2</option><option>3</option><option selected>4</option><option>5</option></select>
+            <div class="remove-feat" data-id="Hapus" data-en="Remove">Hapus</div>
+          </div>
+          <div class="feat-row">
+            <div class="drag-handle">&#9899;&#9899;</div>
+            <div class="feat-thumb"></div>
+            <div>
+              <div class="feat-name">Mesin Creasing Elektrik E660</div>
+              <div class="feat-slot-note" data-id="Slot #5 — foto rasio 4:3 (landscape)" data-en="Slot #5 — 4:3 (landscape) photo">Slot #5 — foto rasio 4:3 (landscape)</div>
+            </div>
+            <select><option>1</option><option>2</option><option>3</option><option>4</option><option selected>5</option></select>
+            <div class="remove-feat" data-id="Hapus" data-en="Remove">Hapus</div>
+          </div>
+        </div>
+        <br>
+        <button class="btn-new" data-id="+ Tambah Produk ke Beranda" data-en="+ Add Product to Homepage">+ Tambah Produk ke Beranda</button>
+      </div>
+
+      <!-- HALAMAN / SEO -->
+      <div class="screen" id="screen-halaman">
+        <div class="tutorial-box"><span class="bulb">&#128161;</span><span data-id="Atur judul dan deskripsi SEO untuk halaman utama situs. Gunakan tab di atas untuk berpindah antar halaman." data-en="Set the SEO title and description for the site's main pages. Use the tabs above to switch between pages.">Atur judul dan deskripsi SEO untuk halaman utama situs. Gunakan tab di atas untuk berpindah antar halaman.</span></div>
+        <div class="page-tabs">
+          <div class="page-tab active" data-id="Beranda" data-en="Homepage">Beranda</div>
+          <div class="page-tab" data-id="Tentang Kami" data-en="About Us">Tentang Kami</div>
+          <div class="page-tab" data-id="Hubungi Kami" data-en="Contact Us">Hubungi Kami</div>
+        </div>
+        <div class="form-layout">
+          <div>
+            <div class="panel">
+              <div class="content-lang-tabs">
+                <div class="clt active">🇮🇩 <span data-id="Konten Indonesia" data-en="Indonesian Content">Konten Indonesia</span></div>
+                <div class="clt">🇬🇧 <span data-id="English Content" data-en="English Content">English Content</span></div>
+              </div>
+              <h3 data-id="SEO &amp; Tampilan di Google — Beranda" data-en="SEO &amp; Google Appearance — Homepage">SEO &amp; Tampilan di Google — Beranda</h3>
+              <div class="field">
+                <label><span data-id="Judul SEO" data-en="SEO Title">Judul SEO</span> <span class="counter">56/60</span></label>
+                <input type="text" value="Lexia Machinery - Distributor Mesin Percetakan se-Indonesia">
+              </div>
+              <div class="field">
+                <label><span data-id="Deskripsi SEO" data-en="SEO Description">Deskripsi SEO</span> <span class="counter">148/155</span></label>
+                <textarea>Distributor mesin potong kertas, laminating, dan jilid lem untuk bisnis percetakan &amp; photocopy. Melayani Medan, Jakarta, dan seluruh Indonesia.</textarea>
+              </div>
+            </div>
+            <div class="panel">
+              <h3 data-id="Konten Halaman" data-en="Page Content">Konten Halaman</h3>
+              <div class="field">
+                <label data-id="Judul Utama (H1)" data-en="Main Heading (H1)">Judul Utama (H1)</label>
+                <input type="text" value="Distributor Mesin Percetakan &amp; Photocopy Terpercaya, Melayani Seluruh Indonesia">
+              </div>
+              <div class="field">
+                <label data-id="Sub-judul" data-en="Subheading">Sub-judul</label>
+                <textarea>Potong, laminating, jilid, dan finishing — satu distributor tepercaya untuk seluruh kebutuhan mesin percetakan dan photocopy Anda.</textarea>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="sidebar-panel">
+              <h4 data-id="Status" data-en="Status">Status</h4>
+              <span class="status-pill" data-id="● Tayang" data-en="● Live">● Tayang</span>
+              <button class="btn-save" data-id="Simpan Perubahan" data-en="Save Changes">Simpan Perubahan</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BLOG LIST -->
+      <div class="screen" id="screen-blog-list">
+        <div class="tutorial-box"><span class="bulb">&#128161;</span><span data-id="Kelola artikel blog di sini. Klik 'Edit' untuk mengubah artikel yang sudah ada, atau tulis artikel baru untuk membantu SEO situs." data-en="Manage blog articles here. Click 'Edit' to change an existing article, or write a new one to help the site's SEO.">Kelola artikel blog di sini. Klik 'Edit' untuk mengubah artikel yang sudah ada, atau tulis artikel baru untuk membantu SEO situs.</span></div>
+        <div class="toolbar">
+          <div></div>
+          <button class="btn-new" onclick="showScreen('blog-editor', null)" data-id="+ Tulis Artikel Baru" data-en="+ Write New Article">+ Tulis Artikel Baru</button>
+        </div>
+        <div class="recent-table">
+          <div class="blog-row head"><div data-id="Foto" data-en="Photo">Foto</div><div data-id="Judul" data-en="Title">Judul</div><div data-id="Kategori" data-en="Category">Kategori</div><div data-id="Tanggal" data-en="Date">Tanggal</div><div data-id="Status" data-en="Status">Status</div><div></div></div>
+          <div class="blog-row"><div class="thumb-sm"></div><div>Cara Memilih Mesin Laminating untuk Usaha Percetakan</div><div data-id="Panduan Membeli" data-en="Buying Guide">Panduan Membeli</div><div>2 Sep 2026</div><div><span class="badge ok" data-id="Tayang" data-en="Published">Tayang</span></div><div class="icon-btn" onclick="showScreen('blog-editor', null)" data-id="Edit" data-en="Edit">Edit</div></div>
+          <div class="blog-row"><div class="thumb-sm"></div><div>Perbedaan Jilid Lem Panas dan Jilid Spiral</div><div data-id="Perbandingan" data-en="Comparison">Perbandingan</div><div>28 Agu 2026</div><div><span class="badge ok" data-id="Tayang" data-en="Published">Tayang</span></div><div class="icon-btn" data-id="Edit" data-en="Edit">Edit</div></div>
+          <div class="blog-row"><div class="thumb-sm"></div><div>5 Tips Merawat Mesin Potong Kertas Hydraulic</div><div data-id="Perawatan" data-en="Maintenance">Perawatan</div><div>20 Agu 2026</div><div><span class="badge warn" data-id="Draf" data-en="Draft">Draf</span></div><div class="icon-btn" data-id="Edit" data-en="Edit">Edit</div></div>
+        </div>
+      </div>
+
+      <!-- BLOG EDITOR -->
+      <div class="screen" id="screen-blog-editor">
+        <div class="tutorial-box"><span class="bulb">&#128161;</span><span data-id="Isi artikel dalam Bahasa Indonesia dan Inggris menggunakan tab di bawah. Jangan lupa isi tombol tautan di bagian bawah agar pembaca bisa langsung menuju produk terkait." data-en="Fill in the article in Indonesian and English using the tabs below. Don't forget the link button at the bottom so readers can go straight to the related product.">Isi artikel dalam Bahasa Indonesia dan Inggris menggunakan tab di bawah. Jangan lupa isi tombol tautan di bagian bawah agar pembaca bisa langsung menuju produk terkait.</span></div>
+        <div class="form-layout">
+          <div>
+            <div class="panel">
+              <div class="content-lang-tabs">
+                <div class="clt active">🇮🇩 <span data-id="Konten Indonesia" data-en="Indonesian Content">Konten Indonesia</span></div>
+                <div class="clt">🇬🇧 <span data-id="English Content" data-en="English Content">English Content</span></div>
+              </div>
+              <h3 data-id="Artikel" data-en="Article">Artikel</h3>
+              <div class="field">
+                <label data-id="Judul Artikel" data-en="Article Title">Judul Artikel</label>
+                <input type="text" placeholder="Contoh: Cara Memilih Mesin Laminating untuk Usaha Percetakan">
+              </div>
+              <div class="field">
+                <label data-id="Kategori Artikel" data-en="Article Category">Kategori Artikel</label>
+                <select><option data-id="Panduan Membeli" data-en="Buying Guide">Panduan Membeli</option><option data-id="Perbandingan" data-en="Comparison">Perbandingan</option><option data-id="Perawatan" data-en="Maintenance">Perawatan</option></select>
+              </div>
+              <div class="field">
+                <label data-id="Isi Artikel" data-en="Article Content">Isi Artikel</label>
+                <textarea style="min-height:200px" placeholder="Tulis isi artikel di sini..."></textarea>
+              </div>
+            </div>
+            <div class="panel">
+              <h3 data-id="SEO Artikel" data-en="Article SEO">SEO Artikel</h3>
+              <div class="field">
+                <label data-id="Judul SEO" data-en="SEO Title">Judul SEO</label>
+                <input type="text" placeholder="Judul untuk hasil pencarian Google">
+              </div>
+              <div class="field">
+                <label data-id="Deskripsi SEO" data-en="SEO Description">Deskripsi SEO</label>
+                <textarea placeholder="Ringkasan singkat untuk hasil pencarian Google (maks 155 karakter)"></textarea>
+              </div>
+            </div>
+            <div class="panel">
+              <h3 data-id="Foto Sampul" data-en="Cover Photo">Foto Sampul</h3>
+              <div class="field spec-hint" data-id="📐 Ukuran ideal: 1200 x 675 px (rasio 16:9) &middot; Maks. 2 MB &middot; Format JPG atau PNG." data-en="📐 Ideal size: 1200 x 675 px (16:9 ratio) &middot; Max 2 MB &middot; JPG or PNG format.">📐 Ukuran ideal: 1200 x 675 px (rasio 16:9) &middot; Maks. 2 MB &middot; Format JPG atau PNG.</div>
+              <div class="dropzone-grid" style="grid-template-columns: repeat(2, 1fr); max-width: 300px;">
+                <div class="dropzone" data-id="+ Unggah Foto Sampul" data-en="+ Upload Cover Photo">+ Unggah Foto Sampul</div>
+              </div>
+            </div>
+
+            <div class="panel">
+              <h3 data-id="Tombol Tautan (Call-to-Action)" data-en="Link Button (Call-to-Action)">Tombol Tautan (Call-to-Action)</h3>
+              <p class="hint" data-id="Tombol ini muncul di bagian bawah artikel, mengarahkan pembaca ke produk atau kategori terkait." data-en="This button appears at the bottom of the article, directing readers to a related product or category.">Tombol ini muncul di bagian bawah artikel, mengarahkan pembaca ke produk atau kategori terkait.</p>
+              <div class="field">
+                <label data-id="Teks Tombol" data-en="Button Label">Teks Tombol</label>
+                <input type="text" placeholder="Contoh: Lihat Mesin Laminating 390 B" value="Lihat Mesin Laminating 390 B">
+              </div>
+              <div class="field">
+                <label data-id="Tipe Tujuan" data-en="Destination Type">Tipe Tujuan</label>
+                <select onchange="toggleLinkTarget(this.value)" id="link-target-type">
+                  <option value="produk" data-id="Halaman Produk" data-en="Product Page">Halaman Produk</option>
+                  <option value="kategori" data-id="Halaman Kategori" data-en="Category Page">Halaman Kategori</option>
+                  <option value="url" data-id="URL Kustom" data-en="Custom URL">URL Kustom</option>
+                </select>
+              </div>
+              <div class="field" id="target-produk">
+                <label data-id="Pilih Produk" data-en="Select Product">Pilih Produk</label>
+                <select>
+                  <optgroup label="Mesin Laminating Kertas">
+                    <option>Mesin Laminating Kertas 390 B</option>
+                    <option>Mesin Laminating Kertas 390AF Plus</option>
+                  </optgroup>
+                  <optgroup label="Mesin Potong Kertas">
+                    <option>Mesin Potong Kertas Hydraulic 5310</option>
+                  </optgroup>
+                </select>
+              </div>
+              <div class="field" id="target-url" style="display:none;">
+                <label data-id="URL Tujuan" data-en="Destination URL">URL Tujuan</label>
+                <input type="text" placeholder="https://lexia.co.id/...">
+              </div>
+              <div class="field">
+                <label data-id="Kategori Cadangan" data-en="Fallback Category">Kategori Cadangan</label>
+                <select>
+                  <option>Mesin Laminating Kertas</option>
+                  <option>Mesin Potong Kertas</option>
+                  <option>Mesin Lem Binding Buku</option>
+                </select>
+                <p class="hint" style="margin-top:8px; margin-bottom:0;" data-id="Jika produk yang dipilih di atas suatu saat dihapus dari katalog, tombol ini akan otomatis mengarah ke halaman kategori cadangan ini — bukan ke halaman error." data-en="If the product selected above is ever removed from the catalog, this button will automatically redirect to this fallback category page — instead of an error page.">Jika produk yang dipilih di atas suatu saat dihapus dari katalog, tombol ini akan otomatis mengarah ke halaman kategori cadangan ini — bukan ke halaman error.</p>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="sidebar-panel">
+              <h4 data-id="Status" data-en="Status">Status</h4>
+              <span class="status-pill" style="background:#FBEAE2; color:var(--rust);" data-id="● Draf" data-en="● Draft">● Draf</span>
+              <button class="btn-save" data-id="Terbitkan" data-en="Publish">Terbitkan</button>
+              <button class="btn-draft" onclick="showScreen('blog-list', null)" data-id="Kembali ke Daftar" data-en="Back to List">Kembali ke Daftar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  const titles = {
+    dashboard: {id:'Dashboard', en:'Dashboard'},
+    'produk-list': {id:'Produk', en:'Products'},
+    'produk-edit': {id:'Edit Produk', en:'Edit Product'},
+    featured: {id:'Produk Unggulan', en:'Featured Products'},
+    halaman: {id:'Halaman & SEO', en:'Pages & SEO'},
+    'blog-list': {id:'Blog', en:'Blog'},
+    'blog-editor': {id:'Tulis Artikel', en:'Write Article'}
+  };
+  let currentLang = 'id';
+
+  function showScreen(id, navEl) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('screen-' + id).classList.add('active');
+    document.getElementById('topbar-title').textContent = titles[id][currentLang];
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    if (navEl) { navEl.classList.add('active'); }
+    else {
+      const map = { 'blog-editor': 'blog-list', 'produk-edit': 'produk-list' };
+      const target = map[id] || id;
+      document.querySelectorAll('.nav-item').forEach(n => {
+        if (n.getAttribute('data-id') === titles[target].id) n.classList.add('active');
+      });
+    }
+    document.getElementById('sidebar').classList.remove('open');
+  }
+
+  function setAdminLang(lang) {
+    currentLang = lang;
+    document.querySelectorAll('[data-id]').forEach(el => {
+      el.innerHTML = lang === 'id' ? el.getAttribute('data-id') : el.getAttribute('data-en');
+    });
+    document.getElementById('admin-lang-id').classList.toggle('active', lang === 'id');
+    document.getElementById('admin-lang-en').classList.toggle('active', lang === 'en');
+    const activeScreen = document.querySelector('.screen.active').id.replace('screen-', '');
+    document.getElementById('topbar-title').textContent = titles[activeScreen][lang];
+  }
+
+  function setAvail(type, el) {
+    document.querySelectorAll('.avail-opt').forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+    document.getElementById('replacement-field').classList.toggle('show', type === 'disc');
+  }
+
+  function toggleLinkTarget(val) {
+    document.getElementById('target-produk').style.display = val === 'produk' ? 'block' : 'none';
+    document.getElementById('target-url').style.display = val === 'url' ? 'block' : 'none';
+  }
+
+  function setContentTab(el, group) {
+    el.parentElement.querySelectorAll('.clt').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+  }
+</script>
+
+</body>
+</html>
