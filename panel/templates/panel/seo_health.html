@@ -1,0 +1,48 @@
+{% extends "panel/base.html" %}
+
+{% block body %}
+<div class="tut">
+  <span class="tut-mark">?</span>
+  <div>Ringkasan kondisi SEO dari data yang sudah ada. <b>Masalah penting</b> perlu segera
+    diperbaiki, <b>peringatan</b> sebaiknya diperbaiki, <b>info</b> hanya saran. Klik nama
+    item untuk membuka halaman editnya. Halaman ini hanya membaca — tidak mengubah apa pun.</div>
+</div>
+
+<div class="seo-summary">
+  <div class="seo-pill {% if errors %}is-bad{% else %}is-good{% endif %}">
+    <b>{{ errors }}</b> masalah penting
+  </div>
+  <div class="seo-pill {% if warnings %}is-warn{% else %}is-good{% endif %}">
+    <b>{{ warnings }}</b> peringatan
+  </div>
+  <div class="seo-pill">{{ live_posts }} artikel terbit</div>
+</div>
+
+{% for s in sections %}
+<div class="form-card">
+  <div class="form-card-head">
+    <h3>{{ s.name }}{% if s.total is not None %} <span class="seo-muted">· {{ s.total }} item</span>{% endif %}</h3>
+  </div>
+  <div class="form-card-body">
+    {% for ck in s.checks %}
+    <div class="seo-check is-{{ ck.severity }}">
+      <div class="seo-check-head">
+        <span class="seo-dot"></span>
+        <span class="seo-check-label">{{ ck.label }}</span>
+        <span class="seo-check-count">{% if ck.severity == 'ok' %}&#10003;{% elif ck.count %}{{ ck.count }}{% else %}&mdash;{% endif %}</span>
+      </div>
+      {% if ck.offenders %}
+      <ul class="seo-offenders">
+        {% for o in ck.offenders %}
+          <li><a href="{{ o.url }}"{% if o.external %} target="_blank" rel="noopener"{% endif %}>{{ o.label }}</a></li>
+        {% endfor %}
+        {% if ck.more %}<li class="seo-muted">+ {{ ck.more }} lainnya…</li>{% endif %}
+      </ul>
+      {% endif %}
+      {% if ck.severity != 'ok' and ck.hint %}<p class="seo-check-hint">{{ ck.hint }}</p>{% endif %}
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endfor %}
+{% endblock %}

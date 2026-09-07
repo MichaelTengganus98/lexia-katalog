@@ -1,6 +1,7 @@
 import json
 import urllib.parse
 import urllib.request
+from collections import Counter
 from functools import wraps
 
 from django.contrib import messages
@@ -10,6 +11,7 @@ from django.core.exceptions import PermissionDenied
 from django.db import transaction
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators.http import require_POST
 
@@ -194,6 +196,157 @@ def seo_suggest(request):
     except Exception:
         return JsonResponse({"error": "Tidak bisa membuat rekomendasi saat ini."}, status=500)
     return JsonResponse(data)
+
+
+# --------------------------------------------------------------------------- #
+#  SEO Health  (read-only audit of existing content)
+# --------------------------------------------------------------------------- #
+def _seo_row(label, url, external=False):
+    return {"label": label, "url": url, "external": external}
+
+
+def _seo_check(severity, label, offenders, hint):
+    return {
+        "severity": severity if offenders else "ok",
+        "label": label,
+        "count": len(offenders),
+        "offenders": offenders[:40],
+        "more": max(0, len(offenders) - 40),
+        "hint": hint,
+    }
+
+
+@staff_member_required
+def seo_health(request):
+    def c(s):
+        return (s or "").strip()
+
+    sections = []
+
+    # ---- Produk -------------------------------------------------------------
+    items = list(Item.objects.select_related("Jenis").all())
+    purl = lambda it: reverse("panel:product_edit", args=[it.pk])
+    dup_title = Counter(c(it.meta_title).lower() for it in items if c(it.meta_title))
+    sections.append({"name": "Produk", "total": len(items), "checks": [
+        _seo_check("error", "Disembunyikan dari Google (noindex)",
+                   [_seo_row(it.name, purl(it)) for it in items if it.noindex],
+                   "Buka produk → kartu \"SEO & Pratinjau Berbagi\" → hilangkan centang "
+                   "\"Sembunyikan dari Google\"."),
+        _seo_check("warn", "Ringkasan pencarian lemah (tak ada ringkasan & deskripsi)",
+                   [_seo_row(it.name, purl(it)) for it in items
+                    if not (c(it.meta_description) or c(it.summary) or c(it.description))],
+                   "Isi Ringkasan singkat / Deskripsi lengkap, atau klik "
+                   "\"Isi dengan rekomendasi SEO\" di kartu SEO."),
+        _seo_check("warn", "Tak ada gambar berbagi (OG image & foto utama kosong)",
+                   [_seo_row(it.name, purl(it)) for it in items
+                    if not it.og_image and not it.picture1],
+                   "Unggah Foto Utama produk, atau OG image khusus di kartu SEO."),
+        _seo_check("warn", "Judul SEO lebih dari 60 karakter (terpotong di Google)",
+                   [_seo_row("%s — %d kar." % (it.name, len(it.seo_title)), purl(it))
+                    for it in items if len(it.seo_title) > 60],
+                   "Isi Meta title yang lebih pendek di kartu SEO."),
+        _seo_check("warn", "Meta description lebih dari 160 karakter",
+                   [_seo_row("%s — %d kar." % (it.name, len(it.seo_description)), purl(it))
+                    for it in items if len(it.seo_description) > 160],
+                   "Persingkat Meta description di kartu SEO."),
+        _seo_check("warn", "Meta title sama dengan produk lain (duplikat)",
+                   [_seo_row(it.name, purl(it)) for it in items
+                    if c(it.meta_title) and dup_title[c(it.meta_title).lower()] > 1],
+                   "Buat Meta title yang unik untuk tiap produk."),
+        _seo_check("info", "Belum ada konten Bahasa Inggris (nama produk)",
+                   [_seo_row(it.name, purl(it)) for it in items
+                    if not c(getattr(it, "name_en", ""))],
+                   "Isi kolom English di kartu Informasi Dasar, lalu pakai tombol terjemah."),
+    ]})
+
+    # ---- Kategori ---------------------------------------------------------
+    cats = list(Category.objects.all())
+    curl = lambda cat: reverse("panel:category_edit", args=[cat.pk])
+    sections.append({"name": "Kategori", "total": len(cats), "checks": [
+        _seo_check("error", "Disembunyikan dari Google (noindex)",
+                   [_seo_row(cat.jenis, curl(cat)) for cat in cats if cat.noindex],
+                   "Buka kategori → kartu SEO → hilangkan centang noindex."),
+        _seo_check("warn", "Halaman kategori tipis (teks pengantar kosong)",
+                   [_seo_row(cat.jenis, curl(cat)) for cat in cats if not c(cat.intro)],
+                   "Tulis 1–2 paragraf pengantar — konten unik di sini sangat membantu "
+                   "peringkat kategori di Google."),
+        _seo_check("warn", "Meta description lebih dari 160 karakter",
+                   [_seo_row("%s — %d kar." % (cat.jenis, len(cat.seo_description)), curl(cat))
+                    for cat in cats if len(cat.seo_description) > 160],
+                   "Persingkat Meta description di kartu SEO."),
+        _seo_check("info", "Belum ada nama kategori Bahasa Inggris",
+                   [_seo_row(cat.jenis, curl(cat)) for cat in cats
+                    if not c(getattr(cat, "jenis_en", ""))],
+                   "Isi kolom English pada nama kategori."),
+    ]})
+
+    # ---- Blog -----------------------------------------------------------
+    posts = list(Post.objects.all())
+    live = [p for p in posts if p.is_live]
+    burl = lambda p: reverse("panel:post_edit", args=[p.pk])
+    sections.append({"name": "Blog", "total": len(posts), "checks": [
+        _seo_check("error", "Artikel terbit disembunyikan dari Google (noindex)",
+                   [_seo_row(p.title, burl(p)) for p in live if p.noindex],
+                   "Buka artikel → kartu SEO → hilangkan centang noindex."),
+        _seo_check("warn", "Artikel terbit tanpa foto sampul",
+                   [_seo_row(p.title, burl(p)) for p in live if not p.cover_image],
+                   "Unggah Foto sampul — dipakai di kartu blog dan saat link dibagikan."),
+        _seo_check("warn", "Judul SEO lebih dari 60 karakter",
+                   [_seo_row("%s — %d kar." % (p.title, len(p.seo_title)), burl(p))
+                    for p in live if len(p.seo_title) > 60],
+                   "Isi Meta title yang lebih pendek di kartu SEO."),
+        _seo_check("info", "Artikel terbit tanpa ringkasan (dibuat otomatis dari isi)",
+                   [_seo_row(p.title, burl(p)) for p in live if not c(p.excerpt)],
+                   "Isi Ringkasan untuk kontrol penuh atas teks di Google & kartu artikel."),
+        _seo_check("info", "Belum ada judul artikel Bahasa Inggris",
+                   [_seo_row(p.title, burl(p)) for p in live
+                    if not c(getattr(p, "title_en", ""))],
+                   "Isi kolom English pada judul, lalu terjemahkan isinya."),
+    ]})
+
+    # ---- Situs -----------------------------------------------------------
+    site = SiteSettings.load()
+    surl = reverse("panel:site_settings")
+    missing = []
+    if not c(site.google_site_verification):
+        missing.append(_seo_row("Kode verifikasi Google Search Console", surl))
+    if not site.default_og_image:
+        missing.append(_seo_row("Gambar berbagi default (OG image)", surl))
+    if not c(site.default_meta_description):
+        missing.append(_seo_row("Meta description default situs", surl))
+    if not c(site.ga_measurement_id):
+        missing.append(_seo_row("ID Google Analytics 4", surl))
+    if not c(site.email):
+        missing.append(_seo_row("Email (dipakai di data terstruktur)", surl))
+    if not (c(site.latitude) and c(site.longitude)):
+        missing.append(_seo_row("Koordinat lokasi (latitude & longitude)", surl))
+    sections.append({"name": "Situs & data terstruktur", "total": None, "checks": [
+        _seo_check("warn", "Data SEO situs belum lengkap", missing,
+                   "Lengkapi di Pengaturan Situs & SEO."),
+    ]})
+
+    # ---- Teknis --------------------------------------------------------
+    sections.append({"name": "Teknis", "total": None, "checks": [{
+        "severity": "info",
+        "label": "Berkas teknis — buka untuk memastikan keduanya benar",
+        "count": 0,
+        "offenders": [_seo_row("sitemap.xml", "/sitemap.xml", True),
+                      _seo_row("robots.txt", "/robots.txt", True)],
+        "more": 0,
+        "hint": "Daftarkan sitemap.xml di Google Search Console setelah verifikasi.",
+    }]})
+
+    errors = sum(ck["count"] for s in sections for ck in s["checks"] if ck["severity"] == "error")
+    warnings = sum(ck["count"] for s in sections for ck in s["checks"] if ck["severity"] == "warn")
+
+    return render(request, "panel/seo_health.html", {
+        "section": "seo",
+        "title": "SEO Health",
+        "sections": sections,
+        "errors": errors,
+        "warnings": warnings,
+        "live_posts": len(live),
+    })
 
 
 # --------------------------------------------------------------------------- #

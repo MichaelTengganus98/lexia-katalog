@@ -8,6 +8,7 @@ urlpatterns = [
     path("", views.dashboard, name="dashboard"),
     path("translate/", views.translate, name="translate"),
     path("seo-suggest/", views.seo_suggest, name="seo_suggest"),
+    path("seo/", views.seo_health, name="seo_health"),
 
     path("produk/", views.product_list, name="product_list"),
     path("produk/urutan/", views.product_reorder, name="product_reorder"),

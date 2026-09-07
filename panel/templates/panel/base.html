@@ -33,6 +33,7 @@
     <div class="admin-group-label">Pengaturan</div>
     <nav class="admin-nav">
       <a href="{% url 'panel:site_settings' %}" class="{% if section == 'pengaturan' %}active{% endif %}">Pengaturan Situs &amp; SEO</a>
+      <a href="{% url 'panel:seo_health' %}" class="{% if section == 'seo' %}active{% endif %}">SEO Health{% if seo_issue_count %} <span class="ext" style="color:var(--rust);font-weight:700">{{ seo_issue_count }}</span>{% endif %}</a>
       {% if request.user.is_superuser %}
         <a href="{% url 'panel:user_list' %}" class="{% if section == 'pengguna' %}active{% endif %}">Pengguna</a>
       {% endif %}

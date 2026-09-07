@@ -210,6 +210,32 @@ button { font-family: inherit; }
 .seo-meter { display: block; margin-top: 5px; font-size: 11px; color: var(--text-muted); }
 .seo-meter.over { color: var(--rust-dark); font-weight: 600; }
 
+/* ---------- SEO Health page ---------- */
+.seo-summary { display: flex; gap: 12px; margin-bottom: 22px; flex-wrap: wrap; }
+.seo-pill { border: 1px solid var(--line); background: #fff; padding: 10px 16px; font-size: 13px; color: var(--text-muted); }
+.seo-pill b { font-size: 18px; font-family: var(--font-display); margin-right: 5px; color: var(--text); }
+.seo-pill.is-bad { border-color: #c65b3d; } .seo-pill.is-bad b { color: var(--rust-dark); }
+.seo-pill.is-warn { border-color: var(--amber); }
+.seo-pill.is-good { border-color: #3c6b3a; } .seo-pill.is-good b { color: #3c6b3a; }
+.seo-check { padding: 14px 0; border-top: 1px solid var(--line); }
+.seo-check:first-child { border-top: none; padding-top: 0; }
+.seo-check-head { display: flex; align-items: center; gap: 10px; }
+.seo-check-label { font-weight: 600; font-size: 13.5px; flex: 1; }
+.seo-check-count { font-family: var(--font-display); font-size: 15px; color: var(--text-muted); flex-shrink: 0; }
+.seo-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--line); flex-shrink: 0; }
+.seo-check.is-error .seo-dot { background: #c65b3d; }
+.seo-check.is-error .seo-check-count { color: var(--rust-dark); }
+.seo-check.is-warn .seo-dot { background: var(--amber); }
+.seo-check.is-info .seo-dot { background: #5b6570; }
+.seo-check.is-ok .seo-dot { background: #3c6b3a; }
+.seo-check.is-ok .seo-check-count { color: #3c6b3a; }
+.seo-offenders { margin: 10px 0 0; padding-left: 19px; }
+.seo-offenders li { font-size: 13px; margin-bottom: 4px; }
+.seo-offenders a { color: var(--rust); }
+.seo-offenders a:hover { text-decoration: underline; }
+.seo-check-hint { margin: 8px 0 0; font-size: 12.5px; color: var(--text-muted); }
+.seo-muted { color: var(--text-muted); font-weight: 400; }
+
 /* ---------- image / file upload slots ---------- */
 .upload-slot {
   border: 1.5px dashed var(--line); background: var(--cream);
