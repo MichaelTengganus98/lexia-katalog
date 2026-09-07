@@ -1,13 +1,17 @@
 {% extends 'admin/base_site.html' %}
-
 {% load static %}
 
+{% block extrastyle %}{{ block.super }}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders:wght@600;700;800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/admin-lexia.css' %}">
+{% endblock %}
+
 {% block branding %}
-    <div class="head">
-        <h1 id="name">Admin Dashboard</h1>
-    </div>
+    <h1 id="site-name"><a href="{% url 'admin:index' %}">LEXIA<span class="lx-accent">ADMIN</span></a></h1>
 {% endblock %}
 
 {% block nav-global %}
-    <img class="brand_img" src="{% static 'img/logo-lexia-machinery.png'%}" width="200" height="50" alt="logo">
+    <a href="/panel/" style="color:#dfa63d;font-weight:600;margin-left:16px;">&#8592; Panel Lexia</a>
 {% endblock %}

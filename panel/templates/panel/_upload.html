@@ -1,0 +1,14 @@
+{% load thumbnail %}
+<div class="upload-slot{% if field.errors %} has-error{% endif %}">
+  <div class="drop">
+    {% if field.value %}
+      {% thumbnail field.value "92x70" crop="center" as im %}<img src="{{ im.url }}" alt="">{% empty %}Foto{% endthumbnail %}
+    {% else %}{{ field.label }}{% endif %}
+  </div>
+  <div class="meta">
+    <div class="name">{{ field.label }}{% if field.field.required %} <span class="req">*</span>{% endif %}</div>
+    {{ field }}
+    <span class="spec-hint">Disarankan <b>{{ dim|default:"1000 &times; 750 px" }}</b>, rasio 4:3, JPG / PNG / WebP</span>
+    {% for e in field.errors %}<span class="field-error">{{ e }}</span>{% endfor %}
+  </div>
+</div>

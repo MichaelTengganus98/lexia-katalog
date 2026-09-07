@@ -1,0 +1,122 @@
+{% extends "panel/base.html" %}
+{% load static thumbnail %}
+
+{% block body %}
+<div class="tut">
+  <span class="tut-mark">?</span>
+  <div>Halaman ini berisi <b>semua produk</b> yang tampil di katalog. Klik nama produk untuk mengedit,
+    atau <b>Tambah Produk</b> untuk menambah model baru. Produk dengan status <b>Discontinued</b> akan
+    menampilkan tautan ke produk pengganti pada halaman detailnya.</div>
+</div>
+
+<div class="admin-page-toolbar">
+  <h2>Semua Produk <span class="count">({{ items|length }})</span></h2>
+  <a href="{% url 'panel:product_create' %}" class="btn btn-primary btn-sm">+ Tambah Produk</a>
+</div>
+
+<div class="admin-panel">
+  <table class="admin-table">
+    <thead>
+      <tr><th>Produk</th><th>Kategori</th><th>Ketersediaan</th><th>Unggulan</th><th></th></tr>
+    </thead>
+    <tbody>
+      {% for it in items %}
+        <tr>
+          <td><a class="t-name" href="{% url 'panel:product_edit' it.pk %}">{{ it.name }}</a></td>
+          <td class="t-muted">{{ it.Jenis.jenis }}</td>
+          <td>
+            {% if it.availability == "InStock" %}<span class="badge badge-ready">Ready Stock</span>
+            {% elif it.availability == "PreOrder" %}<span class="badge badge-po">Pre-Order</span>
+            {% elif it.availability == "OutOfStock" %}<span class="badge badge-po">Stok habis</span>
+            {% else %}<span class="badge badge-off">Discontinued{% if it.replacement %} &rarr; {{ it.replacement.name }}{% endif %}</span>{% endif %}
+          </td>
+          <td class="t-muted">{% if it.feature_rank %}#{{ it.feature_rank }}{% else %}&mdash;{% endif %}</td>
+          <td><a class="t-edit" href="{% url 'panel:product_edit' it.pk %}">Edit</a></td>
+        </tr>
+      {% empty %}
+        <tr><td colspan="5" class="admin-empty">Belum ada produk. <a class="t-edit" href="{% url 'panel:product_create' %}">Tambah produk pertama &rarr;</a></td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<div class="admin-panel">
+  <div class="admin-panel-head">Produk Unggulan di Homepage</div>
+  <div class="admin-panel-note">
+    Urutan #1–#5 menentukan susunan "Produk unggulan" di beranda. #1 tampil besar (kartu hero),
+    #2–#5 tampil ukuran standar. <b>Seret</b> kartu untuk mengubah urutan, lalu tekan <b>Simpan urutan</b>.
+  </div>
+  <div style="padding: 16px 20px 20px;">
+    <ul class="priority-list" id="priorityList">
+      {% for it in featured %}
+        <li class="priority-item" draggable="true" data-pk="{{ it.pk }}">
+          <span class="rank">{{ forloop.counter }}</span>
+          <span class="handle">&#9776;</span>
+          <span class="thumb">
+            {% if it.picture1 %}{% thumbnail it.picture1 "92x70" crop="center" as im %}<img src="{{ im.url }}" alt="">{% endthumbnail %}{% endif %}
+          </span>
+          <span class="pname">{{ it.name }}<br><span class="pcat">{{ it.Jenis.jenis }}</span></span>
+        </li>
+      {% empty %}
+        <li class="priority-empty">Belum ada produk unggulan. Buka satu produk lalu atur "Prioritas unggulan".</li>
+      {% endfor %}
+    </ul>
+    <div class="priority-save">
+      <button type="button" id="savePriority" class="btn btn-outline btn-sm" hidden>Simpan urutan</button>
+      <span id="prioritySaved" class="field-hint" hidden>Urutan tersimpan.</span>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+(function () {
+  var list = document.getElementById('priorityList');
+  if (!list) return;
+  var saveBtn = document.getElementById('savePriority');
+  var savedMsg = document.getElementById('prioritySaved');
+  var dragEl = null;
+
+  function renumber() {
+    [].forEach.call(list.querySelectorAll('.priority-item'), function (li, i) {
+      var r = li.querySelector('.rank'); if (r) r.textContent = i + 1;
+    });
+  }
+  list.addEventListener('dragstart', function (e) {
+    dragEl = e.target.closest('.priority-item');
+    if (dragEl) dragEl.classList.add('dragging');
+  });
+  list.addEventListener('dragend', function () {
+    if (!dragEl) return;
+    dragEl.classList.remove('dragging'); dragEl = null;
+    renumber();
+    if (saveBtn) saveBtn.hidden = false;
+    if (savedMsg) savedMsg.hidden = true;
+  });
+  list.addEventListener('dragover', function (e) {
+    e.preventDefault();
+    if (!dragEl) return;
+    var after = [].find.call(list.querySelectorAll('.priority-item:not(.dragging)'), function (li) {
+      var box = li.getBoundingClientRect();
+      return e.clientY < box.top + box.height / 2;
+    });
+    if (after) list.insertBefore(dragEl, after); else list.appendChild(dragEl);
+  });
+
+  function csrf() {
+    var m = document.cookie.match(/csrftoken=([^;]+)/); return m ? m[1] : '';
+  }
+  if (saveBtn) saveBtn.addEventListener('click', function () {
+    var ids = [].map.call(list.querySelectorAll('.priority-item'), function (li) { return li.getAttribute('data-pk'); });
+    var body = new URLSearchParams();
+    ids.forEach(function (id) { body.append('order[]', id); });
+    fetch('{% url 'panel:product_reorder' %}', {
+      method: 'POST', headers: { 'X-CSRFToken': csrf(), 'Content-Type': 'application/x-www-form-urlencoded' }, body: body
+    }).then(function (r) { return r.json(); }).then(function () {
+      saveBtn.hidden = true; if (savedMsg) savedMsg.hidden = false;
+    });
+  });
+})();
+</script>
+{% endblock %}

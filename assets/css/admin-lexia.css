@@ -1,0 +1,177 @@
+/* ==========================================================================
+   LEXIA MACHINERY — Django admin re-theme
+   Applies the site's industrial ink / cream / rust / amber palette and
+   IBM Plex + Big Shoulders type to the stock Django 2.1 admin. Scoped
+   overrides only — no admin template replacement beyond base_site / login.
+   ========================================================================== */
+
+:root {
+  --lx-ink:        #14151a;
+  --lx-ink-2:      #1d1f26;
+  --lx-cream:      #f1ece3;
+  --lx-cream-2:    #e8e1d2;
+  --lx-paper:      #faf8f3;
+  --lx-rust:       #c1502e;
+  --lx-rust-dark:  #9c3e22;
+  --lx-amber:      #dfa63d;
+  --lx-amber-dark: #b9832a;
+  --lx-slate:      #3a4149;
+  --lx-line:       #d8d3c6;
+  --lx-text:       #1b1c20;
+  --lx-muted:      #6b675c;
+}
+
+body {
+  font-family: "IBM Plex Sans", -apple-system, "Segoe UI", Roboto, sans-serif;
+  background: var(--lx-cream);
+  color: var(--lx-text);
+}
+
+/* ---------- header ---------- */
+#header {
+  background: var(--lx-ink);
+  color: var(--lx-cream);
+  border-bottom: 3px solid var(--lx-amber);
+}
+#branding h1,
+#branding h1 a:link,
+#branding h1 a:visited {
+  font-family: "Big Shoulders", "Arial Narrow", sans-serif;
+  font-weight: 700;
+  letter-spacing: .02em;
+  color: var(--lx-cream);
+}
+#branding h1 .lx-accent { color: var(--lx-amber); }
+#user-tools { color: #a7a395; }
+#user-tools a:link,
+#user-tools a:visited { color: var(--lx-cream); border-bottom-color: rgba(241,236,227,.35); }
+#user-tools a:hover { color: var(--lx-amber); border-bottom-color: var(--lx-amber); }
+
+/* ---------- breadcrumbs ---------- */
+div.breadcrumbs {
+  background: var(--lx-ink-2);
+  color: #a7a395;
+  border-bottom: 1px solid rgba(241,236,227,.12);
+}
+div.breadcrumbs a { color: var(--lx-cream); }
+div.breadcrumbs a:hover { color: var(--lx-amber); }
+
+/* ---------- links ---------- */
+a:link, a:visited { color: var(--lx-rust); }
+a:hover { color: var(--lx-rust-dark); }
+a:focus { outline: 2px solid var(--lx-amber); outline-offset: 1px; }
+
+/* ---------- module / section headers ---------- */
+.module h2, .module caption,
+.inline-group h2 {
+  background: var(--lx-ink);
+  color: var(--lx-cream);
+  font-family: "Big Shoulders", "Arial Narrow", sans-serif;
+  font-weight: 700;
+  letter-spacing: .02em;
+  text-transform: uppercase;
+}
+.module {
+  background: #fff;
+  border: 1px solid var(--lx-line);
+}
+.module h3 { color: var(--lx-text); }
+fieldset.module { border-top: 3px solid var(--lx-amber); }
+.form-row { border-bottom-color: var(--lx-line); }
+
+/* ---------- buttons ---------- */
+.button, input[type=submit], input[type=button], .submit-row input, a.button {
+  background: var(--lx-slate);
+  color: #fff;
+  border-radius: 0;
+  border: 1px solid transparent;
+  font-weight: 600;
+  text-transform: none;
+}
+.button:hover, input[type=submit]:hover, input[type=button]:hover,
+.submit-row input:hover, a.button:hover { background: var(--lx-ink); }
+.button.default, input[type=submit].default, .submit-row input.default {
+  background: var(--lx-rust);
+  color: #fff;
+}
+.button.default:hover, input[type=submit].default:hover, .submit-row input.default:hover {
+  background: var(--lx-rust-dark);
+}
+.submit-row { background: var(--lx-cream-2); border: 1px solid var(--lx-line); border-radius: 0; }
+.submit-row a.deletelink { background: #b23b2c; color: #fff; border-radius: 0; }
+.submit-row a.deletelink:hover { background: #8f2c20; }
+
+/* object tools (Add +, History, View on site) */
+.object-tools a:link, .object-tools a:visited {
+  background: var(--lx-ink);
+  border-radius: 0;
+  text-transform: none;
+  letter-spacing: .01em;
+}
+.object-tools a:hover { background: var(--lx-rust); }
+.object-tools a.addlink { background: var(--lx-rust); }
+.object-tools a.addlink:hover { background: var(--lx-rust-dark); }
+
+/* ---------- changelist ---------- */
+#changelist table thead th {
+  background: var(--lx-cream-2);
+  border-bottom: 1px solid var(--lx-line);
+}
+#changelist table thead th a:link,
+#changelist table thead th a:visited { color: var(--lx-text); }
+#changelist-filter {
+  background: var(--lx-cream-2);
+  border-left: 1px solid var(--lx-line);
+}
+#changelist-filter h2 {
+  background: var(--lx-ink);
+  color: var(--lx-cream);
+  font-family: "Big Shoulders", "Arial Narrow", sans-serif;
+  text-transform: uppercase;
+}
+#changelist-filter li.selected a { color: var(--lx-rust); }
+#changelist .paginator .this-page {
+  background: var(--lx-rust);
+  padding: 2px 6px;
+  color: #fff;
+}
+tr.selected, .row-form-errors { background: #fbf1ec; }
+#changelist table tbody tr:hover { background: var(--lx-paper); }
+
+/* ---------- dashboard app list ---------- */
+.dashboard #content { max-width: 100%; }
+.dashboard .module table th { width: auto; }
+.dashboard .module caption a:link,
+.dashboard .module caption a:visited { color: var(--lx-cream); }
+tr .addlink, .addlink { }
+a.addlink:link, a.addlink:visited { color: var(--lx-rust); }
+a.changelink:link, a.changelink:visited { color: var(--lx-muted); }
+
+/* ---------- messages / notes ---------- */
+ul.messagelist li { border-radius: 0; }
+ul.messagelist li.success { background: #e4ede3 url(../img/icon-yes.svg) 10px 12px no-repeat; }
+.errornote, ul.errorlist li { background: #f6ece7; border-color: var(--lx-rust); border-radius: 0; color: var(--lx-rust-dark); }
+
+/* ---------- inputs ---------- */
+input[type=text], input[type=password], input[type=email], input[type=url],
+input[type=number], input[type=tel], textarea, select, .vTextField {
+  border-radius: 0;
+  border: 1px solid var(--lx-line);
+}
+input:focus, textarea:focus, select:focus { border-color: var(--lx-rust); outline: 0; }
+.help, p.help, div.help { color: var(--lx-muted); }
+
+/* ---------- selector (m2m) & calendar accents ---------- */
+.selector-chosen h2 { background: var(--lx-rust); }
+.calendar td.selected a { background: var(--lx-rust); }
+.calendar caption, .calendarbox h2 { background: var(--lx-amber-dark); }
+
+/* ---------- login ---------- */
+body.login #header { border-bottom: 3px solid var(--lx-amber); }
+.login #container {
+  border: 1px solid var(--lx-line);
+  box-shadow: none;
+  background: #fff;
+}
+.login #content-main { }
+.login .submit-row input { width: 100%; }

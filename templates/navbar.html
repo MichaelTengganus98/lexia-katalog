@@ -1,15 +1,21 @@
 {% load static %}
-<nav class="site-nav" id="siteNav">
-  <a href="{% url 'home' %}" class="logo">LEXIA<span>MACHINERY</span></a>
-  <button class="nav-toggle" type="button" aria-label="Menu" aria-expanded="false" onclick="document.getElementById('siteNav').classList.toggle('open')">
-    <span></span><span></span><span></span>
-  </button>
-  <div class="nav-links">
-    <a href="{% url 'home' %}"{% if request.path == '/' %} class="is-active"{% endif %}>Beranda</a>
-    <a href="{% url 'katalog:all-catalog' %}"{% if '/katalog' in request.path or '/mesin/' in request.path %} class="is-active"{% endif %}>Katalog</a>
-    <a href="{% url 'blog:list' %}"{% if '/blog' in request.path %} class="is-active"{% endif %}>Blog</a>
-    <a href="{% url 'about' %}"{% if '/contact' in request.path %} class="is-active"{% endif %}>Tentang Kami</a>
-    <a href="{% url 'about' %}">Hubungi Kami</a>
-    <a href="https://wa.me/6285275103333" target="_blank" rel="noopener" class="nav-cta">Konsultasi Gratis</a>
+<header class="site-header" id="siteHeader">
+  <div class="wrap">
+    <a href="{% url 'home' %}" class="logo">LEXIA<span class="accent">MACHINERY</span></a>
+    <button class="nav-toggle" type="button" aria-label="Menu" aria-expanded="false"
+            onclick="var h=document.getElementById('siteHeader');var o=h.classList.toggle('open');this.setAttribute('aria-expanded',o);">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-wrap">
+      <nav class="main-nav">
+        <a href="{% url 'home' %}"{% if request.path == '/' %} class="active"{% endif %}>Beranda</a>
+        <a href="{% url 'katalog:all-catalog' %}"{% if '/katalog' in request.path or '/mesin/' in request.path %} class="active"{% endif %}>Katalog</a>
+        <a href="{% url 'blog:list' %}"{% if '/blog' in request.path %} class="active"{% endif %}>Blog</a>
+        <a href="{% url 'about' %}"{% if '/contact' in request.path %} class="active"{% endif %}>Hubungi Kami</a>
+      </nav>
+      <div class="header-cta">
+        <a href="https://wa.me/6285275103333" target="_blank" rel="noopener" class="btn btn-primary btn-sm">Konsultasi Gratis</a>
+      </div>
+    </div>
   </div>
-</nav>
+</header>

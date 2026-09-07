@@ -73,6 +73,7 @@ INSTALLED_APPS = [
     'page',
     'seo',
     'blog',
+    'panel',
     'django_cleanup',
     'sorl.thumbnail',
 ]

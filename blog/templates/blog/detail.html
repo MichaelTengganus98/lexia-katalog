@@ -2,15 +2,18 @@
 {% load thumbnail %}
 
 {% block content %}
-<section class="page-hero">
-  <div class="inner">
-    <div class="breadcrumb">
-      <a href="{% url 'home' %}">Beranda</a><span>/</span>
-      <a href="{% url 'blog:list' %}">Blog</a><span>/</span>
-      {{ post.title }}
-    </div>
+<div class="breadcrumb-bar">
+  <div class="wrap">
+    <a href="{% url 'home' %}">Beranda</a><span class="sep">/</span>
+    <a href="{% url 'blog:list' %}">Blog</a><span class="sep">/</span>
+    <span class="current">{{ post.title }}</span>
+  </div>
+</div>
+
+<section class="page-title">
+  <div class="wrap">
     <h1>{{ post.title }}</h1>
-    <p class="lead">
+    <p class="desc">
       {% if not post.is_live %}<strong style="color:var(--amber)">[DRAF] </strong>{% endif %}
       {% if post.published_at %}{{ post.published_at|date:"j F Y" }}{% endif %}
       {% if post.author and post.author.get_full_name %} &middot; {{ post.author.get_full_name }}{% endif %}
@@ -33,7 +36,12 @@
     {{ post.body|safe }}
   </div>
 
-  {% if post.related_category %}
+  {% if post.cta_label and post.cta_url %}
+    <div class="article-cta">
+      <span>Tertarik dengan mesinnya?</span>
+      <a class="btn btn-primary" href="{{ post.cta_url }}">{{ post.cta_label }} &rarr;</a>
+    </div>
+  {% elif post.related_category %}
     <div class="article-cta">
       <span>Tertarik dengan mesinnya?</span>
       <a class="btn btn-primary" href="{{ post.related_category.get_absolute_url }}">
@@ -46,24 +54,30 @@
 </article>
 
 {% if related_posts %}
-<section class="section paper-dim">
-  <div class="section-head"><h2>Artikel lainnya</h2></div>
-  <div class="post-grid">
-    {% for p in related_posts %}
-      <a class="post-card" href="{{ p.get_absolute_url }}">
-        <div class="post-cover">
-          {% if p.cover_image %}
-            {% thumbnail p.cover_image "560x360" crop="center" as im %}
-              <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" loading="lazy" alt="{{ p.title }}">
-            {% endthumbnail %}
-          {% else %}<span>Lexia Machinery</span>{% endif %}
-        </div>
-        <div class="post-body">
-          <h2>{{ p.title }}</h2>
-          <div class="post-meta">{% if p.published_at %}{{ p.published_at|date:"j M Y" }} &middot; {% endif %}{{ p.reading_time }} mnt baca</div>
-        </div>
-      </a>
-    {% endfor %}
+<section class="section bg-alt">
+  <div class="wrap">
+    <div class="section-head"><h2>Artikel lainnya</h2></div>
+    <div class="blog-grid">
+      {% for p in related_posts %}
+        <a class="card blog-card" href="{{ p.get_absolute_url }}">
+          <div class="card-photo">
+            {% if p.cover_image %}
+              {% thumbnail p.cover_image "560x360" crop="center" as im %}
+                <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" loading="lazy" alt="{{ p.title }}">
+              {% endthumbnail %}
+            {% else %}Lexia Machinery{% endif %}
+          </div>
+          <div class="card-body">
+            <span class="blog-tag">{{ p.get_tag_display }}</span>
+            <h3>{{ p.title }}</h3>
+            <div class="blog-meta">
+              <span>{% if p.published_at %}{{ p.published_at|date:"j M Y" }} &middot; {% endif %}{{ p.reading_time }} mnt baca</span>
+              <span class="read">Baca &rarr;</span>
+            </div>
+          </div>
+        </a>
+      {% endfor %}
+    </div>
   </div>
 </section>
 {% endif %}

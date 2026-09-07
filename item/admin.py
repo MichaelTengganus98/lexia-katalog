@@ -4,16 +4,24 @@ from .models import Item
 
 
 class ItemAdmin(admin.ModelAdmin):
-    list_display = ("name", "Jenis", "model_code", "favorite", "availability", "noindex")
+    list_display = ("name", "Jenis", "model_code", "feature_rank", "favorite", "availability", "noindex")
+    list_editable = ("feature_rank",)
     list_filter = ("Jenis", "favorite", "availability", "noindex")
     search_fields = ("name", "model_code", "description")
+    autocomplete_fields = ("replacement",)
     readonly_fields = ("dateTime", "updated")
     fieldsets = (
         (None, {
-            "fields": ("Jenis", "name", "model_code", "brand", "favorite"),
+            "fields": ("Jenis", "name", "model_code", "brand"),
+        }),
+        ("Tampil di beranda", {
+            "description": "Bagian \"Produk unggulan\" di beranda. Isi urutan 1-5 "
+                           "(1 = kartu besar). \"Favorite\" dipakai sebagai cadangan "
+                           "bila slot 1-5 belum terisi penuh.",
+            "fields": ("feature_rank", "favorite"),
         }),
         ("Harga & ketersediaan", {
-            "fields": ("price", "price_on_request", "availability"),
+            "fields": ("price", "price_on_request", "availability", "replacement"),
         }),
         ("Konten", {
             "fields": ("summary", "description", "specification", "urlVideo"),

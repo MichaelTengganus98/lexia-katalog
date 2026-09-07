@@ -1,0 +1,62 @@
+{% load static %}<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>{{ title }} | Lexia Admin</title>
+<link rel="icon" href="{% static 'img/favicon.png' %}" type="image/x-icon">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders:wght@600;700;800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/panel.css' %}">
+</head>
+<body>
+<div class="admin-shell">
+  <aside class="admin-side">
+    <div class="admin-logo">LEXIA<span class="accent">ADMIN</span></div>
+
+    <div class="admin-group-label">Utama</div>
+    <nav class="admin-nav">
+      <a href="{% url 'panel:dashboard' %}" class="{% if section == 'dashboard' %}active{% endif %}">Dashboard</a>
+    </nav>
+
+    <div class="admin-group-label">Konten</div>
+    <nav class="admin-nav">
+      <a href="{% url 'panel:product_list' %}" class="{% if section == 'produk' %}active{% endif %}">Produk</a>
+      <a href="{% url 'panel:post_list' %}" class="{% if section == 'blog' %}active{% endif %}">Blog</a>
+      <a href="/admin/page/category/">Kategori &amp; SEO <span class="ext">&#8599;</span></a>
+      <a href="/admin/homepage/brochure/">Brosur <span class="ext">&#8599;</span></a>
+    </nav>
+
+    <div class="admin-group-label">Lainnya</div>
+    <nav class="admin-nav">
+      <a href="/admin/about/contactmessage/">Pesan Masuk <span class="ext">&#8599;</span></a>
+      <a href="/admin/seo/sitesettings/">Pengaturan Situs <span class="ext">&#8599;</span></a>
+      <a href="/admin/auth/user/">Pengguna <span class="ext">&#8599;</span></a>
+    </nav>
+  </aside>
+
+  <main class="admin-main">
+    <div class="admin-topbar">
+      <h1>{{ title }}</h1>
+      <div class="admin-user">
+        <b>{{ request.user.get_full_name|default:request.user.username }}</b>
+        <a href="{% url 'home' %}" target="_blank" rel="noopener">Lihat situs &#8599;</a>
+        <a href="/admin/logout/">Keluar</a>
+      </div>
+    </div>
+
+    <div class="admin-body">
+      {% if messages %}
+        {% for m in messages %}
+          <div class="msg msg-{{ m.tags|default:'info' }}">{{ m }}</div>
+        {% endfor %}
+      {% endif %}
+      {% block body %}{% endblock %}
+    </div>
+  </main>
+</div>
+{% block script %}{% endblock %}
+</body>
+</html>

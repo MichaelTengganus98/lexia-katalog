@@ -23,6 +23,17 @@ class Item(SeoModel):
     Jenis = models.ForeignKey(Category, on_delete=models.CASCADE)
     name = models.CharField("Nama barang", max_length=255, unique=True)
     favorite = models.BooleanField("Favorite", blank=True, default=False)
+    feature_rank = models.PositiveSmallIntegerField(
+        "Urutan unggulan di beranda", blank=True, null=True,
+        help_text="1 = kartu besar (hero), 2-5 = kartu standar di bagian "
+                  "\"Produk unggulan\". Kosongkan bila tidak ditampilkan di beranda.",
+    )
+    replacement = models.ForeignKey(
+        "self", blank=True, null=True, on_delete=models.SET_NULL,
+        related_name="replaces", verbose_name="Produk pengganti",
+        help_text="Dipakai bila ketersediaan = \"Tidak diproduksi lagi\". Halaman "
+                  "produk ini akan menampilkan tautan ke produk pengganti.",
+    )
     description = models.TextField("Deskripsi barang", blank=True, null=True)
     picture1 = models.ImageField("Foto barang Utama", upload_to=name_upload, blank=False)
     picture2 = models.ImageField("Foto barang 2", upload_to=name_upload, blank=True, null=True)

@@ -1,0 +1,138 @@
+{% extends "panel/base.html" %}
+
+{% block body %}
+<div class="admin-breadcrumb"><a href="{% url 'panel:post_list' %}">Blog</a> / {{ title }}</div>
+
+<div class="tut">
+  <span class="tut-mark">?</span>
+  <div>{% if instance %}Anda sedang mengedit <b>{{ instance.title }}</b>.{% else %}Tulis artikel dari atas ke bawah.{% endif %}
+    Isi <b>Judul</b>, <b>Ringkasan</b>, dan <b>Isi artikel</b>. Tombol di bawah menyimpan sebagai
+    <b>Terbit</b> atau <b>Draf</b>.</div>
+</div>
+
+<form method="post" enctype="multipart/form-data" class="form-shell" novalidate>
+  {% csrf_token %}
+  {% if form.non_field_errors %}<div class="msg msg-error">{{ form.non_field_errors }}</div>{% endif %}
+
+  <div class="form-card">
+    <div class="form-card-head"><h3>Judul &amp; Kategori</h3></div>
+    <div class="form-card-body">
+      {% include "panel/_field.html" with field=form.title %}
+      <div class="field-row-2">
+        {% include "panel/_field.html" with field=form.tag %}
+        {% include "panel/_field.html" with field=form.slug %}
+      </div>
+      {% include "panel/_field.html" with field=form.related_category %}
+    </div>
+  </div>
+
+  <div class="form-card">
+    <div class="form-card-head"><h3>Ringkasan</h3><p>Muncul di kartu artikel, sebelum orang membuka artikel penuh.</p></div>
+    <div class="form-card-body">
+      {% include "panel/_field.html" with field=form.excerpt %}
+    </div>
+  </div>
+
+  <div class="form-card">
+    <div class="form-card-head"><h3>Foto Sampul</h3></div>
+    <div class="form-card-body">
+      {% include "panel/_upload.html" with field=form.cover_image dim="1200 &times; 750 px" %}
+    </div>
+  </div>
+
+  <div class="form-card">
+    <div class="form-card-head"><h3>Isi Artikel</h3><p>Boleh berisi HTML sederhana (h2, h3, p, ul, a, blockquote). Pilih teks lalu klik tombol untuk memformat.</p></div>
+    <div class="form-card-body">
+      <div class="editor-toolbar" data-editor="{{ form.body.id_for_label }}">
+        <button type="button" data-tag="b" title="Tebal"><b>B</b></button>
+        <button type="button" data-tag="i" title="Miring"><i>I</i></button>
+        <button type="button" data-tag="h2" title="Sub-judul">H2</button>
+        <button type="button" data-tag="h3" title="Sub-judul kecil">H3</button>
+        <button type="button" data-tag="ul" title="Daftar">&#8801;</button>
+        <button type="button" data-tag="a" title="Tautan">&#128279;</button>
+      </div>
+      {{ form.body }}
+      {% for e in form.body.errors %}<span class="field-error">{{ e }}</span>{% endfor %}
+    </div>
+  </div>
+
+  <div class="form-card">
+    <div class="form-card-head"><h3>Tombol di Akhir Artikel</h3><p>Tombol di bagian bawah artikel. Kosongkan untuk memakai tombol otomatis dari kategori terkait.</p></div>
+    <div class="form-card-body">
+      <div class="link-picker">
+        <div class="row">
+          {% include "panel/_field.html" with field=form.cta_label %}
+          {% include "panel/_field.html" with field=form.cta_url %}
+        </div>
+        <div class="link-preview" id="ctaPreview">
+          <span>Tombol:</span> <b id="ctaLabelP">{{ form.cta_label.value|default:"(otomatis dari kategori)" }}</b>
+          <span class="arrow">&rarr;</span> <span id="ctaUrlP">{{ form.cta_url.value|default:"" }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <button type="submit" name="save_publish" class="btn btn-primary">Publikasikan Artikel</button>
+    <button type="submit" name="save_draft" class="btn btn-outline">Simpan sebagai Draf</button>
+    {% if instance %}
+      <a href="{{ instance.get_absolute_url }}" target="_blank" rel="noopener" class="btn btn-outline">Lihat di website &#8599;</a>
+      <button type="submit" form="delForm" class="btn btn-danger to-right"
+              onclick="return confirm('Hapus artikel ini? Tindakan ini tidak bisa dibatalkan.');">Hapus Artikel</button>
+    {% endif %}
+  </div>
+</form>
+
+{% if instance %}
+<form id="delForm" method="post" action="{% url 'panel:post_delete' instance.pk %}">{% csrf_token %}</form>
+{% endif %}
+{% endblock %}
+
+{% block script %}
+<script>
+(function () {
+  // slug auto-fill from title (only while slug empty / untouched on a new article)
+  var title = document.getElementById('{{ form.title.id_for_label }}');
+  var slug = document.getElementById('{{ form.slug.id_for_label }}');
+  if (title && slug) {
+    var touched = slug.value.length > 0;
+    slug.addEventListener('input', function () { touched = true; });
+    title.addEventListener('input', function () {
+      if (touched) return;
+      slug.value = title.value.toLowerCase().trim()
+        .replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-').slice(0, 220);
+    });
+  }
+
+  // minimal wrap-selection formatting for the body textarea
+  var bar = document.querySelector('.editor-toolbar');
+  var body = document.getElementById('{{ form.body.id_for_label }}');
+  if (bar && body) {
+    bar.addEventListener('click', function (e) {
+      var btn = e.target.closest('button[data-tag]'); if (!btn) return;
+      var tag = btn.getAttribute('data-tag');
+      var s = body.selectionStart, en = body.selectionEnd;
+      var sel = body.value.slice(s, en) || 'teks';
+      var out;
+      if (tag === 'ul') out = '<ul>\n  <li>' + sel + '</li>\n</ul>';
+      else if (tag === 'a') { var href = prompt('Alamat tautan (path atau URL):', '/katalog/') || '#'; out = '<a href="' + href + '">' + sel + '</a>'; }
+      else if (tag === 'h2' || tag === 'h3') out = '<' + tag + '>' + sel + '</' + tag + '>';
+      else out = '<' + tag + '>' + sel + '</' + tag + '>';
+      body.setRangeText(out, s, en, 'end');
+      body.focus();
+    });
+  }
+
+  // CTA preview
+  var cl = document.getElementById('{{ form.cta_label.id_for_label }}');
+  var cu = document.getElementById('{{ form.cta_url.id_for_label }}');
+  var clP = document.getElementById('ctaLabelP'), cuP = document.getElementById('ctaUrlP');
+  function upd() {
+    clP.textContent = (cl && cl.value) ? cl.value : '(otomatis dari kategori)';
+    cuP.textContent = (cu && cu.value) ? cu.value : '';
+  }
+  if (cl) cl.addEventListener('input', upd);
+  if (cu) cu.addEventListener('input', upd);
+})();
+</script>
+{% endblock %}

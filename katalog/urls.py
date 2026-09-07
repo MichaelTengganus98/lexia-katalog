@@ -15,6 +15,7 @@ from about.views import about
 from seo.sitemaps import sitemaps
 
 urlpatterns = [
+    path('panel/', include('panel.urls', namespace="panel")),
     path('admin/', admin.site.urls),
     path('mesin/', include('item.urls', namespace="item")),
     path('katalog/', include('page.urls', namespace="katalog")),

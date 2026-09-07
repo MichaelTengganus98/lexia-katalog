@@ -5,8 +5,8 @@ from .models import Post
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    list_display = ("title", "status", "published_at", "author", "related_category")
-    list_filter = ("status", "related_category", "author")
+    list_display = ("title", "tag", "status", "published_at", "author", "related_category")
+    list_filter = ("status", "tag", "related_category", "author")
     search_fields = ("title", "excerpt", "body")
     prepopulated_fields = {"slug": ("title",)}
     date_hierarchy = "published_at"
@@ -14,7 +14,7 @@ class PostAdmin(admin.ModelAdmin):
     readonly_fields = ("created", "updated")
     fieldsets = (
         (None, {
-            "fields": ("title", "slug", "author", "related_category"),
+            "fields": ("title", "slug", "tag", "author", "related_category"),
         }),
         ("Konten", {
             "fields": ("cover_image", "excerpt", "body"),

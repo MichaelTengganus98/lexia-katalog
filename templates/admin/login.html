@@ -1,7 +1,5 @@
 {% extends 'admin/login.html' %}
 
 {% block branding %}
-    <div class="head">
-        <h1 id="name">Lexia Admin Site</h1>
-    </div>
+    <h1 id="site-name"><a href="{% url 'admin:index' %}">LEXIA<span class="lx-accent">ADMIN</span></a></h1>
 {% endblock %}

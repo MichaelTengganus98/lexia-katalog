@@ -1,0 +1,86 @@
+{% load static %}
+<div class="lx-dash">
+  <div class="lx-tut">
+    <span class="lx-tut-mark">?</span>
+    <div>Ringkasan cepat isi website. Untuk mengubah produk buka <b>Item</b>, untuk artikel buka <b>Artikel</b>,
+      dan <b>Pesan Masuk</b> berisi kiriman formulir "Hubungi Kami" yang perlu ditindaklanjuti.</div>
+  </div>
+
+  <div class="lx-stat-grid">
+    {% for label, value, flag in stats %}
+      <div class="lx-stat{% if flag %} is-attention{% endif %}">
+        <div class="lx-stat-num">{{ value }}</div>
+        <div class="lx-stat-label">{{ label }}</div>
+      </div>
+    {% endfor %}
+  </div>
+
+  <div class="lx-dash-cols">
+    <div class="lx-panel">
+      <div class="lx-panel-head">Produk terbaru diubah</div>
+      <table class="lx-table">
+        <thead><tr><th>Nama produk</th><th>Kategori</th><th>Diperbarui</th></tr></thead>
+        <tbody>
+          {% for it in recent_items %}
+            <tr>
+              <td><a href="{% url 'admin:item_item_change' it.pk %}">{{ it.name }}</a></td>
+              <td>{{ it.Jenis.jenis }}</td>
+              <td>{{ it.updated|date:"j M Y, H:i" }}</td>
+            </tr>
+          {% empty %}
+            <tr><td colspan="3">Belum ada produk.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="lx-panel">
+      <div class="lx-panel-head">Pesan masuk terbaru</div>
+      <table class="lx-table">
+        <thead><tr><th>Nama</th><th>Status</th><th>Masuk</th></tr></thead>
+        <tbody>
+          {% for m in recent_messages %}
+            <tr>
+              <td><a href="{% url 'admin:about_contactmessage_change' m.pk %}">{{ m.name }}</a></td>
+              <td>{{ m.get_status_display }}</td>
+              <td>{{ m.created|date:"j M Y, H:i" }}</td>
+            </tr>
+          {% empty %}
+            <tr><td colspan="3">Belum ada pesan masuk.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<style>
+  .lx-dash { margin-bottom: 28px; }
+  .lx-tut {
+    display: flex; gap: 14px; align-items: flex-start;
+    background: #fbf3e4; border: 1px solid #e9d6a8; border-left: 3px solid #b9832a;
+    padding: 14px 18px; margin-bottom: 20px; font-size: 13px; color: #5a4a20; line-height: 1.6;
+  }
+  .lx-tut-mark { font-family: "Big Shoulders","Arial Narrow",sans-serif; font-size: 20px; color: #b9832a; line-height: 1; }
+  .lx-stat-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin-bottom: 22px; }
+  .lx-stat { background: #fff; border: 1px solid #d8d3c6; border-top: 3px solid #dfa63d; padding: 16px 18px; }
+  .lx-stat.is-attention { border-top-color: #c1502e; }
+  .lx-stat-num { font-family: "Big Shoulders","Arial Narrow",sans-serif; font-size: 32px; font-weight: 700; color: #1b1c20; line-height: 1; }
+  .lx-stat.is-attention .lx-stat-num { color: #9c3e22; }
+  .lx-stat-label { font-size: 11px; letter-spacing: .04em; text-transform: uppercase; color: #6b675c; margin-top: 6px; }
+  .lx-dash-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .lx-panel { background: #fff; border: 1px solid #d8d3c6; }
+  .lx-panel-head {
+    padding: 12px 16px; border-bottom: 1px solid #d8d3c6; font-weight: 700; font-size: 13px;
+    background: #14151a; color: #f1ece3;
+    font-family: "Big Shoulders","Arial Narrow",sans-serif; text-transform: uppercase; letter-spacing: .02em;
+  }
+  .lx-table { width: 100%; border-collapse: collapse; }
+  .lx-table th { text-align: left; font-size: 10.5px; letter-spacing: .04em; text-transform: uppercase; color: #6b675c; padding: 9px 16px; border-bottom: 1px solid #d8d3c6; }
+  .lx-table td { padding: 9px 16px; font-size: 13px; border-bottom: 1px solid #ede9df; }
+  .lx-table tr:last-child td { border-bottom: none; }
+  @media (max-width: 1024px) {
+    .lx-stat-grid { grid-template-columns: repeat(2, 1fr); }
+    .lx-dash-cols { grid-template-columns: 1fr; }
+  }
+</style>

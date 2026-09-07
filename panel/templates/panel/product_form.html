@@ -1,0 +1,181 @@
+{% extends "panel/base.html" %}
+
+{% block body %}
+<div class="admin-breadcrumb"><a href="{% url 'panel:product_list' %}">Produk</a> / {{ title }}</div>
+
+<div class="tut">
+  <span class="tut-mark">?</span>
+  <div>{% if instance %}Anda sedang mengedit <b>{{ instance.name }}</b>. Perubahan tampil di website setelah
+    Anda menekan <b>Simpan Produk</b>.{% else %}Isi data produk dari atas ke bawah.{% endif %}
+    Field bertanda <span class="req">*</span> wajib diisi.</div>
+</div>
+
+<form method="post" enctype="multipart/form-data" class="form-shell" novalidate>
+  {% csrf_token %}
+  {% if form.non_field_errors %}<div class="msg msg-error">{{ form.non_field_errors }}</div>{% endif %}
+
+  <div class="form-card">
+    <div class="form-card-head"><h3>Informasi Dasar</h3><p>Nama, kategori, dan deskripsi produk.</p></div>
+    <div class="form-card-body">
+      {% include "panel/_field.html" with field=form.name %}
+      <div class="field-row-2">
+        {% include "panel/_field.html" with field=form.Jenis %}
+        {% include "panel/_field.html" with field=form.model_code %}
+      </div>
+      {% include "panel/_field.html" with field=form.summary %}
+      {% include "panel/_field.html" with field=form.description %}
+    </div>
+  </div>
+
+  <div class="form-card">
+    <div class="form-card-head"><h3>Foto Produk</h3><p>Foto utama tampil besar di halaman detail dan menjadi kartu di katalog / beranda.</p></div>
+    <div class="form-card-body">
+      <div class="thumb-note">
+        <div class="box"><div class="t">Foto #1 unggulan (kartu besar di beranda)</div><div class="dim">1600 &times; 1200 px</div><div class="d">Rasio 4:3 &middot; maks 2 MB</div></div>
+        <div class="box"><div class="t">Kartu katalog &amp; unggulan standar</div><div class="dim">1000 &times; 750 px</div><div class="d">Rasio 4:3 &middot; maks 1 MB</div></div>
+      </div>
+      {% for f in form %}
+        {% if f.name == "picture1" %}{% include "panel/_upload.html" with field=f dim="1600 &times; 1200 px" %}
+        {% elif f.name == "picture2" or f.name == "picture3" or f.name == "picture4" %}{% include "panel/_upload.html" with field=f dim="1000 &times; 750 px" %}
+        {% endif %}
+      {% endfor %}
+      <details class="more-photos">
+        <summary>+ Slot foto lainnya (5&ndash;10)</summary>
+        {% for f in form %}
+          {% if f.name == "picture5" or f.name == "picture6" or f.name == "picture7" or f.name == "picture8" or f.name == "picture9" or f.name == "picture10" %}
+            {% include "panel/_upload.html" with field=f dim="1000 &times; 750 px" %}
+          {% endif %}
+        {% endfor %}
+      </details>
+    </div>
+  </div>
+
+  <div class="form-card">
+    <div class="form-card-head"><h3>Video Produk</h3><p>Sematkan video demo dari YouTube — tidak perlu unggah file.</p></div>
+    <div class="form-card-body">
+      <div class="toggle-box">
+        <div class="checkbox-row">
+          <input type="checkbox" id="videoToggle" {% if form.urlVideo.value %}checked{% endif %}>
+          <label for="videoToggle">Sertakan video demo produk dari YouTube</label>
+        </div>
+        <div class="toggle-fields" id="videoFields" {% if not form.urlVideo.value %}hidden{% endif %}>
+          {% include "panel/_field.html" with field=form.urlVideo %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-card">
+    <div class="form-card-head"><h3>Spesifikasi Teknis</h3><p>Tampil sebagai tabel spesifikasi di halaman detail produk. Satu baris = satu spesifikasi.</p></div>
+    <div class="form-card-body">
+      <div class="spec-rows" id="specRows"></div>
+      <button type="button" class="btn btn-outline btn-sm" id="addSpecRow">+ Tambah baris spesifikasi</button>
+      <div class="field" style="margin-top:16px">
+        <label for="{{ form.specification.id_for_label }}">Atau tulis manual (format <code>Label: nilai</code> per baris)</label>
+        {{ form.specification }}
+        {% for e in form.specification.errors %}<span class="field-error">{{ e }}</span>{% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <div class="form-card">
+    <div class="form-card-head"><h3>Ketersediaan</h3><p>Menentukan label yang tampil di katalog dan halaman detail.</p></div>
+    <div class="form-card-body">
+      <div class="avail-options" id="availOptions">
+        {% for radio in form.availability %}
+          <label class="avail-card" data-val="{{ radio.choice_value }}">
+            {{ radio.tag }}
+            <span class="t">{{ radio.choice_label }}</span>
+          </label>
+        {% endfor %}
+      </div>
+      {% for e in form.availability.errors %}<span class="field-error">{{ e }}</span>{% endfor %}
+
+      <div class="discontinued-box" id="discBox" {% if form.availability.value != "Discontinued" %}hidden{% endif %}>
+        <label for="{{ form.replacement.id_for_label }}">Arahkan pengunjung ke produk pengganti</label>
+        {{ form.replacement }}
+        <span class="field-hint">Halaman produk lama akan menampilkan pesan "produk sudah tidak diproduksi" dengan tautan ke produk yang dipilih di sini.</span>
+        {% for e in form.replacement.errors %}<span class="field-error">{{ e }}</span>{% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <div class="form-card">
+    <div class="form-card-head"><h3>Tampilkan di Beranda</h3><p>Atur apakah produk ini masuk daftar "Produk unggulan" dan di urutan berapa.</p></div>
+    <div class="form-card-body">
+      {% include "panel/_field.html" with field=form.feature_rank %}
+      <span class="field-hint">Anda juga bisa mengatur urutan dengan cara <b>seret</b> di halaman <a href="{% url 'panel:product_list' %}">Produk</a>.</span>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary">Simpan Produk</button>
+    <a href="{% url 'panel:product_list' %}" class="btn btn-outline">Batal</a>
+    {% if instance %}
+      <button type="submit" form="delForm" class="btn btn-danger to-right"
+              onclick="return confirm('Hapus produk ini? Tindakan ini tidak bisa dibatalkan.');">Hapus Produk</button>
+    {% endif %}
+  </div>
+</form>
+
+{% if instance %}
+<form id="delForm" method="post" action="{% url 'panel:product_delete' instance.pk %}">{% csrf_token %}</form>
+{% endif %}
+{% endblock %}
+
+{% block script %}
+<script>
+(function () {
+  // video toggle
+  var vt = document.getElementById('videoToggle'), vf = document.getElementById('videoFields');
+  if (vt && vf) vt.addEventListener('change', function () { vf.hidden = !vt.checked; });
+
+  // availability cards + discontinued box
+  var opts = document.getElementById('availOptions'), disc = document.getElementById('discBox');
+  function syncAvail() {
+    [].forEach.call(opts.querySelectorAll('.avail-card'), function (c) {
+      var input = c.querySelector('input');
+      c.classList.toggle('checked', input.checked);
+      if (input.checked && disc) disc.hidden = (c.getAttribute('data-val') !== 'Discontinued');
+    });
+  }
+  if (opts) { opts.addEventListener('change', syncAvail); syncAvail(); }
+
+  // spec rows editor <-> raw textarea
+  var raw = document.querySelector('.spec-raw');
+  var rows = document.getElementById('specRows');
+  var addBtn = document.getElementById('addSpecRow');
+  if (raw && rows) {
+    function addRow(label, value) {
+      var d = document.createElement('div');
+      d.className = 'spec-row-item';
+      d.innerHTML = '<input type="text" class="k" placeholder="Nama spesifikasi (mis. Lebar Max Kertas)">' +
+                    '<input type="text" class="v" placeholder="Nilai (mis. 530 mm)">' +
+                    '<button type="button" class="row-del" title="Hapus baris">&times;</button>';
+      d.querySelector('.k').value = label || '';
+      d.querySelector('.v').value = value || '';
+      rows.appendChild(d);
+    }
+    function serialize() {
+      var lines = [];
+      [].forEach.call(rows.querySelectorAll('.spec-row-item'), function (r) {
+        var k = r.querySelector('.k').value.trim(), v = r.querySelector('.v').value.trim();
+        if (k || v) lines.push(k + ': ' + v);
+      });
+      raw.value = lines.join('\n');
+    }
+    (raw.value || '').split(/\r?\n/).forEach(function (line) {
+      var m = line.match(/^\s*(.+?)\s*:\s*(.*)$/);
+      if (m) addRow(m[1], m[2]);
+    });
+    if (!rows.children.length) { addRow(); addRow(); }
+    rows.addEventListener('input', serialize);
+    rows.addEventListener('click', function (e) {
+      if (e.target.classList.contains('row-del')) { e.target.closest('.spec-row-item').remove(); serialize(); }
+    });
+    if (addBtn) addBtn.addEventListener('click', function () { addRow(); });
+    serialize();
+  }
+})();
+</script>
+{% endblock %}

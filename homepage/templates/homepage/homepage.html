@@ -5,108 +5,117 @@
 
 {% block content %}
 <section class="hero">
-  <div class="hero-text">
-    <div class="hero-eyebrow">Distributor Resmi &mdash; Medan &middot; Jakarta &middot; Seluruh Indonesia</div>
-    <h1>Mesin percetakan yang bekerja sekeras bisnis Anda</h1>
-    <p>Potong, laminating, jilid, dan finishing &mdash; satu distributor tepercaya untuk seluruh kebutuhan mesin percetakan dan photocopy Anda.</p>
-    <div class="hero-buttons">
-      <a href="{% url 'katalog:all-catalog' %}" class="btn btn-primary">Lihat Katalog</a>
-      <a href="https://wa.me/6285275103333" target="_blank" rel="noopener" class="btn btn-ghost">Hubungi Sales</a>
+  <div class="wrap">
+    <div>
+      <div class="kicker">Distributor Resmi &mdash; Medan &middot; Jakarta &middot; Seluruh Indonesia</div>
+      <h1>Mesin percetakan yang bekerja sekeras bisnis Anda</h1>
+      <p class="lede">Potong, laminating, jilid, dan finishing &mdash; satu distributor tepercaya untuk seluruh kebutuhan mesin percetakan dan photocopy Anda.</p>
+      <div class="hero-actions">
+        <a href="{% url 'katalog:all-catalog' %}" class="btn btn-primary">Lihat Katalog</a>
+        <a href="https://wa.me/6285275103333" target="_blank" rel="noopener" class="btn btn-outline-dark">Hubungi Sales</a>
+      </div>
+    </div>
+    <div class="hero-plate">
+      {% if hero_item %}
+        {% thumbnail hero_item.picture1 "760x620" crop="center" as im %}
+          <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}"
+               fetchpriority="high" alt="{{ hero_item.name }} — {{ hero_item.Jenis.jenis }}">
+        {% empty %}
+          <div class="photo-placeholder"><div class="icon">&#9881;</div>Foto hero belum tersedia</div>
+        {% endthumbnail %}
+        <span class="plate-mark">{{ hero_item.name|truncatechars:32|upper }}</span>
+      {% else %}
+        <div class="photo-placeholder"><div class="icon">&#9881;</div>Foto hero belum tersedia</div>
+      {% endif %}
     </div>
   </div>
-  <div class="hero-photo">
-    {% if hero_item %}
-      {% thumbnail hero_item.picture1 "760x620" crop="center" as im %}
-        <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}"
-             fetchpriority="high" alt="{{ hero_item.name }} — {{ hero_item.Jenis.jenis }}">
-      {% empty %}
-        <div class="photo-placeholder"><div class="icon">&#9881;</div>Foto hero belum tersedia</div>
-      {% endthumbnail %}
-    {% else %}
-      <div class="photo-placeholder"><div class="icon">&#9881;</div>Foto hero belum tersedia</div>
-    {% endif %}
-  </div>
 </section>
 
-<div class="hazard-strip"></div>
+<div class="hazard"></div>
 
 <section class="section">
-  <div class="section-head">
-    <h2>Kategori mesin</h2>
-    <p>{{ link_menu|length }} kategori, dari potong hingga jahit kawat &mdash; semua tersedia dengan stok siap kirim.</p>
-    <a class="link-more" href="{% url 'katalog:all-catalog' %}">Semua mesin &rarr;</a>
-  </div>
-  <div class="cat-grid">
-    {% for c in link_menu %}
-      <a class="cat-plate" href="{% url 'katalog:category' id=c.id slug=c.slug %}">
-        <div class="plate-label">{{ c.jenis }}</div>
-        <div class="plate-sub">{{ c.item_set.count }} model</div>
-      </a>
-    {% endfor %}
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Kategori mesin</h2>
+      <p class="note">{{ link_menu|length }} kategori, dari potong hingga jahit kawat &mdash; semua tersedia dengan stok siap kirim.</p>
+      <a class="link-more" href="{% url 'katalog:all-catalog' %}">Semua mesin &rarr;</a>
+    </div>
+    <div class="cat-grid">
+      {% for c in link_menu %}
+        <a class="cat-card" href="{% url 'katalog:category' id=c.id slug=c.slug %}">
+          <span class="name">{{ c.jenis }}</span>
+          <span class="count">{{ c.item_set.count }} model</span>
+        </a>
+      {% endfor %}
+    </div>
   </div>
 </section>
 
-<section class="section paper-dim">
-  <div class="section-head">
-    <h2>Produk unggulan</h2>
-    <p>Model favorit dan rilis terbaru dari katalog kami.</p>
-  </div>
-  <div class="prod-grid featured-layout">
-    {% for it in featured %}
-      <a class="prod-card{% if forloop.first %} featured{% endif %}" href="{% url 'item:mesin' id=it.id slug=it.slug %}">
-        <div class="prod-photo">
-          {% thumbnail it.picture1 "640x800" crop="center" as im %}
-            <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" loading="lazy"
-                 alt="{{ it.name }} — {{ it.Jenis.jenis }}">
-          {% empty %}Foto belum tersedia{% endthumbnail %}
-        </div>
-        <div class="prod-body">
-          <div class="prod-cat">{{ it.Jenis.jenis }}</div>
-          <h3>{{ it.name }}</h3>
-          {% for label, value in it.specification|specs:2 %}
-            <div class="spec-row"><span>{{ label }}</span><span>{{ value }}</span></div>
-          {% endfor %}
-          <div class="prod-cta">Pelajari lebih lanjut &rarr;</div>
-        </div>
-      </a>
-    {% endfor %}
+<section class="section bg-alt">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Produk unggulan</h2>
+      <p class="note">Model favorit dan rilis terbaru dari katalog kami.</p>
+    </div>
+    <div class="product-grid">
+      {% for it in featured %}
+        <a class="card{% if forloop.first %} span-tall{% endif %}" href="{% url 'item:mesin' id=it.id slug=it.slug %}">
+          <div class="card-photo">
+            {% thumbnail it.picture1 "640x800" crop="center" as im %}
+              <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" loading="lazy"
+                   alt="{{ it.name }} — {{ it.Jenis.jenis }}">
+            {% empty %}Foto belum tersedia{% endthumbnail %}
+          </div>
+          <div class="card-body">
+            <div class="prod-cat">{{ it.Jenis.jenis }}</div>
+            <h3>{{ it.name }}</h3>
+            {% for label, value in it.specification|specs:2 %}
+              <div class="spec-row"><span>{{ label }}</span><span class="val">{{ value }}</span></div>
+            {% endfor %}
+            <span class="card-link">Pelajari lebih lanjut &rarr;</span>
+          </div>
+        </a>
+      {% endfor %}
+    </div>
   </div>
 </section>
 
 {% if brochures %}
 <section class="section">
-  <div class="section-head">
-    <h2>Brosur &amp; katalog</h2>
-    <p>Unduh brosur produk kami untuk referensi lengkap spesifikasi &amp; harga.</p>
-  </div>
-  <div class="brochure-grid">
-    {% for b in brochures %}
-      <div class="brochure-card">
-        <div class="b-cover">
-          {% thumbnail b.picture "560x420" crop="center" as im %}
-            <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" loading="lazy" alt="{{ b.title }}">
-          {% endthumbnail %}
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Brosur &amp; katalog</h2>
+      <p class="note">Unduh brosur produk kami untuk referensi lengkap spesifikasi &amp; harga.</p>
+    </div>
+    <div class="brochure-grid">
+      {% for b in brochures %}
+        <div class="brochure-card">
+          <div class="b-cover">
+            {% thumbnail b.picture "560x420" crop="center" as im %}
+              <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" loading="lazy" alt="{{ b.title }}">
+            {% endthumbnail %}
+          </div>
+          <div class="b-body">
+            <h3>{{ b.title }}</h3>
+            {% if b.description %}<p>{{ b.description }}</p>{% endif %}
+            {% if b.download_url %}
+              <a class="btn btn-outline btn-sm" href="{{ b.download_url }}" target="_blank" rel="noopener"
+                 {% if b.file %}download{% endif %}>Unduh brosur</a>
+            {% endif %}
+          </div>
         </div>
-        <div class="b-body">
-          <h3>{{ b.title }}</h3>
-          {% if b.description %}<p>{{ b.description }}</p>{% endif %}
-          {% if b.download_url %}
-            <a class="btn btn-outline btn-sm" href="{{ b.download_url }}" target="_blank" rel="noopener"
-               {% if b.file %}download{% endif %}>Unduh brosur</a>
-          {% endif %}
-        </div>
-      </div>
-    {% endfor %}
+      {% endfor %}
+    </div>
   </div>
 </section>
 {% endif %}
 
-<section class="section graphite">
-  <div class="trust">
-    <div class="trust-stat"><div class="stat-num">15+</div><div class="stat-label">Tahun melayani industri percetakan</div></div>
-    <div class="trust-stat"><div class="stat-num">{{ item_count }}+</div><div class="stat-label">Model mesin tersedia</div></div>
-    <div class="trust-stat"><div class="stat-num">2</div><div class="stat-label">Kota, berkembang ke seluruh Indonesia</div></div>
-    <div class="trust-stat"><div class="stat-num">100%</div><div class="stat-label">Konsultasi &amp; dukungan langsung</div></div>
+<section class="stats-bar">
+  <div class="wrap">
+    <div class="stat"><div class="num">15+</div><div class="label">Tahun melayani industri percetakan</div></div>
+    <div class="stat"><div class="num">{{ item_count }}+</div><div class="label">Model mesin tersedia</div></div>
+    <div class="stat"><div class="num">2</div><div class="label">Kota, berkembang ke seluruh Indonesia</div></div>
+    <div class="stat"><div class="num">100%</div><div class="label">Konsultasi &amp; dukungan langsung</div></div>
   </div>
 </section>
 {% endblock %}

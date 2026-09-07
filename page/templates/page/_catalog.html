@@ -1,73 +1,92 @@
 {% load static %}
 {% load thumbnail %}
 {% load item_extras %}
-{% comment %}Shared catalog body: expects `item` (paginated page), `judul`, `link_menu`.{% endcomment %}
+{% comment %}Shared catalog body: expects `item` (paginated page), `judul`, `link_menu`, optional `category`.{% endcomment %}
 
-<section class="page-hero">
-  <div class="inner">
-    <div class="breadcrumb">
-      <a href="{% url 'home' %}">Beranda</a><span>/</span>
-      <a href="{% url 'katalog:all-catalog' %}">Katalog</a><span>/</span>
-      {{ judul }}
+<div class="breadcrumb-bar">
+  <div class="wrap">
+    <a href="{% url 'home' %}">Beranda</a><span class="sep">/</span>
+    {% if category %}
+      <a href="{% url 'katalog:all-catalog' %}">Katalog</a><span class="sep">/</span>
+      <span class="current">{{ judul }}</span>
+    {% else %}
+      <span class="current">{{ judul|default:"Katalog" }}</span>
+    {% endif %}
+  </div>
+</div>
+
+<section class="cat-title-block">
+  <div class="wrap">
+    <div>
+      <h1>{{ judul|default:"Semua Mesin" }}</h1>
+      {% if category and category.meta_description %}<p class="desc">{{ category.meta_description }}</p>{% endif %}
     </div>
-    <h1>{{ judul }}</h1>
-    {% if category and category.meta_description %}<p class="lead">{{ category.meta_description }}</p>{% endif %}
+    <div class="cat-count">
+      <div class="num">{{ item.paginator.count }}</div>
+      <div class="label">Model Tersedia</div>
+    </div>
   </div>
 </section>
 
 {% if category.intro %}
 <section class="catalog-intro">
-  <div class="inner">{{ category.intro|linebreaks }}</div>
+  <div class="wrap">{{ category.intro|linebreaks }}</div>
 </section>
 {% endif %}
 
-<div class="catalog-layout">
-  <aside class="catalog-side">
-    <h5>Cari mesin</h5>
-    <form class="search-box" method="get" action="{% url 'search:category' %}"
-          data-search-suggest data-suggest-url="{% url 'search:searchpost' %}" data-csrf="{{ csrf_token }}">
-      <input type="search" name="mesin" placeholder="Nama mesin&hellip;" aria-label="Cari mesin"
-             value="{{ request.GET.mesin }}">
-      <button type="submit">Cari</button>
-      <div class="search-suggest"></div>
-    </form>
+<div class="wrap">
+  <div class="catalog-layout">
+    <aside class="catalog-side">
+      <div class="filter-title">Cari mesin</div>
+      <form class="search-box" method="get" action="{% url 'search:category' %}"
+            data-search-suggest data-suggest-url="{% url 'search:searchpost' %}" data-csrf="{{ csrf_token }}">
+        <input type="search" name="mesin" placeholder="Nama mesin&hellip;" aria-label="Cari mesin"
+               value="{{ request.GET.mesin }}">
+        <button type="submit">Cari</button>
+        <div class="search-suggest"></div>
+      </form>
 
-    <h5>Kategori</h5>
-    <nav class="cat-list">
-      <a href="{% url 'katalog:all-catalog' %}"
-         class="{% if request.resolver_match.url_name == 'all-catalog' %}is-active{% endif %}">Semua Mesin</a>
-      {% for mesin in link_menu %}
-        <a href="{% url 'katalog:category' id=mesin.id slug=mesin.slug %}"
-           class="{% if request.resolver_match.kwargs.id == mesin.id %}is-active{% endif %}">{{ mesin.jenis }}</a>
-      {% endfor %}
-    </nav>
-  </aside>
-
-  <div class="catalog-main">
-    <p class="result-meta">{{ item.paginator.count }} mesin ditemukan</p>
-    {% if item %}
-      <div class="prod-grid">
-        {% for i in item %}
-          <a class="prod-card" href="{% url 'item:mesin' id=i.id slug=i.slug %}">
-            <div class="prod-photo">
-              {% thumbnail i.picture1 "480x360" crop="center" as im %}
-                <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" loading="lazy"
-                     alt="{{ i.name }} — {{ i.Jenis.jenis }}">
-              {% empty %}Foto belum tersedia{% endthumbnail %}
-            </div>
-            <div class="prod-body">
-              <div class="prod-cat">{{ i.Jenis.jenis }}</div>
-              <h3>{{ i.name }}</h3>
-              {% for label, value in i.specification|specs:2 %}
-                <div class="spec-row"><span>{{ label }}</span><span>{{ value }}</span></div>
-              {% endfor %}
-              <div class="prod-cta">Pelajari lebih lanjut &rarr;</div>
-            </div>
-          </a>
+      <div class="filter-title">Kategori</div>
+      <ul class="filter-list">
+        <li{% if request.resolver_match.url_name == 'all-catalog' %} class="is-active"{% endif %}>
+          <a href="{% url 'katalog:all-catalog' %}">Semua Mesin</a>
+        </li>
+        {% for mesin in link_menu %}
+          <li{% if request.resolver_match.kwargs.id == mesin.id %} class="is-active"{% endif %}>
+            <a href="{% url 'katalog:category' id=mesin.id slug=mesin.slug %}">
+              {{ mesin.jenis }} <span class="n">{{ mesin.item_set.count }}</span>
+            </a>
+          </li>
         {% endfor %}
-      </div>
-    {% else %}
-      <div class="empty-note">Tidak ada mesin pada kategori ini.</div>
-    {% endif %}
+      </ul>
+    </aside>
+
+    <div class="catalog-main">
+      <p class="result-meta">{{ item.paginator.count }} mesin ditemukan</p>
+      {% if item %}
+        <div class="grid-3">
+          {% for i in item %}
+            <a class="card" href="{% url 'item:mesin' id=i.id slug=i.slug %}">
+              <div class="card-photo">
+                {% thumbnail i.picture1 "480x360" crop="center" as im %}
+                  <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" loading="lazy"
+                       alt="{{ i.name }} — {{ i.Jenis.jenis }}">
+                {% empty %}Foto belum tersedia{% endthumbnail %}
+              </div>
+              <div class="card-body">
+                <div class="prod-cat">{{ i.Jenis.jenis }}</div>
+                <h3>{{ i.name }}</h3>
+                {% for label, value in i.specification|specs:2 %}
+                  <div class="spec-row"><span>{{ label }}</span><span class="val">{{ value }}</span></div>
+                {% endfor %}
+                <span class="card-link">Pelajari lebih lanjut &rarr;</span>
+              </div>
+            </a>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="empty-note">Tidak ada mesin pada kategori ini.</div>
+      {% endif %}
+    </div>
   </div>
 </div>

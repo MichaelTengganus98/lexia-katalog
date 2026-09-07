@@ -5,132 +5,157 @@
 {% load item_extras %}
 
 {% block content %}
-<section class="page-hero" style="padding-bottom:28px">
-  <div class="inner">
-    <div class="breadcrumb" style="margin-bottom:0">
-      <a href="{% url 'home' %}">Beranda</a><span>/</span>
-      <a href="{% url 'katalog:all-catalog' %}">Katalog</a><span>/</span>
-      <a href="{% url 'katalog:category' id=barang.Jenis.id slug=barang.Jenis.slug %}">{{ barang.Jenis.jenis }}</a><span>/</span>
-      {{ barang.name }}
-    </div>
+<div class="breadcrumb-bar">
+  <div class="wrap">
+    <a href="{% url 'home' %}">Beranda</a><span class="sep">/</span>
+    <a href="{% url 'katalog:all-catalog' %}">Katalog</a><span class="sep">/</span>
+    <a href="{% url 'katalog:category' id=barang.Jenis.id slug=barang.Jenis.slug %}">{{ barang.Jenis.jenis }}</a><span class="sep">/</span>
+    <span class="current">{{ barang.name }}</span>
   </div>
-</section>
+</div>
 
-<div class="detail-wrap">
-  {% with pics=barang|pictures %}
-  <div class="detail-gallery">
-    <div class="gallery-main" id="galleryMain" data-lightbox>
-      {% if pics %}
-        {% thumbnail pics.0 "900x900" as im %}
-          <img id="galleryImg" src="{{ im.url }}" data-full="{{ pics.0.url }}"
-               width="{{ im.width }}" height="{{ im.height }}" fetchpriority="high"
-               alt="{{ barang.name }} — {{ barang.Jenis.jenis }}">
-        {% empty %}
-          <img id="galleryImg" src="{{ pics.0.url }}" data-full="{{ pics.0.url }}"
-               alt="{{ barang.name }} — {{ barang.Jenis.jenis }}">
-        {% endthumbnail %}
-      {% else %}
-        <div class="photo-placeholder" style="color:var(--muted-dark)">Foto belum tersedia</div>
+{% if barang.availability == "Discontinued" %}
+<div class="wrap">
+  <div class="notice notice-warn">
+    <strong>Produk ini sudah tidak diproduksi lagi.</strong>
+    {% if replacement %}
+      Silakan lihat penggantinya:
+      <a href="{% url 'item:mesin' id=replacement.id slug=replacement.slug %}">{{ replacement.name }} &rarr;</a>
+    {% else %}
+      Hubungi kami untuk rekomendasi produk pengganti.
+    {% endif %}
+  </div>
+</div>
+{% endif %}
+
+<div class="wrap">
+  <div class="pd-layout">
+    {% with pics=barang|pictures %}
+    <div class="pd-gallery">
+      <div class="pd-photo-main gallery-main" id="galleryMain" data-lightbox>
+        {% if pics %}
+          {% thumbnail pics.0 "900x900" as im %}
+            <img id="galleryImg" src="{{ im.url }}" data-full="{{ pics.0.url }}"
+                 width="{{ im.width }}" height="{{ im.height }}" fetchpriority="high"
+                 alt="{{ barang.name }} — {{ barang.Jenis.jenis }}">
+          {% empty %}
+            <img id="galleryImg" src="{{ pics.0.url }}" data-full="{{ pics.0.url }}"
+                 alt="{{ barang.name }} — {{ barang.Jenis.jenis }}">
+          {% endthumbnail %}
+        {% else %}
+          Foto belum tersedia
+        {% endif %}
+      </div>
+      {% if pics|length > 1 %}
+        <div class="pd-thumbs gallery-thumbs" id="galleryThumbs">
+          {% for pic in pics %}
+            <button type="button" data-full="{{ pic.url }}" class="{% if forloop.first %}is-active{% endif %}">
+              {% thumbnail pic "140x140" crop="center" as im %}
+                <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" loading="lazy"
+                     alt="{{ barang.name }} foto {{ forloop.counter }}">
+              {% empty %}<img src="{{ pic.url }}" alt="">{% endthumbnail %}
+            </button>
+          {% endfor %}
+        </div>
       {% endif %}
     </div>
-    {% if pics|length > 1 %}
-      <div class="gallery-thumbs" id="galleryThumbs">
-        {% for pic in pics %}
-          <button type="button" data-full="{{ pic.url }}" class="{% if forloop.first %}is-active{% endif %}">
-            {% thumbnail pic "140x140" crop="center" as im %}
-              <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" loading="lazy"
-                   alt="{{ barang.name }} foto {{ forloop.counter }}">
-            {% empty %}<img src="{{ pic.url }}" alt="">{% endthumbnail %}
-          </button>
-        {% endfor %}
+    {% endwith %}
+
+    <div class="pd-info">
+      <div class="pd-eyebrow">
+        <a href="{% url 'katalog:category' id=barang.Jenis.id slug=barang.Jenis.slug %}">{{ barang.Jenis.jenis }}</a>
       </div>
-    {% endif %}
-  </div>
-  {% endwith %}
+      <h1>{{ barang.name }}</h1>
+      {% if barang.description %}
+        <p class="desc">{{ barang.description|striptags|truncatewords:32 }}</p>
+      {% endif %}
 
-  <div class="detail-info">
-    <div class="detail-cat">
-      <a href="{% url 'katalog:category' id=barang.Jenis.id slug=barang.Jenis.slug %}">{{ barang.Jenis.jenis }}</a>
-    </div>
-    <h1>{{ barang.name }}</h1>
-
-    {% if spec %}
-      <div class="detail-key">
-        {% for key, value in spec.items %}
-          {% if forloop.counter <= 5 %}
-            <div class="spec-row"><span>{{ key|bold|safe }}</span><span>{{ value|bold|safe }}</span></div>
+      {% if spec %}
+        <div class="pd-quickspecs">
+          {% for key, value in spec.items %}
+            {% if forloop.counter <= 4 %}
+              <div class="cell"><div class="k">{{ key|bold|safe }}</div><div class="v">{{ value|bold|safe }}</div></div>
+            {% endif %}
+          {% endfor %}
+        </div>
+      {% else %}
+        {% with qs=barang.specification|specs:4 %}
+          {% if qs %}
+            <div class="pd-quickspecs">
+              {% for label, value in qs %}
+                <div class="cell"><div class="k">{{ label }}</div><div class="v">{{ value }}</div></div>
+              {% endfor %}
+            </div>
           {% endif %}
-        {% endfor %}
-      </div>
-    {% else %}
-      {% for label, value in barang.specification|specs:5 %}
-        <div class="spec-row"><span>{{ label }}</span><span>{{ value }}</span></div>
-      {% endfor %}
-    {% endif %}
+        {% endwith %}
+      {% endif %}
 
-    <div class="detail-actions">
-      <a class="btn btn-primary" target="_blank" rel="noopener"
-         href="https://wa.me/6285275103333?text=Halo%20Lexia%2C%20saya%20tertarik%20dengan%20{{ barang.name|urlencode }}">
-        Pesan Sekarang
-      </a>
-      <a class="btn btn-outline" href="{% url 'katalog:category' id=barang.Jenis.id slug=barang.Jenis.slug %}">
-        Lihat kategori
-      </a>
+      <div class="pd-actions">
+        <a class="btn btn-primary" target="_blank" rel="noopener"
+           href="https://wa.me/6285275103333?text=Halo%20Lexia%2C%20saya%20tertarik%20dengan%20{{ barang.name|urlencode }}">
+          Pesan Sekarang
+        </a>
+        <a class="btn btn-outline" href="{% url 'katalog:category' id=barang.Jenis.id slug=barang.Jenis.slug %}">
+          Lihat kategori
+        </a>
+      </div>
     </div>
   </div>
-</div>
 
-{% if barang.description %}
-<div class="detail-section">
-  <h2>Deskripsi</h2>
-  <div class="detail-desc"><p>{{ barang.description|linebreaksbr|bold|safe }}</p></div>
-</div>
-{% endif %}
+  {% if barang.description %}
+  <div class="detail-section">
+    <h2>Deskripsi</h2>
+    <div class="detail-desc"><p>{{ barang.description|linebreaksbr|bold|safe }}</p></div>
+  </div>
+  {% endif %}
 
-{% if spec or barang.specification %}
-<div class="detail-section">
-  <h2>Spesifikasi</h2>
-  <table class="spec-table">
-    {% if spec %}
-      {% for key, value in spec.items %}
-        <tr><td>{{ key|bold|safe }}</td><td>{{ value|bold|safe }}</td></tr>
-      {% endfor %}
-    {% else %}
-      {% for label, value in barang.specification|specs %}
-        <tr><td>{{ label }}</td><td>{{ value }}</td></tr>
-      {% endfor %}
-    {% endif %}
-  </table>
-</div>
-{% endif %}
+  {% if spec or barang.specification %}
+  <div class="spec-table">
+    <h2>Spesifikasi lengkap</h2>
+    <table>
+      {% if spec %}
+        {% for key, value in spec.items %}
+          <tr><td>{{ key|bold|safe }}</td><td>{{ value|bold|safe }}</td></tr>
+        {% endfor %}
+      {% else %}
+        {% for label, value in barang.specification|specs %}
+          <tr><td>{{ label }}</td><td>{{ value }}</td></tr>
+        {% endfor %}
+      {% endif %}
+    </table>
+  </div>
+  {% endif %}
 
-{% if barang.urlVideo %}
-<div class="detail-section">
-  <h2>Video</h2>
-  <iframe class="machine-video" src="{{ barang.urlVideo }}" allowfullscreen
-          allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"></iframe>
+  {% if barang.urlVideo %}
+  <div class="detail-section">
+    <h2>Video</h2>
+    <iframe class="machine-video" src="{{ barang.urlVideo }}" allowfullscreen
+            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"></iframe>
+  </div>
+  {% endif %}
 </div>
-{% endif %}
 
 {% if related %}
-<section class="section paper-dim">
-  <div class="section-head"><h2>Produk terkait</h2></div>
-  <div class="prod-grid">
-    {% for it in related %}
-      <a class="prod-card" href="{% url 'item:mesin' id=it.id slug=it.slug %}">
-        <div class="prod-photo">
-          {% thumbnail it.picture1 "480x360" crop="center" as im %}
-            <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" loading="lazy"
-                 alt="{{ it.name }} — {{ it.Jenis.jenis }}">
-          {% empty %}Foto belum tersedia{% endthumbnail %}
-        </div>
-        <div class="prod-body">
-          <div class="prod-cat">{{ it.Jenis.jenis }}</div>
-          <h3>{{ it.name }}</h3>
-          <div class="prod-cta">Pelajari lebih lanjut &rarr;</div>
-        </div>
-      </a>
-    {% endfor %}
+<section class="section bg-alt">
+  <div class="wrap">
+    <div class="section-head"><h2>Produk terkait</h2></div>
+    <div class="grid-3">
+      {% for it in related %}
+        <a class="card" href="{% url 'item:mesin' id=it.id slug=it.slug %}">
+          <div class="card-photo">
+            {% thumbnail it.picture1 "480x360" crop="center" as im %}
+              <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" loading="lazy"
+                   alt="{{ it.name }} — {{ it.Jenis.jenis }}">
+            {% empty %}Foto belum tersedia{% endthumbnail %}
+          </div>
+          <div class="card-body">
+            <div class="prod-cat">{{ it.Jenis.jenis }}</div>
+            <h3>{{ it.name }}</h3>
+            <span class="card-link">Pelajari lebih lanjut &rarr;</span>
+          </div>
+        </a>
+      {% endfor %}
+    </div>
   </div>
 </section>
 {% endif %}

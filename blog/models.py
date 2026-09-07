@@ -19,7 +19,19 @@ class Post(SeoModel):
     PUBLISHED = "published"
     STATUS_CHOICES = [(DRAFT, "Draf"), (PUBLISHED, "Terbit")]
 
+    TAG_CHOICES = [
+        ("panduan", "Panduan Membeli"),
+        ("perbandingan", "Perbandingan"),
+        ("perawatan", "Perawatan"),
+        ("tips", "Tips & Wawasan"),
+        ("berita", "Berita"),
+    ]
+
     title = models.CharField("Judul", max_length=200)
+    tag = models.CharField(
+        "Tag artikel", max_length=20, choices=TAG_CHOICES, default="tips",
+        help_text="Label editorial yang tampil di kartu artikel (mis. \"Panduan Membeli\").",
+    )
     slug = models.SlugField("Slug URL", max_length=220, unique=True)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default=DRAFT)
     published_at = models.DateTimeField(
@@ -43,6 +55,14 @@ class Post(SeoModel):
         "page.Category", null=True, blank=True, on_delete=models.SET_NULL,
         related_name="posts", verbose_name="Kategori produk terkait",
         help_text="Menautkan artikel ke satu kategori mesin (untuk internal link).",
+    )
+    cta_label = models.CharField(
+        "Teks tombol akhir artikel", max_length=80, blank=True,
+        help_text="Kosongkan untuk memakai tombol otomatis dari kategori terkait.",
+    )
+    cta_url = models.CharField(
+        "Tautan tombol akhir artikel", max_length=300, blank=True,
+        help_text="Path internal (mis. /katalog/) atau URL lengkap (https://...).",
     )
     created = models.DateTimeField(auto_now_add=True)
 

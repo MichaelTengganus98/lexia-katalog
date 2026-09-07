@@ -2,59 +2,125 @@
 {% load static %}
 
 {% block content %}
-<section class="page-hero">
-  <div class="inner">
-    <div class="breadcrumb"><a href="{% url 'home' %}">Beranda</a><span>/</span> Hubungi Kami</div>
-    <h1>Hubungi Kami</h1>
-    <p class="lead">Ingin melakukan pemesanan atau butuh informasi lebih lanjut? Tim kami siap membantu memilih mesin yang tepat untuk kebutuhan produksi Anda.</p>
-  </div>
-</section>
-
-<div class="contact-grid">
-  <div>
-    <div class="contact-lines">
-      <div class="contact-line">
-        <div class="ci">&#9742;</div>
-        <div>
-          <h4>Telepon</h4>
-          <p><a href="tel:+62614154876">(+62) 61 4154876</a></p>
-          <p><a href="tel:+62614515028">(+62) 61 4515028</a></p>
-        </div>
-      </div>
-      <div class="contact-line">
-        <div class="ci">WA</div>
-        <div>
-          <h4>WhatsApp</h4>
-          <p><a href="https://wa.me/6285275103333" target="_blank" rel="noopener">(+62) 852 7510 3333</a></p>
-        </div>
-      </div>
-      <div class="contact-line">
-        <div class="ci">&#9873;</div>
-        <div>
-          <h4>Alamat</h4>
-          <p>Pelita Graphic Supplies<br>Jalan Mesjid No. 165<br>Medan, Indonesia</p>
-        </div>
-      </div>
-    </div>
-    <div class="detail-actions" style="margin-top:28px">
-      <a class="btn btn-primary" href="https://wa.me/6285275103333" target="_blank" rel="noopener">Chat via WhatsApp</a>
-      <a class="btn btn-outline" href="{% url 'katalog:all-catalog' %}">Lihat Katalog</a>
-    </div>
-  </div>
-
-  <div class="contact-map">
-    <iframe title="Lokasi Pelita Graphic Supplies" loading="lazy"
-            src="https://maps.google.com/maps?width=600&amp;height=400&amp;hl=en&amp;q=pelita%20graphics%20supplies%20medan&amp;t=&amp;z=17&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"></iframe>
+<div class="breadcrumb-bar">
+  <div class="wrap">
+    <a href="{% url 'home' %}">Beranda</a><span class="sep">/</span>
+    <span class="current">Hubungi Kami</span>
   </div>
 </div>
 
-<section class="section graphite">
-  <div class="section-head"><h2>Media sosial kami</h2></div>
-  <div class="social-row">
-    <a href="https://instagram.com/lexiamachinery.ind" target="_blank" rel="noopener">Instagram &mdash; lexiamachinery.ind</a>
-    <a href="https://www.facebook.com/lexiamachinery.ind/" target="_blank" rel="noopener">Facebook &mdash; lexiamachinery.ind</a>
-    <a href="https://www.youtube.com/user/JeffryAldiP" target="_blank" rel="noopener">YouTube &mdash; Lexia Machinery</a>
-    <a href="https://www.tokopedia.com/lexiamachinery" target="_blank" rel="noopener">Tokopedia &mdash; Lexia Machinery</a>
+<section class="page-title">
+  <div class="wrap">
+    <h1>Hubungi Kami</h1>
+    <p class="desc">Konsultasi kebutuhan mesin percetakan Anda, atau kunjungi langsung showroom kami di Medan. Isi formulir di bawah &mdash; tim kami akan menghubungi Anda kembali.</p>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="contact-layout">
+    <div>
+      <div class="contact-map">
+        <iframe title="Lokasi Pelita Graphic Supplies" loading="lazy"
+                src="https://maps.google.com/maps?width=600&amp;height=400&amp;hl=en&amp;q=pelita%20graphics%20supplies%20medan&amp;t=&amp;z=17&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"></iframe>
+      </div>
+
+      <div class="contact-lines" style="margin-top:24px">
+        <div class="contact-line">
+          <div class="ci">&#9742;</div>
+          <div>
+            <h4>Telepon</h4>
+            <p><a href="tel:+62614154876">(+62) 61 4154876</a></p>
+            <p><a href="tel:+62614515028">(+62) 61 4515028</a></p>
+          </div>
+        </div>
+        <div class="contact-line">
+          <div class="ci">WA</div>
+          <div>
+            <h4>WhatsApp</h4>
+            <p><a href="https://wa.me/6285275103333" target="_blank" rel="noopener">(+62) 852 7510 3333</a></p>
+          </div>
+        </div>
+        <div class="contact-line">
+          <div class="ci">&#9873;</div>
+          <div>
+            <h4>Alamat</h4>
+            <p>Pelita Graphic Supplies<br>Jalan Mesjid No. 165<br>Kesawan, Medan Barat, Kota Medan</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="contact-card">
+      {% if sent %}
+        <div class="notice notice-ok">
+          <strong>Pesan Anda terkirim.</strong>
+          Terima kasih &mdash; tim kami akan menghubungi Anda dalam 1&times;24 jam kerja.
+          Untuk respons lebih cepat, hubungi kami langsung via
+          <a href="https://wa.me/6285275103333" target="_blank" rel="noopener">WhatsApp</a>.
+        </div>
+        <a href="{% url 'about' %}" class="btn btn-outline">Kirim pesan lain</a>
+      {% else %}
+        <h2>Kirim Pesan</h2>
+        <p class="desc">Isi form di bawah, tim kami akan menghubungi Anda dalam 1&times;24 jam.</p>
+
+        {% if form.non_field_errors %}
+          <div class="notice notice-warn">{{ form.non_field_errors }}</div>
+        {% endif %}
+
+        <form method="post" action="{% url 'about' %}" novalidate>
+          {% csrf_token %}
+          <div class="form-row">
+            <div class="field">
+              <label for="{{ form.name.id_for_label }}">Nama Lengkap</label>
+              {{ form.name }}
+              {% if form.name.errors %}<span class="field-error">{{ form.name.errors|striptags }}</span>{% endif %}
+            </div>
+            <div class="field">
+              <label for="{{ form.whatsapp.id_for_label }}">No. WhatsApp</label>
+              {{ form.whatsapp }}
+              {% if form.whatsapp.errors %}<span class="field-error">{{ form.whatsapp.errors|striptags }}</span>{% endif %}
+            </div>
+          </div>
+          <div class="field">
+            <label for="{{ form.email.id_for_label }}">Email <span class="opt">(opsional)</span></label>
+            {{ form.email }}
+            {% if form.email.errors %}<span class="field-error">{{ form.email.errors|striptags }}</span>{% endif %}
+          </div>
+          <div class="field">
+            <label for="{{ form.category.id_for_label }}">Mesin yang Diminati <span class="opt">(opsional)</span></label>
+            {{ form.category }}
+          </div>
+          <div class="field">
+            <label for="{{ form.message.id_for_label }}">Pesan</label>
+            {{ form.message }}
+            {% if form.message.errors %}<span class="field-error">{{ form.message.errors|striptags }}</span>{% endif %}
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Kirim Pesan</button>
+        </form>
+      {% endif %}
+
+      <div class="info-plate">
+        <h3>Pelita Graphic Supplies</h3>
+        <dl>
+          <dt>Alamat</dt><dd>Jl. Mesjid No. 165, Kesawan, Medan Barat, Kota Medan, Sumatera Utara</dd>
+          <dt>Telepon</dt><dd>(+62) 61 4154876</dd>
+          <dt>WhatsApp</dt><dd>(+62) 852 7510 3333</dd>
+          <dt>Jam Buka</dt><dd>Senin &ndash; Sabtu, 08.00 &ndash; 17.00 WIB</dd>
+        </dl>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="section graphite tight">
+  <div class="wrap">
+    <div class="section-head"><h2>Media sosial kami</h2></div>
+    <div class="social-row">
+      <a href="https://instagram.com/lexiamachinery.ind" target="_blank" rel="noopener">Instagram &mdash; lexiamachinery.ind</a>
+      <a href="https://www.facebook.com/lexiamachinery.ind/" target="_blank" rel="noopener">Facebook &mdash; lexiamachinery.ind</a>
+      <a href="https://www.youtube.com/user/JeffryAldiP" target="_blank" rel="noopener">YouTube &mdash; Lexia Machinery</a>
+      <a href="https://www.tokopedia.com/lexiamachinery" target="_blank" rel="noopener">Tokopedia &mdash; Lexia Machinery</a>
+    </div>
   </div>
 </section>
 {% endblock %}

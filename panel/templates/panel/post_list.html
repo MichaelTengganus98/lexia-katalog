@@ -1,0 +1,39 @@
+{% extends "panel/base.html" %}
+
+{% block body %}
+<div class="tut">
+  <span class="tut-mark">?</span>
+  <div>Artikel di sini tampil di halaman <b>Blog</b>. Klik judul untuk mengedit, atau
+    <b>Tulis Artikel</b> untuk membuat artikel baru. Artikel berstatus <b>Draf</b> belum tampil ke pengunjung.</div>
+</div>
+
+<div class="admin-page-toolbar">
+  <h2>Semua Artikel <span class="count">({{ posts|length }})</span></h2>
+  <a href="{% url 'panel:post_create' %}" class="btn btn-primary btn-sm">+ Tulis Artikel</a>
+</div>
+
+<div class="admin-panel">
+  <table class="admin-table">
+    <thead>
+      <tr><th>Judul</th><th>Tag</th><th>Status</th><th>Kategori terkait</th><th>Terakhir diubah</th><th></th></tr>
+    </thead>
+    <tbody>
+      {% for p in posts %}
+        <tr>
+          <td><a class="t-name" href="{% url 'panel:post_edit' p.pk %}">{{ p.title }}</a></td>
+          <td class="t-muted">{{ p.get_tag_display }}</td>
+          <td>
+            {% if p.is_live %}<span class="badge badge-live">Terbit</span>
+            {% else %}<span class="badge badge-draft">Draf</span>{% endif %}
+          </td>
+          <td class="t-muted">{% if p.related_category %}{{ p.related_category.jenis }}{% else %}&mdash;{% endif %}</td>
+          <td class="t-muted">{{ p.updated|date:"j M Y, H:i" }}</td>
+          <td><a class="t-edit" href="{% url 'panel:post_edit' p.pk %}">Edit</a></td>
+        </tr>
+      {% empty %}
+        <tr><td colspan="6" class="admin-empty">Belum ada artikel. <a class="t-edit" href="{% url 'panel:post_create' %}">Tulis artikel pertama &rarr;</a></td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

@@ -5,13 +5,21 @@ from .models import Brochure
 
 
 def home(request):
-    fav = Item.objects.filter(favorite=True)
+    # Featured strip (homepage "Produk unggulan"): explicit feature_rank order
+    # first, then favourites, then the newest items to fill the 5-slot layout.
+    featured = list(Item.objects.filter(feature_rank__isnull=False).order_by('feature_rank'))
 
-    # Featured strip: favourites first, then the newest items to fill the layout.
-    featured = list(fav)
+    def _fill(qs):
+        seen = {i.pk for i in featured}
+        for it in qs.exclude(pk__in=seen):
+            if len(featured) >= 5:
+                break
+            featured.append(it)
+
     if len(featured) < 5:
-        fill = Item.objects.exclude(pk__in=[i.pk for i in featured]).order_by('-dateTime')
-        featured += list(fill[:5 - len(featured)])
+        _fill(Item.objects.filter(favorite=True))
+    if len(featured) < 5:
+        _fill(Item.objects.order_by('-dateTime'))
     featured = featured[:5]
 
     return render(request, 'homepage/homepage.html', {

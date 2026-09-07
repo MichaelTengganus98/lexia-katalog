@@ -45,10 +45,15 @@ def item(request, id, slug):
     page_jsonld = graph(request, product(request, item, specDict),
                         breadcrumb(request, crumbs))
 
+    replacement = None
+    if item.availability == "Discontinued" and item.replacement_id:
+        replacement = item.replacement
+
     return render(request, 'item/product-detail.html', {
         'barang': item,
         'spec': specDict,
         'related': related_items,
+        'replacement': replacement,
         'page_title': item.seo_title,
         'page_description': item.seo_description,
         'page_image': page_image,
