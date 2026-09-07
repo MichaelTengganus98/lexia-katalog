@@ -62,17 +62,85 @@
 </div>
 <script>
   // ID / EN content tabs, scoped to each form card
-  document.addEventListener('click', function (e) {
-    var tab = e.target.closest('.lang-tab');
-    if (!tab) return;
-    var scope = tab.closest('.form-card') || document;
-    var lang = tab.getAttribute('data-lang');
+  function panelShowLang(scope, lang) {
     scope.querySelectorAll('.lang-tab').forEach(function (t) {
       t.classList.toggle('active', t.getAttribute('data-lang') === lang);
     });
     scope.querySelectorAll('.field-lang').forEach(function (fl) {
       fl.hidden = fl.getAttribute('data-lang') !== lang;
     });
+  }
+  document.addEventListener('click', function (e) {
+    var tab = e.target.closest('.lang-tab');
+    if (!tab) return;
+    panelShowLang(tab.closest('.form-card') || document, tab.getAttribute('data-lang'));
+  });
+
+  // Quick translate — fill the empty fields of one language from the other,
+  // scoped to the form card the button sits in. Result is editable afterwards.
+  var PANEL_TRANSLATE_URL = "{% url 'panel:translate' %}";
+  document.addEventListener('click', function (e) {
+    var btn = e.target.closest('.lang-fill-btn');
+    if (!btn) return;
+
+    var scope = btn.closest('.form-card') || document;
+    var src = btn.getAttribute('data-src');            // 'id' | 'en'
+    var tgt = btn.getAttribute('data-tgt');
+    var srcSuffix = src === 'id' ? '_ind' : '_en';
+    var tgtSuffix = tgt === 'id' ? '_ind' : '_en';
+    var tgtTab = tgt === 'id' ? 'ind' : 'en';
+    var msg = scope.querySelector('.lang-fill-msg');
+    var buttons = scope.querySelectorAll('.lang-fill-btn');
+
+    function say(text, isError) {
+      if (!msg) return;
+      msg.textContent = text || '';
+      msg.classList.toggle('is-error', !!isError);
+    }
+
+    var pairs = [];
+    scope.querySelectorAll('[name$="' + srcSuffix + '"]').forEach(function (srcEl) {
+      var base = srcEl.name.slice(0, -srcSuffix.length);
+      var tgtEl = scope.querySelector('[name="' + base + tgtSuffix + '"]');
+      if (!tgtEl) return;
+      var text = (srcEl.value || '').trim();
+      if (!text) return;                               // nothing to translate from
+      if ((tgtEl.value || '').trim()) return;          // keep whatever is already there
+      pairs.push({ text: text, el: tgtEl });
+    });
+
+    if (!pairs.length) {
+      say('Tidak ada yang bisa diisi — field tujuan sudah terisi, atau sumbernya kosong.');
+      return;
+    }
+
+    var token = (scope.querySelector('[name=csrfmiddlewaretoken]') ||
+                 document.querySelector('[name=csrfmiddlewaretoken]') || {}).value;
+
+    buttons.forEach(function (b) { b.disabled = true; });
+    say('Menerjemahkan ' + pairs.length + ' field…');
+
+    fetch(PANEL_TRANSLATE_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-CSRFToken': token || '' },
+      body: JSON.stringify({ q: pairs.map(function (p) { return p.text; }), source: src, target: tgt })
+    })
+      .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
+      .then(function (res) {
+        if (!res.ok) { say(res.d.error || 'Terjemahan gagal.', true); return; }
+        var list = res.d.translations || [], filled = 0;
+        list.forEach(function (t, i) {
+          if (t && pairs[i]) {
+            pairs[i].el.value = t;
+            pairs[i].el.dispatchEvent(new Event('input', { bubbles: true }));
+            filled++;
+          }
+        });
+        panelShowLang(scope, tgtTab);
+        say(filled + ' field terisi otomatis — periksa & sunting bila perlu.');
+      })
+      .catch(function () { say('Tidak dapat terhubung ke layanan terjemahan.', true); })
+      .then(function () { buttons.forEach(function (b) { b.disabled = false; }); });
   });
 </script>
 {% block script %}{% endblock %}

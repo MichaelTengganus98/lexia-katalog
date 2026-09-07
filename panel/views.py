@@ -1,3 +1,6 @@
+import json
+import urllib.parse
+import urllib.request
 from functools import wraps
 
 from django.contrib import messages
@@ -31,6 +34,133 @@ def superuser_required(view):
             raise PermissionDenied("Butuh akses superuser.")
         return view(request, *args, **kwargs)
     return _wrapped
+
+
+# --------------------------------------------------------------------------- #
+#  Quick translate  (fill ID/EN content fields from the other language)
+# --------------------------------------------------------------------------- #
+# Keyless Google endpoints. clients5 keeps paragraph breaks and takes several
+# `q=` params per request; translate.googleapis is the fallback when it 429s.
+_GT_URL = "https://clients5.google.com/translate_a/t"
+_GT_FALLBACK = "https://translate.googleapis.com/translate_a/single"
+_GT_MAXQ = 5000         # cap on encoded query length per request
+_GT_LANGS = {"id", "en"}
+_GT_HEADERS = {"User-Agent": "Mozilla/5.0 (LexiaPanel quick-translate)"}
+
+
+def _gt_get(url):
+    req = urllib.request.Request(url, headers=_GT_HEADERS)
+    with urllib.request.urlopen(req, timeout=12) as resp:
+        return json.loads(resp.read().decode("utf-8"))
+
+
+def _gt_fallback_one(text, source, target):
+    """translate.googleapis.com/single — one text, returns joined segments."""
+    query = urllib.parse.urlencode({
+        "client": "gtx", "sl": source, "tl": target, "dt": "t", "q": text,
+    })
+    data = _gt_get(_GT_FALLBACK + "?" + query)
+    return "".join(seg[0] for seg in (data[0] or []) if seg and seg[0])
+
+
+def _gt_batch(texts, source, target):
+    """clients5 — a list of texts in one request, order preserved."""
+    query = urllib.parse.urlencode(
+        [("client", "dict-chrome-ex"), ("sl", source), ("tl", target)]
+        + [("q", t) for t in texts]
+    )
+    try:
+        data = _gt_get(_GT_URL + "?" + query)
+        out = []
+        for item in data:
+            if isinstance(item, str):
+                out.append(item)
+            elif isinstance(item, list) and item:
+                out.append(item[0])
+            else:
+                out.append("")
+        if len(out) == len(texts):
+            return out
+    except Exception:
+        pass
+    return [_gt_fallback_one(t, source, target) for t in texts]
+
+
+def _gt_long(text, source, target):
+    """Split an oversized field on paragraph breaks, translate, rejoin."""
+    parts, buf = [], ""
+    for para in text.split("\n\n"):
+        cand = (buf + "\n\n" + para) if buf else para
+        if len(urllib.parse.quote(cand)) <= _GT_MAXQ:
+            buf = cand
+            continue
+        if buf:
+            parts.append(buf)
+            buf = ""
+        while len(urllib.parse.quote(para)) > _GT_MAXQ:
+            cut = _GT_MAXQ // 3
+            parts.append(para[:cut])
+            para = para[cut:]
+        buf = para
+    if buf:
+        parts.append(buf)
+    return "\n\n".join(_gt_translate_many(parts, source, target))
+
+
+def _gt_translate_many(texts, source, target):
+    """Translate texts, batching short ones and handling long ones separately."""
+    results = [""] * len(texts)
+    pending, pending_idx, pending_len = [], [], 0
+
+    def flush():
+        if not pending:
+            return
+        for j, out in enumerate(_gt_batch(pending, source, target)):
+            results[pending_idx[j]] = out
+        del pending[:]
+        del pending_idx[:]
+
+    for i, raw in enumerate(texts):
+        text = raw or ""
+        enc = len(urllib.parse.quote(text))
+        if enc > _GT_MAXQ:
+            flush()
+            pending_len = 0
+            results[i] = _gt_long(text, source, target)
+            continue
+        if pending and pending_len + enc > _GT_MAXQ:
+            flush()
+            pending_len = 0
+        pending.append(text)
+        pending_idx.append(i)
+        pending_len += enc
+    flush()
+    return results
+
+
+@staff_member_required
+@require_POST
+def translate(request):
+    try:
+        payload = json.loads(request.body.decode("utf-8"))
+    except (ValueError, UnicodeDecodeError):
+        return JsonResponse({"error": "Permintaan tidak valid."}, status=400)
+
+    source = payload.get("source")
+    target = payload.get("target")
+    texts = payload.get("q")
+    if source not in _GT_LANGS or target not in _GT_LANGS or source == target \
+            or not isinstance(texts, list):
+        return JsonResponse({"error": "Parameter bahasa tidak valid."}, status=400)
+
+    try:
+        results = _gt_translate_many([str(t) for t in texts[:20]], source, target)
+    except Exception:
+        return JsonResponse(
+            {"error": "Layanan terjemahan sedang sibuk. Coba lagi sebentar, atau isi manual."},
+            status=502,
+        )
+    return JsonResponse({"translations": results})
 
 
 # --------------------------------------------------------------------------- #
