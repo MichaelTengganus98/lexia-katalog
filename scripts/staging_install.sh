@@ -29,13 +29,24 @@ echo "==> app root: $APP_ROOT"
 echo "==> python: $(python --version 2>&1)   pip: $(pip --version 2>&1 | awk '{print $2}')"
 
 # --- 1. sync code to origin/staging ------------------------------------
-if [ -d .git ]; then
-  echo "==> git: fetch + hard reset to origin/staging"
-  git fetch --prune origin staging
-  git reset --hard origin/staging
-  git log -1 --pretty='    now at %h  %s'
+REPO_URL="https://github.com/MichaelTengganus98/lexia-katalog.git"
+if command -v git >/dev/null 2>&1; then
+  [ -d .git ] || git init -q
+  git remote get-url origin >/dev/null 2>&1 || git remote add origin "$REPO_URL"
+  echo "==> git: fetch staging (retrying - this server's GitHub link is flaky)"
+  ok=""
+  for i in 1 2 3 4 5; do
+    if git fetch --depth 1 --prune origin staging; then ok=1; break; fi
+    echo "    fetch attempt $i failed; retrying in 5s..."; sleep 5
+  done
+  if [ -n "$ok" ]; then
+    git reset --hard FETCH_HEAD
+    git log -1 --pretty='    now at %h  %s'
+  else
+    echo "!! could not reach GitHub after 5 tries - continuing with the files already on disk"
+  fi
 else
-  echo "==> (no .git dir - skipping git sync; using files as-is)"
+  echo "==> (git not available - using files as-is)"
 fi
 
 # --- 2. dependencies --------------------------------------------------
