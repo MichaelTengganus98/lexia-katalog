@@ -62,8 +62,21 @@ SSH in (cPanel → *Terminal*), then:
 
 ```bash
 mkdir -p ~/apps
-git clone -b staging https://github.com/MichaelTengganus98/lexia-katalog.git ~/apps/katalog-staging
+git clone --depth 1 -b staging https://github.com/MichaelTengganus98/lexia-katalog.git ~/apps/katalog-staging
 cd ~/apps/katalog-staging
+```
+
+`--depth 1` keeps the download small so the flaky cPanel web-terminal doesn't
+drop it. If it still aborts, delete the partial dir (`rm -rf ~/apps/katalog-staging`)
+and grab a tarball instead:
+
+```bash
+cd ~/apps
+curl -L -o s.tgz https://github.com/MichaelTengganus98/lexia-katalog/archive/refs/heads/staging.tar.gz
+tar xzf s.tgz && mv lexia-katalog-staging katalog-staging && rm s.tgz
+cd katalog-staging
+git init -q && git remote add origin https://github.com/MichaelTengganus98/lexia-katalog.git
+git fetch --depth 1 -q origin staging && git reset --hard -q origin/staging   # so the installer's git sync works
 ```
 
 ## 4. Create the Python app
@@ -103,54 +116,33 @@ Generate a secret key:
 (You can instead enter each as an *Environment variable* in the Setup Python App
 screen — the `.env` file is just less clicking.)
 
-## 6. Install, migrate, load data, collect static
+## 6. Run the installer (does everything)
 
 In the Setup Python App screen, copy the **"Enter to the virtual environment"**
 command and run it in Terminal, then:
 
 ```bash
 cd ~/apps/katalog-staging
-pip install -r requirements.txt
-python manage.py migrate --noinput
-python manage.py loaddata fixtures/staging_seed.json   # categories, machines, brochures, blog, users, SiteSettings
-python manage.py collectstatic --noinput
+bash scripts/staging_install.sh
 ```
 
-`staging_seed.json` includes the two admin users with their existing password
-hashes, so you can log in at `/admin/` straight away. To add a fresh admin
-instead: `python manage.py createsuperuser`.
+That one script: syncs the checkout to `origin/staging`, `pip install`s the
+pinned requirements, runs `migrate`, loads **`fixtures/staging_seed.json`**
+(8 categories, 20 machines, 3 brochures, 2 blog posts, `SiteSettings`, and the
+2 admin users with their existing password hashes), unpacks the bundled
+**`fixtures/staging_media.tar.gz`** into `DJANGO_MEDIA_ROOT`, runs
+`collectstatic`, and touches `tmp/restart.txt`.
 
-> If `pip install` fails on **mysqlclient**, see the note at the bottom of
-> `requirements.txt` (switch to PyMySQL).
+Re-run it any time to pull + redeploy — it's idempotent.
 
-## 7. Upload the media files
+> If `pip install` fails on **mysqlclient**, apply the PyMySQL fallback from the
+> bottom of `requirements.txt`, then re-run the installer.
 
-The database rows reference image files that live under `media/`. On your PC,
-zip these two folders (skip `media/cache/` — it regenerates):
+The DB fixture ships the two admin users, so `/admin/` login works immediately
+(`jeffry.aldi@gmail.com` + the production password). For a fresh admin instead:
+`python manage.py createsuperuser`.
 
-```
-media/upload/     ->  product photos + brochure covers + brochure PDFs
-media/blog/       ->  blog cover images
-```
-
-Upload the zip to `/home/lexiacoi/staging.lexia.co.id/`, extract so you end up
-with:
-
-```
-/home/lexiacoi/staging.lexia.co.id/media/upload/...
-/home/lexiacoi/staging.lexia.co.id/media/blog/...
-```
-
-(That path is `DJANGO_MEDIA_ROOT`. Apache/LiteSpeed serves `/media/...` directly
-from there; `/static/...` likewise from the `static/` folder collectstatic just
-filled.)
-
-## 8. Restart & verify
-
-```bash
-mkdir -p ~/apps/katalog-staging/tmp
-touch ~/apps/katalog-staging/tmp/restart.txt
-```
+## 7. Verify
 
 Open `https://staging.lexia.co.id/` and check:
 
@@ -167,17 +159,22 @@ The subdomain is already `noindex`-safe only if you also add it to robots — fo
 private staging site, either password-protect it (cPanel → *Directory Privacy* on
 the docroot) or add `Disallow: /` via a staging-only robots override.
 
-## 9. Updating staging later
+## 8. Updating staging later
+
+Same one command:
 
 ```bash
-cd ~/apps/katalog-staging
-git pull origin staging
-bash deployment.sh          # pip install + migrate + collectstatic + restart
+cd ~/apps/katalog-staging && bash scripts/staging_install.sh
 ```
 
-New media added through the admin lands in `DJANGO_MEDIA_ROOT` automatically.
+It hard-resets to `origin/staging`, so **don't edit files on the server** — they
+get overwritten. Media/content you add through the admin persists (it's in the DB
++ `DJANGO_MEDIA_ROOT`, which the installer only adds to, never wipes).
 
-## 10. Promoting to production later
+To refresh the shipped example data / photos, on your PC run
+`bash scripts/build_staging_fixtures.sh`, commit `fixtures/`, push `staging`.
+
+## 9. Promoting to production later
 
 When `staging` is approved, merge it and deploy to the **production** Python app:
 

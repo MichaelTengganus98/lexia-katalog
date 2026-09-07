@@ -25,3 +25,5 @@ media/upload/brosur/
 # deploy bundles (build artifacts)
 staging-media.zip
 *.tar.gz
+# except this one — the staging installer ships it
+!fixtures/staging_media.tar.gz
