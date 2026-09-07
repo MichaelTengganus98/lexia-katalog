@@ -17,19 +17,21 @@
   <div class="form-card">
     <div class="form-card-head"><h3>Judul &amp; Kategori</h3></div>
     <div class="form-card-body">
-      {% include "panel/_field.html" with field=form.title %}
       <div class="field-row-2">
         {% include "panel/_field.html" with field=form.tag %}
         {% include "panel/_field.html" with field=form.slug %}
       </div>
       {% include "panel/_field.html" with field=form.related_category %}
+      {% include "panel/_langbar.html" %}
+      {% include "panel/_transfield.html" with f_ind=form.title_ind f_en=form.title_en %}
     </div>
   </div>
 
   <div class="form-card">
     <div class="form-card-head"><h3>Ringkasan</h3><p>Muncul di kartu artikel, sebelum orang membuka artikel penuh.</p></div>
     <div class="form-card-body">
-      {% include "panel/_field.html" with field=form.excerpt %}
+      {% include "panel/_langbar.html" %}
+      {% include "panel/_transfield.html" with f_ind=form.excerpt_ind f_en=form.excerpt_en %}
     </div>
   </div>
 
@@ -43,16 +45,23 @@
   <div class="form-card">
     <div class="form-card-head"><h3>Isi Artikel</h3><p>Boleh berisi HTML sederhana (h2, h3, p, ul, a, blockquote). Pilih teks lalu klik tombol untuk memformat.</p></div>
     <div class="form-card-body">
-      <div class="editor-toolbar" data-editor="{{ form.body.id_for_label }}">
-        <button type="button" data-tag="b" title="Tebal"><b>B</b></button>
-        <button type="button" data-tag="i" title="Miring"><i>I</i></button>
-        <button type="button" data-tag="h2" title="Sub-judul">H2</button>
-        <button type="button" data-tag="h3" title="Sub-judul kecil">H3</button>
-        <button type="button" data-tag="ul" title="Daftar">&#8801;</button>
-        <button type="button" data-tag="a" title="Tautan">&#128279;</button>
+      {% include "panel/_langbar.html" %}
+      <div class="field-lang" data-lang="ind">
+        <div class="editor-toolbar" data-editor="{{ form.body_ind.id_for_label }}">
+          <button type="button" data-tag="b" title="Tebal"><b>B</b></button>
+          <button type="button" data-tag="i" title="Miring"><i>I</i></button>
+          <button type="button" data-tag="h2" title="Sub-judul">H2</button>
+          <button type="button" data-tag="h3" title="Sub-judul kecil">H3</button>
+          <button type="button" data-tag="ul" title="Daftar">&#8801;</button>
+          <button type="button" data-tag="a" title="Tautan">&#128279;</button>
+        </div>
+        {{ form.body_ind }}
+        {% for e in form.body_ind.errors %}<span class="field-error">{{ e }}</span>{% endfor %}
       </div>
-      {{ form.body }}
-      {% for e in form.body.errors %}<span class="field-error">{{ e }}</span>{% endfor %}
+      <div class="field-lang" data-lang="en" hidden>
+        {{ form.body_en }}
+        {% for e in form.body_en.errors %}<span class="field-error">{{ e }}</span>{% endfor %}
+      </div>
     </div>
   </div>
 
@@ -61,10 +70,9 @@
     <div class="form-card-body">
       {{ form.cta_url }}
       <div class="link-picker" id="ctaPicker">
-        <div class="row">
-          {% include "panel/_field.html" with field=form.cta_label %}
-          {% include "panel/_field.html" with field=form.cta_type %}
-        </div>
+        {% include "panel/_field.html" with field=form.cta_type %}
+        {% include "panel/_langbar.html" %}
+        {% include "panel/_transfield.html" with f_ind=form.cta_label_ind f_en=form.cta_label_en %}
         <div class="field" data-cta="halaman">{% include "panel/_field.html" with field=form.cta_page %}</div>
         <div class="field" data-cta="kategori">{% include "panel/_field.html" with field=form.cta_category %}</div>
         <div class="field" data-cta="produk">{% include "panel/_field.html" with field=form.cta_product %}</div>
@@ -97,7 +105,7 @@
 <script>
 (function () {
   // slug auto-fill from title (only while slug empty / untouched on a new article)
-  var title = document.getElementById('{{ form.title.id_for_label }}');
+  var title = document.getElementById('{{ form.title_ind.id_for_label }}');
   var slug = document.getElementById('{{ form.slug.id_for_label }}');
   if (title && slug) {
     var touched = slug.value.length > 0;
@@ -111,7 +119,7 @@
 
   // minimal wrap-selection formatting for the body textarea
   var bar = document.querySelector('.editor-toolbar');
-  var body = document.getElementById('{{ form.body.id_for_label }}');
+  var body = document.getElementById('{{ form.body_ind.id_for_label }}');
   if (bar && body) {
     bar.addEventListener('click', function (e) {
       var btn = e.target.closest('button[data-tag]'); if (!btn) return;
@@ -131,7 +139,7 @@
   // CTA target picker: show only the field for the chosen type + live preview
   var picker = document.getElementById('ctaPicker');
   if (picker) {
-    var cl = document.getElementById('{{ form.cta_label.id_for_label }}');
+    var cl = document.getElementById('{{ form.cta_label_ind.id_for_label }}');
     var ct = document.getElementById('{{ form.cta_type.id_for_label }}');
     var rows = {};
     ['halaman', 'kategori', 'produk', 'url'].forEach(function (k) {

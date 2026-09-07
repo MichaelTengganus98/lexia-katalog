@@ -180,6 +180,16 @@ button { font-family: inherit; }
 .field.has-error input, .field.has-error select, .field.has-error textarea { border-color: var(--rust); }
 .field-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
 
+/* ID / EN content tabs inside a form card */
+.lang-tabs { display: flex; gap: 2px; margin-bottom: 18px; border-bottom: 1px solid var(--line); }
+.lang-tab {
+  padding: 8px 15px; font-size: 12.5px; font-weight: 600; color: var(--text-muted);
+  border: 1px solid transparent; border-bottom: none; background: none; cursor: pointer;
+}
+.lang-tab:hover { color: var(--text); }
+.lang-tab.active { color: var(--text); border-color: var(--line); background: #fff; margin-bottom: -1px; }
+.field-lang[hidden] { display: none; }
+
 /* ---------- image / file upload slots ---------- */
 .upload-slot {
   border: 1.5px dashed var(--line); background: var(--cream);

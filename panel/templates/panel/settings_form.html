@@ -1,31 +1,30 @@
 {% extends "panel/base.html" %}
-{% load panel_extras %}
 
 {% block body %}
 <div class="tut">
   <span class="tut-mark">?</span>
-  <div>Data situs yang dipakai di seluruh halaman: nama &amp; meta default, info kontak untuk
-    data terstruktur / Google Maps, tautan media sosial, dan kode verifikasi / Analytics.</div>
+  <div>Data situs yang dipakai di seluruh halaman: nama &amp; meta default, teks halaman
+    Beranda / Tentang / Hubungi Kami (dua bahasa), info kontak untuk data terstruktur,
+    tautan media sosial, dan kode verifikasi / Analytics.</div>
 </div>
 
 <form method="post" enctype="multipart/form-data" class="form-shell" novalidate>
   {% csrf_token %}
   {% if form.non_field_errors %}<div class="msg msg-error">{{ form.non_field_errors }}</div>{% endif %}
 
-  {% for heading, names in groups %}
+  {% for heading, items, has_trans in groups %}
     <div class="form-card">
       <div class="form-card-head"><h3>{{ heading }}</h3></div>
       <div class="form-card-body">
-        {% for name in names %}
-          {% with f=form|formfield:name %}
-            {% if name == "default_og_image" %}
-              {% include "panel/_upload.html" with field=f dim="1200 &times; 630 px" %}
-            {% elif name == "about_image" %}
-              {% include "panel/_upload.html" with field=f dim="1200 &times; 900 px" %}
-            {% else %}
-              {% include "panel/_field.html" with field=f %}
-            {% endif %}
-          {% endwith %}
+        {% if has_trans %}{% include "panel/_langbar.html" %}{% endif %}
+        {% for kind, a, b in items %}
+          {% if kind == "trans" %}
+            {% include "panel/_transfield.html" with f_ind=a f_en=b %}
+          {% elif kind == "image" %}
+            {% include "panel/_upload.html" with field=a dim="1200 &times; 900 px" %}
+          {% else %}
+            {% include "panel/_field.html" with field=a %}
+          {% endif %}
         {% endfor %}
       </div>
     </div>

@@ -15,15 +15,16 @@
   {% if form.non_field_errors %}<div class="msg msg-error">{{ form.non_field_errors }}</div>{% endif %}
 
   <div class="form-card">
-    <div class="form-card-head"><h3>Informasi Dasar</h3><p>Nama, kategori, dan deskripsi produk.</p></div>
+    <div class="form-card-head"><h3>Informasi Dasar</h3><p>Nama, kategori, dan deskripsi produk. Isi versi Indonesia; versi English opsional.</p></div>
     <div class="form-card-body">
-      {% include "panel/_field.html" with field=form.name %}
       <div class="field-row-2">
         {% include "panel/_field.html" with field=form.Jenis %}
         {% include "panel/_field.html" with field=form.model_code %}
       </div>
-      {% include "panel/_field.html" with field=form.summary %}
-      {% include "panel/_field.html" with field=form.description %}
+      {% include "panel/_langbar.html" %}
+      {% include "panel/_transfield.html" with f_ind=form.name_ind f_en=form.name_en %}
+      {% include "panel/_transfield.html" with f_ind=form.summary_ind f_en=form.summary_en %}
+      {% include "panel/_transfield.html" with f_ind=form.description_ind f_en=form.description_en %}
     </div>
   </div>
 
@@ -66,14 +67,20 @@
   </div>
 
   <div class="form-card">
-    <div class="form-card-head"><h3>Spesifikasi Teknis</h3><p>Tampil sebagai tabel spesifikasi di halaman detail produk. Satu baris = satu spesifikasi.</p></div>
+    <div class="form-card-head"><h3>Spesifikasi Teknis</h3><p>Tampil sebagai tabel spesifikasi di halaman detail produk. Satu baris = satu spesifikasi (format <code>Label: nilai</code>).</p></div>
     <div class="form-card-body">
-      <div class="spec-rows" id="specRows"></div>
-      <button type="button" class="btn btn-outline btn-sm" id="addSpecRow">+ Tambah baris spesifikasi</button>
-      <div class="field" style="margin-top:16px">
-        <label for="{{ form.specification.id_for_label }}">Atau tulis manual (format <code>Label: nilai</code> per baris)</label>
-        {{ form.specification }}
-        {% for e in form.specification.errors %}<span class="field-error">{{ e }}</span>{% endfor %}
+      {% include "panel/_langbar.html" %}
+      <div class="field-lang" data-lang="ind">
+        <div class="spec-rows" id="specRows"></div>
+        <button type="button" class="btn btn-outline btn-sm" id="addSpecRow">+ Tambah baris spesifikasi</button>
+        <div class="field" style="margin-top:16px">
+          <label for="{{ form.specification_ind.id_for_label }}">Teks mentah (Indonesia)</label>
+          {{ form.specification_ind }}
+          {% for e in form.specification_ind.errors %}<span class="field-error">{{ e }}</span>{% endfor %}
+        </div>
+      </div>
+      <div class="field-lang" data-lang="en" hidden>
+        {% include "panel/_field.html" with field=form.specification_en %}
       </div>
     </div>
   </div>

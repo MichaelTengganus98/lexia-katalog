@@ -10,8 +10,9 @@
   <div class="form-card">
     <div class="form-card-head"><h3>Brosur</h3><p>Gambar sampul tampil sebagai kartu di beranda; berkas PDF opsional untuk diunduh.</p></div>
     <div class="form-card-body">
-      {% include "panel/_field.html" with field=form.title %}
-      {% include "panel/_field.html" with field=form.description %}
+      {% include "panel/_langbar.html" %}
+      {% include "panel/_transfield.html" with f_ind=form.title_ind f_en=form.title_en %}
+      {% include "panel/_transfield.html" with f_ind=form.description_ind f_en=form.description_en %}
       {% include "panel/_upload.html" with field=form.picture dim="1000 &times; 750 px" %}
       <div class="upload-slot">
         <div class="drop">PDF</div>

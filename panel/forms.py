@@ -14,7 +14,19 @@ PICTURE_FIELDS = ["picture%d" % n for n in range(1, 11)]
 User = get_user_model()
 
 
-class ProductForm(forms.ModelForm):
+class TransEmptyNoneMixin:
+    """Store an empty translated field as NULL, never ''. modeltranslation keeps
+    `unique=True` on `<field>_ind` / `<field>_en`; multiple NULLs are allowed but
+    multiple '' are not, so a blank English name on two products would clash."""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for name, field in self.fields.items():
+            if (name.endswith("_ind") or name.endswith("_en")) and hasattr(field, "empty_value"):
+                field.empty_value = None
+
+
+class ProductForm(TransEmptyNoneMixin, forms.ModelForm):
     FEATURE_CHOICES = [
         ("", "Tidak ditampilkan di beranda"),
         ("1", "#1 — Kartu besar (hero)"),
@@ -31,23 +43,32 @@ class ProductForm(forms.ModelForm):
     class Meta:
         model = Item
         fields = [
-            "name", "Jenis", "model_code", "summary", "description",
-            *PICTURE_FIELDS, "urlVideo", "specification",
+            "name_ind", "name_en", "Jenis", "model_code",
+            "summary_ind", "summary_en", "description_ind", "description_en",
+            *PICTURE_FIELDS, "urlVideo",
+            "specification_ind", "specification_en",
             "availability", "replacement", "feature_rank",
         ]
         widgets = {
-            "name": forms.TextInput(attrs={"placeholder": "Contoh: Mesin Potong Kertas Hydraulic 5310"}),
+            "name_ind": forms.TextInput(attrs={"placeholder": "Contoh: Mesin Potong Kertas Hydraulic 5310"}),
+            "name_en": forms.TextInput(attrs={"placeholder": "e.g. Hydraulic Paper Cutting Machine 5310"}),
             "model_code": forms.TextInput(attrs={"placeholder": "Contoh: 5310"}),
-            "summary": forms.Textarea(attrs={"rows": 2, "placeholder": "1–2 kalimat yang muncul di bawah nama produk pada halaman detail."}),
-            "description": forms.Textarea(attrs={"rows": 6, "placeholder": "Deskripsi lengkap produk untuk bagian \"Deskripsi\"."}),
+            "summary_ind": forms.Textarea(attrs={"rows": 2}),
+            "summary_en": forms.Textarea(attrs={"rows": 2}),
+            "description_ind": forms.Textarea(attrs={"rows": 6}),
+            "description_en": forms.Textarea(attrs={"rows": 6}),
             "urlVideo": forms.TextInput(attrs={"placeholder": "https://www.youtube.com/watch?v=..."}),
-            "specification": forms.Textarea(attrs={"rows": 5, "class": "spec-raw"}),
+            "specification_ind": forms.Textarea(attrs={"rows": 5, "class": "spec-raw"}),
+            "specification_en": forms.Textarea(attrs={"rows": 5}),
             "availability": forms.RadioSelect(),
         }
         labels = {
-            "name": "Nama produk", "Jenis": "Kategori", "model_code": "Kode / SKU model",
-            "summary": "Ringkasan singkat", "description": "Deskripsi lengkap",
-            "urlVideo": "Tautan YouTube", "specification": "Spesifikasi teknis",
+            "name_ind": "Nama produk", "name_en": "Product name (English)",
+            "Jenis": "Kategori", "model_code": "Kode / SKU model",
+            "summary_ind": "Ringkasan singkat", "summary_en": "Short summary (English)",
+            "description_ind": "Deskripsi lengkap", "description_en": "Full description (English)",
+            "urlVideo": "Tautan YouTube",
+            "specification_ind": "Spesifikasi teknis", "specification_en": "Technical specs (English)",
             "availability": "Ketersediaan",
         }
 
@@ -55,8 +76,10 @@ class ProductForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields["Jenis"].queryset = Category.objects.all()
         self.fields["Jenis"].empty_label = "Pilih kategori"
-        self.fields["description"].required = False
-        self.fields["summary"].required = False
+        for f in ("summary_ind", "summary_en", "description_ind", "description_en",
+                  "name_en", "specification_ind", "specification_en"):
+            self.fields[f].required = False
+        self.fields["name_ind"].required = True
         self.fields["replacement"].queryset = Item.objects.exclude(
             pk=self.instance.pk) if self.instance.pk else Item.objects.all()
         self.fields["replacement"].empty_label = "— tidak ada —"
@@ -74,6 +97,23 @@ class ProductForm(forms.ModelForm):
         v = self.cleaned_data.get("feature_rank")
         return int(v) if v else None
 
+    def _unique_name(self, value, field):
+        v = (value or "").strip()
+        if not v:
+            return None
+        qs = Item.objects.filter(**{field: v})
+        if self.instance.pk:
+            qs = qs.exclude(pk=self.instance.pk)
+        if qs.exists():
+            raise forms.ValidationError("Nama produk ini sudah dipakai produk lain.")
+        return v
+
+    def clean_name_ind(self):
+        return self._unique_name(self.cleaned_data.get("name_ind"), "name_ind")
+
+    def clean_name_en(self):
+        return self._unique_name(self.cleaned_data.get("name_en"), "name_en")
+
 
 CTA_PAGES = [
     ("/", "Beranda"),
@@ -84,7 +124,7 @@ CTA_PAGES = [
 _CTA_PAGE_PATHS = {p for p, _ in CTA_PAGES}
 
 
-class PostForm(forms.ModelForm):
+class PostForm(TransEmptyNoneMixin, forms.ModelForm):
     CTA_TYPES = [
         ("", "— tidak ada (pakai tombol otomatis) —"),
         ("halaman", "Halaman Internal"),
@@ -108,29 +148,42 @@ class PostForm(forms.ModelForm):
     class Meta:
         model = Post
         fields = [
-            "title", "slug", "tag", "excerpt", "cover_image", "body",
-            "related_category", "cta_label", "cta_url",
+            "title_ind", "title_en", "slug", "tag",
+            "excerpt_ind", "excerpt_en", "cover_image",
+            "body_ind", "body_en",
+            "related_category", "cta_label_ind", "cta_label_en", "cta_url",
         ]
         widgets = {
-            "title": forms.TextInput(attrs={"placeholder": "Contoh: Cara Memilih Mesin Laminating untuk Usaha Percetakan"}),
+            "title_ind": forms.TextInput(attrs={"placeholder": "Contoh: Cara Memilih Mesin Laminating untuk Usaha Percetakan"}),
+            "title_en": forms.TextInput(attrs={"placeholder": "e.g. How to Choose a Laminating Machine for Your Print Shop"}),
             "slug": forms.TextInput(attrs={"placeholder": "otomatis-dari-judul"}),
-            "excerpt": forms.Textarea(attrs={"rows": 2, "placeholder": "1–2 kalimat ringkasan artikel (tampil di kartu)."}),
-            "body": forms.Textarea(attrs={"class": "editor-body", "placeholder": "Tulis isi artikel di sini…"}),
-            "cta_label": forms.TextInput(attrs={"placeholder": "Contoh: Lihat Katalog Laminating"}),
+            "excerpt_ind": forms.Textarea(attrs={"rows": 2}),
+            "excerpt_en": forms.Textarea(attrs={"rows": 2}),
+            "body_ind": forms.Textarea(attrs={"class": "editor-body", "placeholder": "Tulis isi artikel di sini…"}),
+            "body_en": forms.Textarea(attrs={"class": "editor-body", "placeholder": "Write the article body here…"}),
+            "cta_label_ind": forms.TextInput(attrs={"placeholder": "Contoh: Lihat Katalog Laminating"}),
+            "cta_label_en": forms.TextInput(attrs={"placeholder": "e.g. See the Laminating Catalog"}),
             "cta_url": forms.HiddenInput(),
         }
         labels = {
-            "title": "Judul artikel", "slug": "Slug URL", "tag": "Tag artikel",
-            "excerpt": "Ringkasan", "cover_image": "Foto sampul", "body": "Isi artikel",
+            "title_ind": "Judul artikel", "title_en": "Article title (English)",
+            "slug": "Slug URL", "tag": "Tag artikel",
+            "excerpt_ind": "Ringkasan", "excerpt_en": "Summary (English)",
+            "cover_image": "Foto sampul",
+            "body_ind": "Isi artikel", "body_en": "Article body (English)",
             "related_category": "Kategori produk terkait",
-            "cta_label": "Teks tombol",
+            "cta_label_ind": "Teks tombol", "cta_label_en": "Button text (English)",
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["slug"].required = False
-        self.fields["excerpt"].required = False
         self.fields["cta_url"].required = False
+        for f in ("title_en", "excerpt_ind", "excerpt_en", "body_en",
+                  "cta_label_ind", "cta_label_en"):
+            self.fields[f].required = False
+        self.fields["title_ind"].required = True
+        self.fields["body_ind"].required = True
         self.fields["related_category"].queryset = Category.objects.all()
         self.fields["related_category"].empty_label = "— tidak ada —"
         self._seed_cta_initial()
@@ -162,7 +215,7 @@ class PostForm(forms.ModelForm):
     def clean_slug(self):
         slug = (self.cleaned_data.get("slug") or "").strip()
         if not slug:
-            slug = slugify(self.cleaned_data.get("title", ""))[:220]
+            slug = slugify(self.cleaned_data.get("title_ind", ""))[:220]
         qs = Post.objects.filter(slug=slug)
         if self.instance.pk:
             qs = qs.exclude(pk=self.instance.pk)
@@ -173,7 +226,7 @@ class PostForm(forms.ModelForm):
     def clean(self):
         cleaned = super().clean()
         ctype = cleaned.get("cta_type") or ""
-        label = (cleaned.get("cta_label") or "").strip()
+        label = (cleaned.get("cta_label_ind") or "").strip()
         url = ""
         if ctype == "halaman":
             url = cleaned.get("cta_page") or ""
@@ -195,10 +248,11 @@ class PostForm(forms.ModelForm):
                 self.add_error("cta_external", "Masukkan URL lengkap yang diawali http:// atau https://")
             url = ext
         if ctype and not label:
-            self.add_error("cta_label", "Isi teks tombol, atau pilih \"tidak ada\" untuk tombol otomatis.")
+            self.add_error("cta_label_ind", "Isi teks tombol, atau pilih \"tidak ada\" untuk tombol otomatis.")
         cleaned["cta_url"] = url if ctype else ""
         if not ctype:
-            cleaned["cta_label"] = ""
+            cleaned["cta_label_ind"] = ""
+            cleaned["cta_label_en"] = ""
         self.instance.cta_url = cleaned["cta_url"]
         return cleaned
 
@@ -206,39 +260,65 @@ class PostForm(forms.ModelForm):
 # --------------------------------------------------------------------------- #
 #  Category & SEO
 # --------------------------------------------------------------------------- #
-class CategoryForm(forms.ModelForm):
+class CategoryForm(TransEmptyNoneMixin, forms.ModelForm):
     class Meta:
         model = Category
-        fields = ["jenis", "intro", "meta_title", "meta_description", "og_image", "noindex"]
+        fields = ["jenis_ind", "jenis_en", "intro_ind", "intro_en",
+                  "meta_title_ind", "meta_title_en",
+                  "meta_description_ind", "meta_description_en",
+                  "og_image", "noindex"]
         widgets = {
-            "jenis": forms.TextInput(attrs={"placeholder": "Contoh: Mesin Potong Kertas"}),
-            "intro": forms.Textarea(attrs={"rows": 5}),
-            "meta_title": forms.TextInput(),
-            "meta_description": forms.Textarea(attrs={"rows": 2}),
+            "jenis_ind": forms.TextInput(attrs={"placeholder": "Contoh: Mesin Potong Kertas"}),
+            "jenis_en": forms.TextInput(attrs={"placeholder": "e.g. Paper Cutting Machines"}),
+            "intro_ind": forms.Textarea(attrs={"rows": 5}),
+            "intro_en": forms.Textarea(attrs={"rows": 5}),
+            "meta_title_ind": forms.TextInput(),
+            "meta_title_en": forms.TextInput(),
+            "meta_description_ind": forms.Textarea(attrs={"rows": 2}),
+            "meta_description_en": forms.Textarea(attrs={"rows": 2}),
         }
-        labels = {"jenis": "Nama kategori"}
+        labels = {
+            "jenis_ind": "Nama kategori", "jenis_en": "Category name (English)",
+            "intro_ind": "Teks pengantar", "intro_en": "Intro text (English)",
+            "meta_title_ind": "Meta title", "meta_title_en": "Meta title (English)",
+            "meta_description_ind": "Meta description", "meta_description_en": "Meta description (English)",
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["jenis_ind"].required = True
+        for f in ("jenis_en", "intro_ind", "intro_en", "meta_title_ind", "meta_title_en",
+                  "meta_description_ind", "meta_description_en"):
+            self.fields[f].required = False
 
 
 # --------------------------------------------------------------------------- #
 #  Brochure
 # --------------------------------------------------------------------------- #
-class BrochureForm(forms.ModelForm):
+class BrochureForm(TransEmptyNoneMixin, forms.ModelForm):
     class Meta:
         model = Brochure
-        fields = ["title", "description", "picture", "file", "order", "is_active"]
+        fields = ["title_ind", "title_en", "description_ind", "description_en",
+                  "picture", "file", "order", "is_active"]
         widgets = {
-            "title": forms.TextInput(),
-            "description": forms.TextInput(),
+            "title_ind": forms.TextInput(),
+            "title_en": forms.TextInput(),
+            "description_ind": forms.TextInput(),
+            "description_en": forms.TextInput(),
             "order": forms.NumberInput(attrs={"min": 0}),
         }
         labels = {
-            "title": "Judul brosur", "description": "Deskripsi singkat",
+            "title_ind": "Judul brosur", "title_en": "Brochure title (English)",
+            "description_ind": "Deskripsi singkat", "description_en": "Short description (English)",
             "picture": "Gambar sampul", "file": "Berkas PDF (opsional)",
             "order": "Urutan tampil", "is_active": "Tampilkan di beranda",
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields["title_ind"].required = True
+        for f in ("title_en", "description_ind", "description_en"):
+            self.fields[f].required = False
         self.fields["picture"].required = not bool(self.instance.pk and self.instance.picture)
 
 
@@ -256,13 +336,32 @@ class ContactMessageForm(forms.ModelForm):
 # --------------------------------------------------------------------------- #
 #  Site settings (singleton)
 # --------------------------------------------------------------------------- #
-class SiteSettingsForm(forms.ModelForm):
+_SS_TRANSLATED = ("tagline", "default_meta_description", "home_kicker", "home_headline",
+                  "home_lead", "about_headline", "about_body", "contact_intro")
+
+
+class SiteSettingsForm(TransEmptyNoneMixin, forms.ModelForm):
     class Meta:
         model = SiteSettings
-        exclude = []
+        # keep only the per-language columns; the bare translated fields are
+        # kept in sync by modeltranslation on model save.
+        exclude = list(_SS_TRANSLATED)
         widgets = {
-            "default_meta_description": forms.Textarea(attrs={"rows": 2}),
+            "default_meta_description_ind": forms.Textarea(attrs={"rows": 2}),
+            "default_meta_description_en": forms.Textarea(attrs={"rows": 2}),
+            "home_lead_ind": forms.Textarea(attrs={"rows": 3}),
+            "home_lead_en": forms.Textarea(attrs={"rows": 3}),
+            "about_body_ind": forms.Textarea(attrs={"rows": 6}),
+            "about_body_en": forms.Textarea(attrs={"rows": 6}),
+            "contact_intro_ind": forms.Textarea(attrs={"rows": 3}),
+            "contact_intro_en": forms.Textarea(attrs={"rows": 3}),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for name, field in self.fields.items():
+            if name.endswith("_en"):
+                field.required = False
 
 
 # --------------------------------------------------------------------------- #

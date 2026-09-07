@@ -16,16 +16,18 @@
   <div class="form-card">
     <div class="form-card-head"><h3>Kategori</h3><p>Nama dan teks pengantar yang tampil di atas daftar produk.</p></div>
     <div class="form-card-body">
-      {% include "panel/_field.html" with field=form.jenis %}
-      {% include "panel/_field.html" with field=form.intro %}
+      {% include "panel/_langbar.html" %}
+      {% include "panel/_transfield.html" with f_ind=form.jenis_ind f_en=form.jenis_en %}
+      {% include "panel/_transfield.html" with f_ind=form.intro_ind f_en=form.intro_en %}
     </div>
   </div>
 
   <div class="form-card">
     <div class="form-card-head"><h3>SEO</h3><p>Semua opsional — kosongkan untuk memakai nilai otomatis dari nama &amp; pengantar.</p></div>
     <div class="form-card-body">
-      {% include "panel/_field.html" with field=form.meta_title %}
-      {% include "panel/_field.html" with field=form.meta_description %}
+      {% include "panel/_langbar.html" %}
+      {% include "panel/_transfield.html" with f_ind=form.meta_title_ind f_en=form.meta_title_en %}
+      {% include "panel/_transfield.html" with f_ind=form.meta_description_ind f_en=form.meta_description_en %}
       {% include "panel/_upload.html" with field=form.og_image dim="1200 &times; 630 px" %}
       {% include "panel/_checkbox.html" with field=form.noindex %}
     </div>

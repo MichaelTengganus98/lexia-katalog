@@ -312,18 +312,43 @@ def site_settings(request):
         messages.error(request, "Periksa kembali isian yang ditandai merah.")
     else:
         form = SiteSettingsForm(instance=obj)
+    # each entry: field name (language-neutral) or ("trans", base) for id/en pair
     groups = [
-        ("Identitas", ["site_name", "tagline", "default_meta_description", "default_og_image"]),
-        ("Halaman Tentang Kami", ["about_headline", "about_body", "about_image"]),
+        ("Identitas", ["site_name", ("trans", "tagline"),
+                       ("trans", "default_meta_description"), "default_og_image"]),
+        ("Halaman: Beranda", [("trans", "home_kicker"), ("trans", "home_headline"),
+                              ("trans", "home_lead")]),
+        ("Halaman: Tentang Kami", [("trans", "about_headline"), ("trans", "about_body"),
+                                   "about_image"]),
+        ("Halaman: Hubungi Kami", [("trans", "contact_intro")]),
         ("Kontak & Lokasi", ["phone_primary", "phone_secondary", "whatsapp_number", "email",
                              "address", "city", "postal_code", "region", "country",
                              "latitude", "longitude", "opening_hours"]),
         ("Media Sosial", ["facebook_url", "instagram_url", "youtube_url", "tokopedia_url"]),
         ("Verifikasi & Analytics", ["google_site_verification", "bing_site_verification", "ga_measurement_id"]),
     ]
+    def _bf(name):
+        try:
+            return form[name]
+        except KeyError:
+            return None
+
+    resolved = []
+    for heading, names in groups:
+        items = []
+        for n in names:
+            if isinstance(n, tuple) and n[0] == "trans":
+                items.append(("trans", _bf(n[1] + "_ind"), _bf(n[1] + "_en")))
+            elif n in ("default_og_image", "about_image"):
+                items.append(("image", _bf(n), None))
+            else:
+                items.append(("plain", _bf(n), None))
+        has_trans = any(k == "trans" for k, _a, _b in items)
+        resolved.append((heading, items, has_trans))
+
     return render(request, "panel/settings_form.html", {
         "section": "pengaturan", "title": "Pengaturan Situs & SEO",
-        "form": form, "groups": groups,
+        "form": form, "groups": resolved,
     })
 
 

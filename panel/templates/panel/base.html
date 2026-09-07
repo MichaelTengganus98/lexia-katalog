@@ -60,6 +60,21 @@
     </div>
   </main>
 </div>
+<script>
+  // ID / EN content tabs, scoped to each form card
+  document.addEventListener('click', function (e) {
+    var tab = e.target.closest('.lang-tab');
+    if (!tab) return;
+    var scope = tab.closest('.form-card') || document;
+    var lang = tab.getAttribute('data-lang');
+    scope.querySelectorAll('.lang-tab').forEach(function (t) {
+      t.classList.toggle('active', t.getAttribute('data-lang') === lang);
+    });
+    scope.querySelectorAll('.field-lang').forEach(function (fl) {
+      fl.hidden = fl.getAttribute('data-lang') !== lang;
+    });
+  });
+</script>
 {% block script %}{% endblock %}
 </body>
 </html>

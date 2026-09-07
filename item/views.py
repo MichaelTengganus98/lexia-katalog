@@ -23,7 +23,7 @@ def item(request, id, slug):
             specDict[found.group(1)] = found.group(2)
         except AttributeError:
             pass
-    related = get_object_or_404(Category, jenis=item.Jenis)
+    related = item.Jenis
     related_items = related.item_set.exclude(pk=item.pk)
     if related_items.count() >= 4:
         related_items = related_items[:4]
