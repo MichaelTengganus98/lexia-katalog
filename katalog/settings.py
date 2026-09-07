@@ -59,6 +59,7 @@ if not ALLOWED_HOSTS:
 
 # Application definition
 INSTALLED_APPS = [
+    'modeltranslation',            # must precede django.contrib.admin
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -81,6 +82,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -141,6 +143,18 @@ TIME_ZONE = 'Asia/Jakarta'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
+
+LANGUAGES = [
+    ('id', 'Bahasa Indonesia'),
+    ('en', 'English'),
+]
+LOCALE_PATHS = [os.path.join(BASE_DIR, 'locale')]
+
+# django-modeltranslation: content fields get an `_id` / `_en` column each;
+# the bare accessor (item.name) returns the active language, falling back to id.
+MODELTRANSLATION_DEFAULT_LANGUAGE = 'id'
+MODELTRANSLATION_LANGUAGES = ('id', 'en')
+MODELTRANSLATION_FALLBACK_LANGUAGES = ('id', 'en')
 
 
 # Static & media
