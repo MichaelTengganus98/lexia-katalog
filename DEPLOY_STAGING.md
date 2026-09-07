@@ -206,3 +206,4 @@ database does not sync to production automatically.
 | infinite redirect | `DJANGO_SECURE_SSL=1` but no SSL cert yet → set it to `0`, restart |
 | admin CSS missing | `collectstatic` + the `static/` folder must be web-served from the docroot |
 | changes not showing | `touch tmp/restart.txt` (Passenger caches the process) |
+| panel "Isi English dari…" / translate button errors or does nothing | the server has no outbound HTTPS to `clients5.google.com` / `translate.googleapis.com`, or Google is rate-limiting the IP. Editors fill the field manually; "Isi dengan rekomendasi SEO" is unaffected (local-only). |
