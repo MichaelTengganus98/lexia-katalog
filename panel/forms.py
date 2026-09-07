@@ -48,6 +48,9 @@ class ProductForm(TransEmptyNoneMixin, forms.ModelForm):
             *PICTURE_FIELDS, "urlVideo",
             "specification_ind", "specification_en",
             "availability", "replacement", "feature_rank",
+            "meta_title_ind", "meta_title_en",
+            "meta_description_ind", "meta_description_en",
+            "og_image", "noindex",
         ]
         widgets = {
             "name_ind": forms.TextInput(attrs={"placeholder": "Contoh: Mesin Potong Kertas Hydraulic 5310"}),
@@ -61,6 +64,10 @@ class ProductForm(TransEmptyNoneMixin, forms.ModelForm):
             "specification_ind": forms.Textarea(attrs={"rows": 5, "class": "spec-raw"}),
             "specification_en": forms.Textarea(attrs={"rows": 5}),
             "availability": forms.RadioSelect(),
+            "meta_title_ind": forms.TextInput(),
+            "meta_title_en": forms.TextInput(),
+            "meta_description_ind": forms.Textarea(attrs={"rows": 2}),
+            "meta_description_en": forms.Textarea(attrs={"rows": 2}),
         }
         labels = {
             "name_ind": "Nama produk", "name_en": "Product name (English)",
@@ -70,6 +77,9 @@ class ProductForm(TransEmptyNoneMixin, forms.ModelForm):
             "urlVideo": "Tautan YouTube",
             "specification_ind": "Spesifikasi teknis", "specification_en": "Technical specs (English)",
             "availability": "Ketersediaan",
+            "meta_title_ind": "Meta title", "meta_title_en": "Meta title (English)",
+            "meta_description_ind": "Meta description", "meta_description_en": "Meta description (English)",
+            "og_image": "Gambar share (OG image)", "noindex": "Sembunyikan dari Google (noindex)",
         }
 
     def __init__(self, *args, **kwargs):
@@ -77,7 +87,9 @@ class ProductForm(TransEmptyNoneMixin, forms.ModelForm):
         self.fields["Jenis"].queryset = Category.objects.all()
         self.fields["Jenis"].empty_label = "Pilih kategori"
         for f in ("summary_ind", "summary_en", "description_ind", "description_en",
-                  "name_en", "specification_ind", "specification_en"):
+                  "name_en", "specification_ind", "specification_en",
+                  "meta_title_ind", "meta_title_en",
+                  "meta_description_ind", "meta_description_en", "og_image", "noindex"):
             self.fields[f].required = False
         self.fields["name_ind"].required = True
         self.fields["replacement"].queryset = Item.objects.exclude(
@@ -152,6 +164,9 @@ class PostForm(TransEmptyNoneMixin, forms.ModelForm):
             "excerpt_ind", "excerpt_en", "cover_image",
             "body_ind", "body_en",
             "related_category", "cta_label_ind", "cta_label_en", "cta_url",
+            "meta_title_ind", "meta_title_en",
+            "meta_description_ind", "meta_description_en",
+            "og_image", "noindex",
         ]
         widgets = {
             "title_ind": forms.TextInput(attrs={"placeholder": "Contoh: Cara Memilih Mesin Laminating untuk Usaha Percetakan"}),
@@ -164,6 +179,10 @@ class PostForm(TransEmptyNoneMixin, forms.ModelForm):
             "cta_label_ind": forms.TextInput(attrs={"placeholder": "Contoh: Lihat Katalog Laminating"}),
             "cta_label_en": forms.TextInput(attrs={"placeholder": "e.g. See the Laminating Catalog"}),
             "cta_url": forms.HiddenInput(),
+            "meta_title_ind": forms.TextInput(),
+            "meta_title_en": forms.TextInput(),
+            "meta_description_ind": forms.Textarea(attrs={"rows": 2}),
+            "meta_description_en": forms.Textarea(attrs={"rows": 2}),
         }
         labels = {
             "title_ind": "Judul artikel", "title_en": "Article title (English)",
@@ -173,6 +192,9 @@ class PostForm(TransEmptyNoneMixin, forms.ModelForm):
             "body_ind": "Isi artikel", "body_en": "Article body (English)",
             "related_category": "Kategori produk terkait",
             "cta_label_ind": "Teks tombol", "cta_label_en": "Button text (English)",
+            "meta_title_ind": "Meta title", "meta_title_en": "Meta title (English)",
+            "meta_description_ind": "Meta description", "meta_description_en": "Meta description (English)",
+            "og_image": "Gambar share (OG image)", "noindex": "Sembunyikan dari Google (noindex)",
         }
 
     def __init__(self, *args, **kwargs):
@@ -180,7 +202,9 @@ class PostForm(TransEmptyNoneMixin, forms.ModelForm):
         self.fields["slug"].required = False
         self.fields["cta_url"].required = False
         for f in ("title_en", "excerpt_ind", "excerpt_en", "body_en",
-                  "cta_label_ind", "cta_label_en"):
+                  "cta_label_ind", "cta_label_en",
+                  "meta_title_ind", "meta_title_en",
+                  "meta_description_ind", "meta_description_en", "og_image", "noindex"):
             self.fields[f].required = False
         self.fields["title_ind"].required = True
         self.fields["body_ind"].required = True

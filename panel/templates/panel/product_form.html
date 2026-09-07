@@ -115,6 +115,21 @@
     </div>
   </div>
 
+  <div class="form-card">
+    <div class="form-card-head"><h3>SEO &amp; Pratinjau Berbagi</h3><p>Judul &amp; ringkasan yang tampil di Google dan saat link dibagikan. Kosongkan untuk memakai nilai otomatis dari nama &amp; deskripsi produk.</p></div>
+    <div class="form-card-body">
+      <div class="seo-tools">
+        <button type="button" class="btn btn-outline btn-sm seo-suggest-btn" data-type="product" data-id="{{ instance.pk|default:'' }}"{% if not instance %} disabled title="Simpan produk dulu untuk memakai rekomendasi"{% endif %}>&#9889; Isi dengan rekomendasi SEO</button>
+        <span class="seo-suggest-msg" aria-live="polite"></span>
+      </div>
+      {% include "panel/_langbar.html" %}
+      {% include "panel/_transfield.html" with f_ind=form.meta_title_ind f_en=form.meta_title_en %}
+      {% include "panel/_transfield.html" with f_ind=form.meta_description_ind f_en=form.meta_description_en %}
+      {% include "panel/_upload.html" with field=form.og_image dim="1200 &times; 630 px" %}
+      {% include "panel/_checkbox.html" with field=form.noindex %}
+    </div>
+  </div>
+
   <div class="form-actions">
     <button type="submit" class="btn btn-primary">Simpan Produk</button>
     <a href="{% url 'panel:product_list' %}" class="btn btn-outline">Batal</a>

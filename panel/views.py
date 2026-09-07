@@ -20,6 +20,7 @@ from item.models import Item
 from page.models import Category
 from seo.models import SiteSettings
 
+from . import seogen
 from .forms import (BrochureForm, CategoryForm, ContactMessageForm, PanelSetPasswordForm,
                     PostForm, ProductForm, SiteSettingsForm, UserCreateForm, UserEditForm)
 
@@ -161,6 +162,38 @@ def translate(request):
             status=502,
         )
     return JsonResponse({"translations": results})
+
+
+# --------------------------------------------------------------------------- #
+#  SEO recommendations  ("Isi dengan rekomendasi SEO" button)
+# --------------------------------------------------------------------------- #
+_SEO_MODELS = {"product": Item, "post": Post, "category": Category}
+
+
+@staff_member_required
+@require_POST
+def seo_suggest(request):
+    try:
+        payload = json.loads(request.body.decode("utf-8"))
+    except (ValueError, UnicodeDecodeError):
+        return JsonResponse({"error": "Permintaan tidak valid."}, status=400)
+
+    kind = payload.get("type")
+    lang = payload.get("lang")
+    if kind not in _SEO_MODELS or lang not in ("id", "en"):
+        return JsonResponse({"error": "Parameter tidak valid."}, status=400)
+
+    try:
+        obj = _SEO_MODELS[kind].objects.get(pk=payload.get("id"))
+    except (_SEO_MODELS[kind].DoesNotExist, ValueError, TypeError):
+        return JsonResponse(
+            {"error": "Simpan dulu sebelum memakai rekomendasi SEO."}, status=404)
+
+    try:
+        data = seogen.suggest(kind, obj, lang)
+    except Exception:
+        return JsonResponse({"error": "Tidak bisa membuat rekomendasi saat ini."}, status=500)
+    return JsonResponse(data)
 
 
 # --------------------------------------------------------------------------- #

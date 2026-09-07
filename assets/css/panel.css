@@ -203,6 +203,13 @@ button { font-family: inherit; }
 .lang-fill-msg { font-size: 12px; color: var(--text-muted); }
 .lang-fill-msg.is-error { color: var(--rust-dark); font-weight: 600; }
 
+/* SEO card: recommendation button + character meters */
+.seo-tools { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+.seo-suggest-msg { font-size: 12px; color: var(--text-muted); }
+.seo-suggest-msg.is-error { color: var(--rust-dark); font-weight: 600; }
+.seo-meter { display: block; margin-top: 5px; font-size: 11px; color: var(--text-muted); }
+.seo-meter.over { color: var(--rust-dark); font-weight: 600; }
+
 /* ---------- image / file upload slots ---------- */
 .upload-slot {
   border: 1.5px dashed var(--line); background: var(--cream);

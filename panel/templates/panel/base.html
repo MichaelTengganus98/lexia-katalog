@@ -142,6 +142,84 @@
       .catch(function () { say('Tidak dapat terhubung ke layanan terjemahan.', true); })
       .then(function () { buttons.forEach(function (b) { b.disabled = false; }); });
   });
+
+  // "Isi dengan rekomendasi SEO" — fill meta title/description for the card's
+  // active language from a server-side rule-based recommendation. Empty fields
+  // only; clear a field first to regenerate it.
+  var PANEL_SEO_SUGGEST_URL = "{% url 'panel:seo_suggest' %}";
+  document.addEventListener('click', function (e) {
+    var btn = e.target.closest('.seo-suggest-btn');
+    if (!btn || btn.disabled) return;
+
+    var card = btn.closest('.form-card') || document;
+    var activeTab = card.querySelector('.lang-tab.active');
+    var lang = (activeTab && activeTab.getAttribute('data-lang') === 'en') ? 'en' : 'id';
+    var suffix = lang === 'en' ? '_en' : '_ind';
+    var msg = card.querySelector('.seo-suggest-msg');
+    var titleEl = card.querySelector('[name$="meta_title' + suffix + '"]');
+    var descEl = card.querySelector('[name$="meta_description' + suffix + '"]');
+
+    function say(t, err) {
+      if (!msg) return;
+      msg.textContent = t || '';
+      msg.classList.toggle('is-error', !!err);
+    }
+    if (!titleEl && !descEl) { say('Field SEO tidak ditemukan.', true); return; }
+
+    var token = (card.querySelector('[name=csrfmiddlewaretoken]') ||
+                 document.querySelector('[name=csrfmiddlewaretoken]') || {}).value;
+    var label = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = 'Membuat rekomendasi…';
+
+    fetch(PANEL_SEO_SUGGEST_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-CSRFToken': token || '' },
+      body: JSON.stringify({
+        type: btn.getAttribute('data-type'),
+        id: btn.getAttribute('data-id'),
+        lang: lang
+      })
+    })
+      .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
+      .then(function (res) {
+        if (!res.ok) { say(res.d.error || 'Gagal membuat rekomendasi.', true); return; }
+        var filled = 0, kept = 0;
+        [[titleEl, res.d.meta_title], [descEl, res.d.meta_description]].forEach(function (p) {
+          if (!p[0] || !p[1]) return;
+          if ((p[0].value || '').trim()) { kept++; return; }
+          p[0].value = p[1];
+          p[0].dispatchEvent(new Event('input', { bubbles: true }));
+          filled++;
+        });
+        if (filled && kept) say(filled + ' field diisi; ' + kept + ' dibiarkan (sudah ada isian).');
+        else if (filled) say(filled + ' field diisi — periksa & sunting bila perlu.');
+        else say('Field SEO sudah terisi. Kosongkan dulu untuk memakai rekomendasi.');
+      })
+      .catch(function () { say('Tidak dapat terhubung.', true); })
+      .then(function () { btn.disabled = false; btn.textContent = label; });
+  });
+
+  // Live character meter for SEO meta fields (ideal length hint).
+  (function () {
+    var IDEAL = { meta_title: 60, meta_description: 160 };
+    document.querySelectorAll('[name*="meta_title"], [name*="meta_description"]').forEach(function (el) {
+      var key = el.name.indexOf('meta_title') > -1 ? 'meta_title'
+              : (el.name.indexOf('meta_description') > -1 ? 'meta_description' : null);
+      if (!key || !el.parentNode) return;
+      var ideal = IDEAL[key];
+      var out = document.createElement('span');
+      out.className = 'seo-meter';
+      el.parentNode.appendChild(out);
+      function upd() {
+        var n = (el.value || '').trim().length;
+        out.textContent = n + ' / ' + ideal + ' — panjang ideal';
+        out.classList.toggle('over', n > ideal);
+      }
+      el.addEventListener('input', upd);
+      upd();
+    });
+  })();
 </script>
 {% block script %}{% endblock %}
 </body>
