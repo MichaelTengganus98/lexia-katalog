@@ -149,7 +149,8 @@ a.changelink:link, a.changelink:visited { color: var(--lx-muted); }
 
 /* ---------- messages / notes ---------- */
 ul.messagelist li { border-radius: 0; }
-ul.messagelist li.success { background: #e4ede3 url(../img/icon-yes.svg) 10px 12px no-repeat; }
+ul.messagelist li.success { background-color: #e4ede3; }
+ul.messagelist li.warning { background-color: #fbf3e4; }
 .errornote, ul.errorlist li { background: #f6ece7; border-color: var(--lx-rust); border-radius: 0; color: var(--lx-rust-dark); }
 
 /* ---------- inputs ---------- */

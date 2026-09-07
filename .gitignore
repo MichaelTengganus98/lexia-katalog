@@ -7,6 +7,9 @@ __pycache__/
 # local collectstatic output (STATIC_ROOT in dev)
 katalog/static/
 
+# sync.sh: cached requirements.txt hash (per-machine)
+tmp/.sync-reqhash
+
 # sorl-thumbnail generated thumbnails
 media/cache/
 
