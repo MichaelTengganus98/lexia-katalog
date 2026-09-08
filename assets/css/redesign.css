@@ -1110,8 +1110,17 @@ table.spec-table { margin-top: 0; }
   .grid-4 { grid-template-columns: repeat(2, 1fr); }
   .product-grid .span-tall,
   .prod-card.featured { grid-row: auto; grid-column: 1 / -1; }
+  /* drop the desktop tall-card treatment: `min-height: 340px` + aspect-ratio
+     was sizing the photo's WIDTH from the height (340 * 16/9 ≈ 604px) and
+     blowing past a ~374px phone viewport. */
   .span-tall .card-photo,
-  .prod-card.featured .prod-photo { aspect-ratio: 16 / 9; }
+  .prod-card.featured .prod-photo {
+    aspect-ratio: 16 / 9;
+    flex: none;
+    min-height: 0;
+    width: 100%;
+    max-width: 100%;
+  }
   .blog-grid,
   .post-grid,
   .brochure-grid { grid-template-columns: repeat(2, 1fr); }
