@@ -1,5 +1,6 @@
 User-agent: *
 Disallow: /admin/
+Disallow: /panel/
 Disallow: /search/
 Disallow: /*?page=
 Allow: /
